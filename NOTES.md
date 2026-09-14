@@ -13,4 +13,7 @@
   - Protect against the "tutorial trap" using the 30-minute deliberate practice rule (15-min solitary struggle with whiteboard diagrams, pattern-only hints, active reproduction from empty buffer).
   - Pair theoretical proofs (Abdul Bari) with practical interview habits (Tech Interview Handbook).
   - Tufte-style clean HTML lessons with high interactive retrieval practice (quizzes with balanced choices, immediate feedback).
-  - Central `index.html` at repository root acts as the syllabus/course hub, optimized for GitHub Pages hosting (with `.nojekyll`).
+  - Central `index.html` at repository root acts as the syllabus/course hub, featuring both the 30 Core Theory Lessons and the interactive 26-Week Grind 169 Problem Tracker, optimized for GitHub Pages hosting (with `.nojekyll`).
+  - Ground curriculum across dual synchronized tracks:
+    1. **Foundational Concept Track**: 30 interactive lessons across 17 modules teaching memory mechanics, asymptotic bounds, and invariant mental models.
+    2. **Grind 169 (26-Week Deliberate Practice Track)**: 169 canonical problems distributed across 26 weeks (~6.5 problems / ~5.7 hours per week) mapped to primary literature (CLRS, Sedgewick, EPI).

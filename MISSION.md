@@ -1,19 +1,29 @@
-# Mission: Master Data Structures & Algorithms from First Principles
+# Mission: Master Data Structures, Algorithmic Invariants & Mechanical Sympathy
 
 ## Why
-Crack top-tier technical coding interviews and elevate daily software engineering capability by developing an instinctive, durable mental model of algorithmic problem-solving. This will transform problem-solving from stressful memorization into principled analysis and clean, high-performance code across Python, TypeScript, and Java.
+Transform algorithmic problem-solving from an anxiety-inducing memorization chore into an intuitive, high-performance engineering discipline. The ultimate goal is twofold:
+1. **Interview Dominance**: Confidently dismantle unseen technical coding interview questions at top-tier companies (FAANG, high-frequency trading, infrastructure teams) under timed, adversarial conditions without reliance on memorized templates.
+2. **Production Engineering Rigor**: Cultivate deep *mechanical sympathy*—understanding how high-level abstractions map down to CPU caches, RAM bus bandwidth, garbage collectors, and physical memory architectures across Python, TypeScript, and Java.
 
 ## Success looks like
-- Confidently identify time and space complexity ($O(1)$ to $O(2^n)$) for any snippet or algorithm on sight.
-- Deconstruct unseen interview and real-world problems into core algorithmic patterns (e.g., Two Pointers, Sliding Window, Monotonic Stack, BFS/DFS, Top K, DP).
-- Fluently implement optimal solutions in Python, TypeScript, and Java while explaining edge cases and trade-offs.
-- Solve LeetCode Medium-level interview questions in under 25 minutes without looking at solutions.
+- **Complexity on Sight**: Instantly classify time ($O(1)$ to $O(N!)$) and auxiliary space complexity (heap allocations vs. execution stack frames) for any algorithm or snippet from first principles.
+- **Deconstruct Unseen Mediums & Hards**:
+  - Solve LeetCode Medium-level problems in under 20 minutes from an empty buffer.
+  - Decompose LeetCode Hard problems (e.g., *Trapping Rain Water*, *Median of Two Sorted Arrays*, *Minimum Window Substring*, *Serialize and Deserialize Binary Tree*) in under 35 minutes by systematically isolating the underlying invariant and optimal substructure.
+- **Full 169-Problem Mastery**: Complete and internalize all 169 canonical problems from the Tech Interview Handbook Grind 75 (26-week track), fluently articulating the *Transition Mindset* (Naive Brute Force $\to$ Redundant Waste $\to$ Invariant & Minimal Pattern).
+- **Trilingual Mechanical Sympathy**: Fluently implement solutions across Python, TypeScript, and Java while explaining the exact language-level runtime implications:
+  - *Python*: Object boxing, arbitrary-precision arithmetic, dynamic array geometric over-allocation, reference counts.
+  - *TypeScript / V8*: Small integer (SMI) vs HeapNumber representations, hidden classes, typed arrays (`Int32Array`) vs sparse arrays.
+  - *Java / JVM*: Primitive vs object wrapper boxing (`int` vs `Integer`), cache-unfriendly pointer hopping in node trees, `HashMap` treeification at threshold 8.
+- **Architectural Trade-Off Fluency**: Defend architectural trade-offs using the MIT 4-Tier Deep Inquiry Engine (e.g., Quicksort cache locality vs Mergesort stability; Separate Chaining vs Open Addressing; Top-Down memoization vs Bottom-Up tabulation; In-Place mutation vs Persistent immutability).
+- **Forensic Self-Correction**: When an implementation fails or times out, perform rapid forensic error analysis to isolate the exact broken invariant or overlooked edge case without guessing.
 
 ## Constraints
-- Total beginner baseline in algorithmic complexity: begin strictly from first principles (Big-O and foundational structures) before advancing.
-- Multi-language requirement: all conceptual implementations and idioms must be provided in Python, TypeScript, and Java.
-- High-retention focus: prioritize interactive retrieval practice and pattern recognition over passive reading or aimless grinding.
+- **First-Principles Grounding**: Never accept a formula, heuristic, or library method as a black box. Derive bounds, prove loop invariants, and trace memory layouts explicitly before optimizing.
+- **Active Retrieval over Passive Consumption**: Adhere to the 30-minute deliberate practice protocol: solitary pencil-and-paper diagramming before viewing hints; no passive reading of solutions.
+- **Tri-Language Parity**: Core concepts, memory mechanics, and interview idioms must always be evaluated across Python, TypeScript, and Java in parallel.
+- **Authoritative Primary Literature**: Ground conceptual models in foundational computer science literature (**CLRS**, **Sedgewick & Wayne**, **Aziz/Lee/Prakash EPI**, **Roughgarden**, **Knuth**, **Skiena**), bypassing superficial blog simplifications.
 
 ## Out of scope
-- Niche, highly specialized competitive programming algorithms (e.g., Fenwick trees, Heavy-Light Decomposition, suffix automata) until core patterns and medium problems are mastered.
-- Premature DP or advanced graph optimization before foundational structures (Arrays, Objects/Hash Maps, Two Pointers) are second nature.
+- Niche, hyper-specialized competitive programming topics (e.g., Treaps, Heavy-Light Decomposition, Link-Cut Trees, FFT, Suffix Automata) that have near-zero incidence in production engineering or FAANG-level interviews.
+- Superficial rote memorization of hundreds of uncurated, repetitive LeetCode problems beyond the 169 canonical archetypes.
