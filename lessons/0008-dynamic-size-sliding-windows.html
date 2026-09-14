@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0008: Dynamic-Size Sliding Windows &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 4: Sliding Window</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0008</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0008</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Dynamic-Size Sliding Windows</h1>
+      <p class="subtitle">
+        Expand greedily on the right, contract lazily on the left. The universal template for finding optimal variable-length contiguous subarrays in strictly O(n) amortized time.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#mental-model" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Expand-and-Contract Mental Model</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#universal-template" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The Universal Sliding Window Template</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations: Longest Substring Without Repeating</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Curated Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      Unlike fixed windows where the span is constant, dynamic sliding windows grow and shrink elastically. They solve questions of the form: <em>"Find the longest/shortest contiguous subarray that satisfies property P."</em>
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        Candidates often worry that the inner <code>while</code> loop makes dynamic sliding windows $O(n^2)$. 
+        <strong>Amortized Proof:</strong> The <code>right</code> pointer advances from $0$ to $n - 1$ ($n$ steps). The <code>left</code> pointer also moves strictly from $0$ to $n - 1$ ($n$ steps). Because neither pointer ever moves backward, the total number of pointer moves across the entire execution is at most $2n$ &rarr; strictly <strong><code>O(n)</code> linear runtime</strong>.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="mental-model">
+      <h2>1. The Expand-and-Contract Mental Model</h2>
+      <p>
+        Think of the sliding window as a rubber band or caterpillar:
+      </p>
+      <ol>
+        <li><strong>Expand (Head):</strong> Move the <code>right</code> pointer forward, incorporating the new element into our window state (frequency map, sum, etc.).</li>
+        <li><strong>Evaluate:</strong> Check if our window invariant is broken (or satisfied, if searching for a minimum window).</li>
+        <li><strong>Contract (Tail):</strong> While the condition requires it, move the <code>left</code> pointer forward, removing outgoing elements from our state until the window becomes valid again.</li>
+        <li><strong>Update Result:</strong> Record the maximum or minimum window length: <code>length = right - left + 1</code>.</li>
+      </ol>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 121 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Best Time to Buy and Sell Stock</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> The simplest 1-sided dynamic sliding window. Maintain <code>left</code> as the minimum price observed. Move <code>right</code> forward. If <code>prices[right] &lt; prices[left]</code>, a new minimum has been found &rarr; snap <code>left = right</code>. Otherwise, compute <code>profit = prices[right] - prices[left]</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 3 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Longest Substring Without Repeating Characters</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Store each character's <em>most recent index</em> in a hash map. When a duplicate character is encountered at index <code>right</code>, if its last seen index is $\ge left$, jump <code>left = last_seen[char] + 1</code> in $O(1)$ instead of incrementing <code>left</code> one step at a time!
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 424 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 6</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Longest Repeating Character Replacement</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> A window is valid if <code>(window_len - max_frequency) &le; k</code> (we can replace all other characters with the majority character). If invalid, slide <code>left += 1</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-accent">LeetCode 76 &bull; Hard</span>
+              <span class="badge badge-neutral">Grind 75 Week 8</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Minimum Window Substring</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Track <code>have</code> vs <code>need</code> unique character frequency matches. Expand <code>right</code> until <code>have == need</code>. Then greedily shrink <code>left</code> while maintaining <code>have == need</code> to find the shortest valid substring.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="universal-template">
+      <h2>3. The Universal Sliding Window Template</h2>
+      <pre><code>def sliding_window_template(sequence):
+    left = 0
+    state = initialize_state()
+    best_result = 0
+
+    for right in range(len(sequence)):
+        # 1. Add right element to window state
+        add_to_state(sequence[right])
+
+        # 2. While window condition is violated (or valid for min-window)
+        while is_invalid():
+            remove_from_state(sequence[left])
+            left += 1
+
+        # 3. Update answer with current window
+        best_result = max(best_result, right - left + 1)
+
+    return best_result</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations: Longest Substring Without Repeating</h2>
+      <p>
+        Solving <strong>LeetCode 3 (Grind 75)</strong> in $O(n)$ time and $O(\min(n, m))$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def length_of_longest_substring(s: str) -> int:
+    """
+    LeetCode 3 (Grind 75) - Dynamic Window with Index Jump.
+    Time Complexity:  O(n) - right advances n times, left jumps forward.
+    Space Complexity: O(min(n, alphabet)) - hash map of character indices.
+    """
+    last_seen = {}
+    left = 0
+    max_len = 0
+
+    for right, ch in enumerate(s):
+        # If character is already in window, jump left past duplicate
+        if ch in last_seen and last_seen[ch] >= left:
+            left = last_seen[ch] + 1
+
+        last_seen[ch] = right
+        max_len = max(max_len, right - left + 1)
+
+    return max_len</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function lengthOfLongestSubstring(s: string): number {
+    // Time Complexity:  O(n) single pass
+    // Space Complexity: O(min(n, alphabet))
+    const lastSeen = new Map<string, number>();
+    let left = 0;
+    let maxLen = 0;
+
+    for (let right = 0; right < s.length; right++) {
+        const ch = s[right];
+        if (lastSeen.has(ch)) {
+            const prevIdx = lastSeen.get(ch)!;
+            if (prevIdx >= left) {
+                left = prevIdx + 1; // Direct O(1) jump
+            }
+        }
+
+        lastSeen.set(ch, right);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+
+    return maxLen;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.HashMap;
+
+public class LongestSubstring {
+    /**
+     * LeetCode 3 (Grind 75) in O(n) time and O(min(n, alphabet)) space.
+     */
+    public static int lengthOfLongestSubstring(String s) {
+        HashMap&lt;Character, Integer&gt; lastSeen = new HashMap&lt;&gt;();
+        int left = 0;
+        int maxLen = 0;
+
+        for (int right = 0; right &lt; s.length(); right++) {
+            char ch = s.charAt(right);
+            if (lastSeen.containsKey(ch)) {
+                int prevIdx = lastSeen.get(ch);
+                if (prevIdx &gt;= left) {
+                    left = prevIdx + 1;
+                }
+            }
+
+            lastSeen.put(ch, right);
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+
+        return maxLen;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your dynamic window mechanics:</p>
+
+      <div class="quiz-box" data-correct="3" data-explanation="Even though there is a nested while loop, each of the left and right pointers moves forward at most n times across the entire algorithm, yielding at most 2n total operations: O(n) amortized.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Amortized Analysis</span>
+        </div>
+        <div class="quiz-question">
+          Why does a dynamic sliding window algorithm with a nested <code>while</code> loop maintain an overall <code>O(n)</code> linear time complexity?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Inner loops execute on separate threads</div>
+          <div class="quiz-option">Window size never exceeds five items</div>
+          <div class="quiz-option">Pointers reset after each valid cycle</div>
+          <div class="quiz-option">Pointers traverse sequence at most once</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Storing the last seen index allows the left pointer to immediately jump to last_seen[char] + 1, skipping redundant single-step contractions.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Optimization Trick</span>
+        </div>
+        <div class="quiz-question">
+          In Longest Substring Without Repeating Characters, what is the benefit of storing character indices in a map rather than using a simple set?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Reduces memory usage to constant zero</div>
+          <div class="quiz-option">Jumps left pointer directly past duplicates</div>
+          <div class="quiz-option">Sorts characters into alphabetical order</div>
+          <div class="quiz-option">Permutes sequence to eliminate collisions</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. Curated Primary Sources</h2>
+      <ul>
+        <li>
+          <strong>Tech Interview Handbook:</strong> <a href="https://www.techinterviewhandbook.org/grind75" target="_blank" rel="noreferrer">Grind 75 &mdash; Best Time to Buy and Sell Stock &amp; Longest Substring &nearr;</a>.
+        </li>
+        <li>
+          <strong>NeetCode:</strong> <a href="https://neetcode.io/problems/longest-substring-without-repeating-characters" target="_blank" rel="noreferrer">Longest Substring Without Repeating Characters &nearr;</a>.
+        </li>
+        <li>
+          <strong>Video Lecture:</strong> <a href="https://www.youtube.com/watch?v=wiGpQwVHdE0" target="_blank" rel="noreferrer">NeetCode &mdash; Minimum Window Substring (LeetCode 76 Hard) &nearr;</a>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0007-fixed-size-sliding-windows.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0007: Fixed-Size Sliding Windows</span>
+      </a>
+      <a href="0009-hash-tables-collisions-and-load-factors.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0009: Hash Tables, Collisions &amp; Load Factors</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

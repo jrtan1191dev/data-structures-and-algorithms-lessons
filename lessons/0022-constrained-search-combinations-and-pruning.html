@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0022: Constrained Search: Combinations &amp; Pruning &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 11: Recursion &amp; Backtracking</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0022</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0022</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Constrained Search: Combinations &amp; Pruning</h1>
+      <p class="subtitle">
+        Branch-and-bound pruning, duplicate elimination via sorting, and in-place matrix mutation rollback for zero-allocation grid search.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Pruning the Exponential Growth</h2>
+      <p>
+        Unchecked backtracking generates combinatorial explosion ($O(2^N)$ or $O(K^N)$). <strong>Pruning</strong> aborts unproductive search branches as soon as mathematical constraints are breached, preventing the traversal of vast dead subtrees:
+      </p>
+      <ul>
+        <li>
+          <strong>Sorted Pruning (LC 39 Combination Sum):</strong> When candidates are sorted ascendingly, if <code>candidates[i] &gt; remaining_target</code>, every subsequent candidate $j &gt; i$ will also exceed the target. We can immediately <code>break</code> the branch loop rather than merely <code>continue</code>.
+        </li>
+        <li>
+          <strong>In-Place Grid State Mutation (LC 79 Word Search):</strong> Maintaining a 2D <code>boolean visited[][]</code> matrix requires allocating a new memory table and paying continuous cache-miss penalties. Instead, temporarily overwrite the grid cell in RAM with a sentinel (e.g. <code>board[r][c] = '#'</code>), explore adjacent neighbors, and restore the original character upon return. This achieves $O(1)$ auxiliary memory!
+        </li>
+      </ul>
+
+      <div class="code-frame">
+        <div class="code-header">Zero-Allocation In-Place Rollback Pattern</div>
+        <pre><code>// Mark visited by overwriting memory cell
+char original = board[r][c];
+board[r][c] = '#';
+
+// Explore 4 cardinal directions
+boolean found = dfs(r + 1, c, k + 1) || dfs(r - 1, c, k + 1) ||
+                dfs(r, c + 1, k + 1) || dfs(r, c - 1, k + 1);
+
+// Rollback / Un-choose: restore original byte
+board[r][c] = original;
+return found;</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 39: Combination Sum</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Unbounded Knapsack + Sort Pruning</td>
+              <td>Allow candidates to be reused by not advancing the index on recursive choice. Sort inputs upfront to terminate sibling exploration the instant the running sum exceeds the target.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 79: Word Search</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>In-Place Grid Backtracking</td>
+              <td>Mutate grid cells in-place with a sentinel byte to track visitation along the active call stack path, avoiding allocation of a separate 2D boolean array. Roll back original values upon recursion return.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 79: Word Search (In-Place Memory Mutation &amp; Rollback)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: In-Place Board Mutation DFS</div>
+            <pre><code>from typing import List
+
+def exist(board: List[List[str]], word: str) -> bool:
+    rows, cols = len(board), len(board[0])
+
+    def dfs(r: int, c: int, idx: int) -> bool:
+        if idx == len(word):
+            return True
+        if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != word[idx]:
+            return False
+
+        # In-place mark visited
+        temp = board[r][c]
+        board[r][c] = "#"
+
+        # Explore 4 orthogonal neighbors
+        found = (dfs(r + 1, c, idx + 1) or
+                 dfs(r - 1, c, idx + 1) or
+                 dfs(r, c + 1, idx + 1) or
+                 dfs(r, c - 1, idx + 1))
+
+        # Rollback state
+        board[r][c] = temp
+        return found
+
+    for r in range(rows):
+        for c in range(cols):
+            if board[r][c] == word[0] and dfs(r, c, 0):
+                return True
+    return False</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: In-Place Char Rollback DFS</div>
+            <pre><code>function exist(board: string[][], word: string): boolean {
+  const rows = board.length;
+  const cols = board[0].length;
+
+  function dfs(r: number, c: number, idx: number): boolean {
+    if (idx === word.length) return true;
+    if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== word[idx]) {
+      return false;
+    }
+
+    const temp = board[r][c];
+    board[r][c] = "#";
+
+    const found =
+      dfs(r + 1, c, idx + 1) ||
+      dfs(r - 1, c, idx + 1) ||
+      dfs(r, c + 1, idx + 1) ||
+      dfs(r, c - 1, idx + 1);
+
+    board[r][c] = temp; // Rollback
+    return found;
+  }
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c] === word[0] && dfs(r, c, 0)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Primitive char[][] In-Place Rollback</div>
+            <pre><code>public class Solution {
+    public boolean exist(char[][] board, String word) {
+        int rows = board.length;
+        int cols = board[0].length;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board[r][c] == word.charAt(0) && dfs(board, word, r, c, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int r, int c, int idx) {
+        if (idx == word.length()) return true;
+        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length || board[r][c] != word.charAt(idx)) {
+            return false;
+        }
+
+        char temp = board[r][c];
+        board[r][c] = '#'; // Mark visited
+
+        boolean found = dfs(board, word, r + 1, c, idx + 1) ||
+                        dfs(board, word, r - 1, c, idx + 1) ||
+                        dfs(board, word, r, c + 1, idx + 1) ||
+                        dfs(board, word, r, c - 1, idx + 1);
+
+        board[r][c] = temp; // Rollback
+        return found;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="2" data-explanation="Sorting candidates ascendingly allows immediate loop termination (break) the instant an element exceeds the remaining target, discarding all subsequent larger candidate branches.">
+        <h3 class="quiz-question">How does upfront array sorting dramatically accelerate branch pruning in Combination Sum problems?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">It enables constant time lookup through precomputed binary heap indices.</button>
+          <button type="button" class="quiz-option" data-index="1">It permits operating systems to parallelize search branches across threads.</button>
+          <button type="button" class="quiz-option" data-index="2">It allows terminating the loop immediately once an element exceeds the target.</button>
+          <button type="button" class="quiz-option" data-index="3">It completely eliminates the requirement for state-space backtracking steps.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="0" data-explanation="Overwriting a cell with a sentinel value like '#' marks it visited along the current recursive search path without allocating a 2D boolean array, and restoring it on return resets state in O(1) space.">
+        <h3 class="quiz-question">What is the memory advantage of in-place character replacement in grid backtracking problems like Word Search?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">It tracks visited cells in O(1) space without allocating external matrices.</button>
+          <button type="button" class="quiz-option" data-index="1">It guarantees deterministic depth limits to prevent recursion stack overflow.</button>
+          <button type="button" class="quiz-option" data-index="2">It compresses string characters into 8-bit ASCII buffers for fast comparison.</button>
+          <button type="button" class="quiz-option" data-index="3">It converts the exponential search graph into a directed acyclic tree.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0021-backtracking-foundations-subsets-and-permutations.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0021: Backtracking Foundations: Subsets &amp; Permutations</span>
+      </a>
+      <a href="0023-graph-representations-and-core-traversals.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0023: Graph Representations &amp; Core Traversals</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

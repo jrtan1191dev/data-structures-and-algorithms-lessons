@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0026: 2D &amp; Subsequence Dynamic Programming &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 13: Dynamic Programming</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0026</span>
+    </div>
+    <span class="row-meta">⏱ 10 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0026</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>2D &amp; Subsequence Dynamic Programming</h1>
+      <p class="subtitle">
+        State transition grids for string alignments and knapsack variants, row-by-row rolling buffers, and backward array traversals for $O(N)$ space compression.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>2D State Grids in Virtual Memory</h2>
+      <p>
+        Multi-dimensional dynamic programming models problems with two independent state variables, such as indices into two strings $(i, j)$ or an item index and remaining weight capacity $(i, w)$.
+      </p>
+      <p>
+        Allocating a full 2D matrix <code>dp[M+1][N+1]</code> consumes $O(M \times N)$ contiguous memory. In systems programming, allocating large matrices causes CPU cache line pollution:
+      </p>
+
+      <div class="code-frame">
+        <div class="code-header">LCS Recurrence Relation</div>
+        <pre><code>State: dp[i][j] = length of LCS between text1[0...i-1] and text2[0...j-1]
+
+Transitions:
+If text1[i-1] == text2[j-1]:
+    dp[i][j] = dp[i-1][j-1] + 1       // Diagonal predecessor match
+Else:
+    dp[i][j] = max(dp[i-1][j], dp[i][j-1])  // Skip one character from either string</code></pre>
+      </div>
+
+      <h3>Compressing 2D Tables to 1D via Rolling Arrays</h3>
+      <p>
+        Notice that computing row $i$ relies <strong>only on row $i-1$</strong>. Cells from row $i-2$ and earlier are never read again!
+      </p>
+      <ul>
+        <li><strong>Two-Row Rolling Buffer:</strong> Maintain <code>prev_row</code> and <code>curr_row</code> of size $N+1$, swapping pointers after each outer iteration ($O(N)$ space).</li>
+        <li><strong>0/1 Knapsack Reverse Traversal:</strong> In Partition Equal Subset Sum (LC 416), traversing the single 1D array <em>backwards</em> from <code>target</code> down to <code>num</code> guarantees that each element is used at most once, preventing an item from contributing to its own state transitions within the same pass.</li>
+      </ul>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 1143: Longest Common Subsequence</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>2D String Grid &rarr; 1D Rolling Buffer</td>
+              <td>Diagonal transition on character equality; max of left and top on mismatch. Compress $O(M \times N)$ matrix to $O(\min(M, N))$ space using a rolling row.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 72: Edit Distance</strong></td>
+              <td><span class="badge badge-purple">Hard</span></td>
+              <td>3-Way String Grid Alignment</td>
+              <td>Minimum of insert ($dp[i][j-1]$), delete ($dp[i-1][j]$), and replace ($dp[i-1][j-1]$). Models Levenshtein distance efficiently.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 416: Partition Equal Subset Sum</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>0/1 Knapsack Reverse 1D DP</td>
+              <td>Target is $\sum / 2$. A single 1D boolean array scanned in reverse eliminates duplicate item usage in $O(\text{sum}/2)$ space.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 62: Unique Paths</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Grid Coordinate Addition</td>
+              <td>Ways to reach $(r, c)$ equals sum of ways from top $(r-1, c)$ and left $(r, c-1)$. Compress to 1D array of width $C$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 1143: Longest Common Subsequence ($O(M \cdot N)$ Time, $O(N)$ Space)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: 1D Rolling Row Buffer</div>
+            <pre><code>def longestCommonSubsequence(text1: str, text2: str) -> int:
+    # Ensure text2 is the shorter string to minimize O(N) memory
+    if len(text1) < len(text2):
+        text1, text2 = text2, text1
+
+    m, n = len(text1), len(text2)
+    prev = [0] * (n + 1)
+    curr = [0] * (n + 1)
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i - 1] == text2[j - 1]:
+                curr[j] = prev[j - 1] + 1
+            else:
+                curr[j] = max(prev[j], curr[j - 1])
+        prev, curr = curr, [0] * (n + 1)
+
+    return prev[n]</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Dual Typed Array Space Optimization</div>
+            <pre><code>function longestCommonSubsequence(text1: string, text2: string): number {
+  if (text1.length < text2.length) {
+    const temp = text1;
+    text1 = text2;
+    text2 = temp;
+  }
+
+  const m = text1.length;
+  const n = text2.length;
+  let prev = new Int32Array(n + 1);
+  let curr = new Int32Array(n + 1);
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (text1[i - 1] === text2[j - 1]) {
+        curr[j] = prev[j - 1] + 1;
+      } else {
+        curr[j] = Math.max(prev[j], curr[j - 1]);
+      }
+    }
+    prev.set(curr);
+    curr.fill(0);
+  }
+
+  return prev[n];
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Rolling Primitive Arrays</div>
+            <pre><code>public class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        if (text1.length() < text2.length()) {
+            String temp = text1;
+            text1 = text2;
+            text2 = temp;
+        }
+
+        int m = text1.length();
+        int n = text2.length();
+        int[] prev = new int[n + 1];
+        int[] curr = new int[n + 1];
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    curr[j] = prev[j - 1] + 1;
+                } else {
+                    curr[j] = Math.max(prev[j], curr[j - 1]);
+                }
+            }
+            System.arraycopy(curr, 0, prev, 0, n + 1);
+            java.util.Arrays.fill(curr, 0);
+        }
+
+        return prev[n];
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="3" data-explanation="Since calculating the current row in LCS depends strictly on the immediately preceding row, we only need to preserve the previous row in memory, shrinking auxiliary space from O(M * N) to O(N).">
+        <h3 class="quiz-question">Why can the Longest Common Subsequence DP table be safely compressed from O(M * N) to O(N) memory?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary search tree branches eliminate the requirement to compute unaligned characters.</button>
+          <button type="button" class="quiz-option" data-index="1">CPU SIMD instructions parallelize all matrix row operations simultaneously.</button>
+          <button type="button" class="quiz-option" data-index="2">String hash codes convert multi-character substrings into single integer primitives.</button>
+          <button type="button" class="quiz-option" data-index="3">Computing each current row requires values exclusively from the single prior row.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="1" data-explanation="Traversing right-to-left (backwards) in 0/1 knapsack guarantees that when evaluating dp[w] = dp[w] || dp[w - num], the subproblem dp[w - num] comes from the prior item iteration, preventing multiple uses of the same item.">
+        <h3 class="quiz-question">Why must the single 1D array in 0/1 Knapsack (Partition Equal Subset Sum) be iterated in reverse order?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Reverse memory access improves hardware branch prediction during execution.</button>
+          <button type="button" class="quiz-option" data-index="1">It ensures each item is used at most once by reading un-updated prior states.</button>
+          <button type="button" class="quiz-option" data-index="2">It prevents integer overflow exceptions when calculating intermediate subset sums.</button>
+          <button type="button" class="quiz-option" data-index="3">It sorts the input array implicitly during bottom-up array traversal.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0025-1d-dynamic-programming-memoization-vs-tabulation.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0025: 1D Dynamic Programming: Memoization vs Tabulation</span>
+      </a>
+      <a href="../index.html" class="nav-card next-card">
+        <span class="nav-dir">Course Home &rarr;</span>
+        <span class="nav-title">Return to Master Curriculum Syllabus</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

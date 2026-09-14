@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0023: Graph Representations &amp; Core Traversals &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 12: Graphs: Traversal &amp; Connectivity</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0023</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0023</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Graph Representations &amp; Core Traversals</h1>
+      <p class="subtitle">
+        Memory layout trade-offs between adjacency matrices and adjacency lists, connected components identification, and multi-source BFS wave propagation.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Adjacency Matrix vs Adjacency List in RAM</h2>
+      <p>
+        How a graph is laid out in memory fundamentally governs performance, cache utilization, and memory scaling:
+      </p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Representation</th>
+              <th>RAM Footprint</th>
+              <th>Edge Lookup $(u, v)$</th>
+              <th>Iterate Neighbors of $u$</th>
+              <th>Cache Profile &amp; Best Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Adjacency Matrix</strong></td>
+              <td>$O(V^2)$ contiguous bytes</td>
+              <td>$O(1)$ direct array index</td>
+              <td>$O(V)$ scan across row</td>
+              <td>Excellent spatial locality. Best for dense graphs ($E \approx V^2$) or small fixed $V$.</td>
+            </tr>
+            <tr>
+              <td><strong>Adjacency List</strong></td>
+              <td>$O(V + E)$ array of pointers/lists</td>
+              <td>$O(\text{deg}(u))$ scan</td>
+              <td>$O(\text{deg}(u))$ direct access</td>
+              <td>Scattered memory allocations unless packed into a flattened offset CSR array. Optimal for sparse graphs ($E \ll V^2$).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Connected Components and Flood Fill Mechanics</h3>
+      <p>
+        In an undirected graph, connected components form disjoint subgraphs. We can count components by iterating through all vertices $0 \dots V-1$; whenever an unvisited vertex is encountered, increment the component counter and execute a full traversal (DFS or BFS) to mark all reachable nodes visited. In grid problems, mutating land cells (<code>'1' &rarr; '0'</code>) directly eliminates auxiliary visited arrays.
+      </p>
+
+      <h3>Multi-Source BFS for Simultaneous Wavefront Propagation</h3>
+      <p>
+        When computing shortest paths from <em>multiple</em> origins simultaneously (e.g. LC 542 01 Matrix or LC 994 Rotting Oranges), running separate BFS traversals from each source takes $O(K \cdot V)$. Instead, seed the FIFO queue with <strong>all source coordinates upfront at time 0</strong>. As the queue unrolls, the frontier expands uniformly across the entire graph in a single $O(V + E)$ pass.
+      </p>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 200: Number of Islands</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Grid Connected Components DFS/BFS</td>
+              <td>Sinking visited land cells (mutating <code>'1' &rarr; '0'</code>) avoids an external $O(R \times C)$ boolean array. Each connected cluster increments the island tally by 1.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 133: Clone Graph</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>DFS / BFS with Hash Map Memoization</td>
+              <td>Graphs with cycles require tracking cloned node memory addresses in a hash map (<code>original &rarr; clone</code>) to prevent infinite recursive cloning cycles.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 542: 01 Matrix</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Multi-Source BFS Wavefront</td>
+              <td>Enqueue all zero cells at distance 0 upfront. Expanding outward level-by-level guarantees the first time a cell is reached is its true shortest distance.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 200: Number of Islands (In-Place Memory Sink DFS)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: In-Place Mutation Island Sink</div>
+            <pre><code>from typing import List
+
+def numIslands(grid: List[List[str]]) -> int:
+    if not grid:
+        return 0
+
+    rows, cols = len(grid), len(grid[0])
+    islands = 0
+
+    def dfs(r: int, c: int):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+            return
+        
+        # Sink the land cell in RAM to prevent revisitation
+        grid[r][c] = '0'
+
+        dfs(r + 1, c)
+        dfs(r - 1, c)
+        dfs(r, c + 1)
+        dfs(r, c - 1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                islands += 1
+                dfs(r, c)
+
+    return islands</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: In-Place Island Sink DFS</div>
+            <pre><code>function numIslands(grid: string[][]): number {
+  if (!grid || grid.length === 0) return 0;
+
+  const rows = grid.length;
+  const cols = grid[0].length;
+  let count = 0;
+
+  function dfs(r: number, c: number): void {
+    if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] !== "1") {
+      return;
+    }
+
+    grid[r][c] = "0"; // In-place sink
+
+    dfs(r + 1, c);
+    dfs(r - 1, c);
+    dfs(r, c + 1);
+    dfs(r, c - 1);
+  }
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] === "1") {
+        count++;
+        dfs(r, c);
+      }
+    }
+  }
+
+  return count;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Primitive char[][] Mutation DFS</div>
+            <pre><code>public class Solution {
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) return 0;
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int islands = 0;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == '1') {
+                    islands++;
+                    sink(grid, r, c);
+                }
+            }
+        }
+        return islands;
+    }
+
+    private void sink(char[][] grid, int r, int c) {
+        if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] != '1') {
+            return;
+        }
+
+        grid[r][c] = '0'; // Mutate directly in RAM
+
+        sink(grid, r + 1, c);
+        sink(grid, r - 1, c);
+        sink(grid, r, c + 1);
+        sink(grid, r, c - 1);
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="1" data-explanation="In sparse graphs where E << V^2, an adjacency list consumes O(V + E) memory compared to O(V^2) for an adjacency matrix, saving enormous amounts of RAM and enabling linear-time neighbor iteration.">
+        <h3 class="quiz-question">Why is an adjacency list representation preferred over an adjacency matrix for sparse graphs?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Adjacency lists support instant constant time edge verification between arbitrary nodes.</button>
+          <button type="button" class="quiz-option" data-index="1">Adjacency lists scale with O(V + E) memory rather than paying quadratic O(V^2) space.</button>
+          <button type="button" class="quiz-option" data-index="2">Adjacency lists eliminate recursive call stacks when executing depth-first traversals.</button>
+          <button type="button" class="quiz-option" data-index="3">Adjacency lists guarantee zero hash collisions during asynchronous parallel processing.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="3" data-explanation="Multi-source BFS simultaneously enqueues all initial origins into the FIFO queue at time 0, expanding the frontier uniformly outward in a single O(V + E) pass instead of running separate BFS passes per source.">
+        <h3 class="quiz-question">How does Multi-Source BFS achieve optimal linear time when calculating shortest distances to multiple origins?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">It maintains a binary heap that prioritizes nodes with fewer outgoing edge connections.</button>
+          <button type="button" class="quiz-option" data-index="1">It sorts all edge weights in descending order to apply Bellman-Ford relaxation steps.</button>
+          <button type="button" class="quiz-option" data-index="2">It executes independent depth-first searches from each origin across background threads.</button>
+          <button type="button" class="quiz-option" data-index="3">It seeds all origin nodes into a FIFO queue initially to propagate a single wavefront.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0022-constrained-search-combinations-and-pruning.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0022: Constrained Search: Combinations &amp; Pruning</span>
+      </a>
+      <a href="0024-topological-sort-and-disjoint-set-union.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0024: Topological Sort &amp; Disjoint Set Union</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

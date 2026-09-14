@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0024: Topological Sort &amp; Disjoint Set Union &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 12: Graphs: Traversal &amp; Connectivity</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0024</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0024</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Topological Sort &amp; Disjoint Set Union</h1>
+      <p class="subtitle">
+        Dependency ordering via in-degree Kahn queues, cycle detection in DAGs, and near-constant time dynamic connectivity via DSU with path compression.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Kahn's In-Degree Reduction vs DFS Cycle Coloring</h2>
+      <p>
+        A <strong>topological sort</strong> of a directed acyclic graph (DAG) produces a linear sequence of vertices such that for every directed edge $u \to v$, vertex $u$ comes before $v$.
+      </p>
+      <p>
+        <strong>Kahn's Algorithm</strong> computes in-degrees for all vertices. A FIFO queue holds all nodes with <code>in_degree == 0</code> (unblocked dependencies):
+      </p>
+      <ul>
+        <li>Pop vertex $u$ from the queue and record it in the topological order.</li>
+        <li>For every neighbor $v$ of $u$, decrement $v$'s in-degree by 1.</li>
+        <li>If $v$'s in-degree drops to 0, push $v$ into the queue.</li>
+        <li><strong>Cycle Check:</strong> If the count of recorded nodes is strictly less than $V$, the graph contains a directed cycle (deadlock).</li>
+      </ul>
+
+      <h3>Disjoint Set Union (DSU) &amp; Path Compression</h3>
+      <p>
+        DSU models dynamic connectivity partitions in a single flat array <code>parent[]</code>:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Path Compression &amp; Union by Rank</div>
+        <pre><code>// Two essential optimizations:
+1. Path Compression: Recursively reparent every visited node directly to the root:
+   find(x):
+     if parent[x] != x:
+       parent[x] = find(parent[x])
+     return parent[x]
+
+2. Union by Rank: Always attach the shallower root under the deeper root.
+
+Result: Almost constant amortized time per operation: O(alpha(N)) <= 4 operations!</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 207: Course Schedule</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Kahn's Algorithm (In-Degree Queue)</td>
+              <td>Track prerequisite counts. Popping zero-in-degree nodes simulates course completion. Unvisited nodes at termination signal circular dependency cycles.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 210: Course Schedule II</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Topological Sequence Generation</td>
+              <td>Append nodes to an array as they exit the in-degree queue. Return the array if all $V$ courses are cleared, or empty array if a cycle exists.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 684: Redundant Connection</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Disjoint Set Union (DSU)</td>
+              <td>Process edges sequentially. If <code>find(u) == find(v)</code>, vertices are already connected within the same tree, meaning edge $(u, v)$ creates a cycle.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 207: Course Schedule (Kahn's BFS In-Degree Algorithm)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Kahn's In-Degree Reduction</div>
+            <pre><code>from collections import deque
+from typing import List
+
+def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
+    adj = [[] for _ in range(numCourses)]
+    in_degree = [0] * numCourses
+
+    # Build adjacency list and compute in-degrees
+    for dest, src in prerequisites:
+        adj[src].append(dest)
+        in_degree[dest] += 1
+
+    # Seed queue with courses having 0 prerequisites
+    queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+    completed = 0
+
+    while queue:
+        curr = queue.popleft()
+        completed += 1
+
+        for neighbor in adj[curr]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+
+    return completed == numCourses</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Array Queue Kahn's Algorithm</div>
+            <pre><code>function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+  const adj: number[][] = Array.from({ length: numCourses }, () => []);
+  const inDegree = new Array(numCourses).fill(0);
+
+  for (const [dest, src] of prerequisites) {
+    adj[src].push(dest);
+    inDegree[dest]++;
+  }
+
+  const queue: number[] = [];
+  for (let i = 0; i < numCourses; i++) {
+    if (inDegree[i] === 0) queue.push(i);
+  }
+
+  let head = 0;
+  let completed = 0;
+
+  while (head < queue.length) {
+    const curr = queue[head++];
+    completed++;
+
+    for (const neighbor of adj[curr]) {
+      inDegree[neighbor]--;
+      if (inDegree[neighbor] === 0) {
+        queue.push(neighbor);
+      }
+    }
+  }
+
+  return completed === numCourses;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: ArrayDeque Kahn's Algorithm</div>
+            <pre><code>import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        int[] inDegree = new int[numCourses];
+        for (int[] edge : prerequisites) {
+            int dest = edge[0];
+            int src = edge[1];
+            adj.get(src).add(dest);
+            inDegree[dest]++;
+        }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        int completed = 0;
+        while (!queue.isEmpty()) {
+            int curr = queue.poll();
+            completed++;
+
+            for (int neighbor : adj.get(curr)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        return completed == numCourses;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="2" data-explanation="In Kahn's algorithm, vertices involved in directed cycles never reach an in-degree of zero because their cyclic dependencies never decrement to zero, so they are never enqueued.">
+        <h3 class="quiz-question">Why does Kahn's algorithm successfully detect cycles in directed graphs?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary search over predecessor arrays fails when cyclic pointer references occur.</button>
+          <button type="button" class="quiz-option" data-index="1">Recursion stack frames overflow when navigating circular memory addresses in RAM.</button>
+          <button type="button" class="quiz-option" data-index="2">Nodes trapped within cycles never see their in-degrees decrement to zero.</button>
+          <button type="button" class="quiz-option" data-index="3">Hash tables reject duplicate entries generated by cyclic node identifiers.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="0" data-explanation="Path compression updates the parent pointer of every visited ancestor directly to the set representative root, flattening the inverted tree and making subsequent find queries nearly O(1).">
+        <h3 class="quiz-question">What physical memory modification occurs during the recursive step of DSU path compression?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Traversed nodes reparent their memory cells directly to the component root.</button>
+          <button type="button" class="quiz-option" data-index="1">Tree nodes allocate duplicate shadow pointers in thread-local storage blocks.</button>
+          <button type="button" class="quiz-option" data-index="2">Adjacent array elements swap positions to maintain ascending numerical order.</button>
+          <button type="button" class="quiz-option" data-index="3">Memory addresses are hashed into bitmasks to verify topological ordering.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0023-graph-representations-and-core-traversals.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0023: Graph Representations &amp; Core Traversals</span>
+      </a>
+      <a href="0025-1d-dynamic-programming-memoization-vs-tabulation.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0025: 1D Dynamic Programming: Memoization vs Tabulation</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

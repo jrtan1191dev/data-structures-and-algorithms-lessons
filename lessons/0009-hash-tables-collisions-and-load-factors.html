@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0009: Hash Tables, Collisions &amp; Load Factors &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 5: Hash Tables</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0009</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0009</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Hash Tables, Collisions &amp; Load Factors</h1>
+      <p class="subtitle">
+        How hash functions convert arbitrary objects into array indices, how collision resolution prevents data loss, and why load factor doubling preserves O(1) average lookup.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#hash-mechanics" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Hash Function &amp; Bucket Array Mechanics</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#collision-resolution" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Collision Resolution: Separate Chaining vs. Open Addressing</span>
+          </a>
+        </li>
+        <li>
+          <a href="#load-factor" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Load Factor &amp; The Cost of Dynamic Resizing</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Two Sum</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      The <strong>Hash Table</strong> (Python <code>dict</code>, TypeScript <code>Map</code>/<code>Set</code>, Java <code>HashMap</code>/<code>HashSet</code>) is the workhorse of technical interviews. It allows developers to trade $O(n)$ space for instantaneous $O(1)$ key lookup.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        Senior interviewers love to probe: <em>"You say lookup is O(1). When can it degrade to O(n)?"</em> 
+        Answering with authority means explaining hash collisions, bad distribution, and worst-case bucket chain traversal, proving you understand production systems and not just LeetCode templates.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="hash-mechanics">
+      <h2>1. The Hash Function &amp; Bucket Array Mechanics</h2>
+      <p>
+        Under the hood, a hash table is simply a <strong>contiguous array of buckets</strong>.
+        When you insert a key-value pair <code>map.put(key, value)</code>:
+      </p>
+      <ol>
+        <li>The key is passed to a <strong>hash function</strong> which computes a large integer hash code: <code>hash = hashCode(key)</code>.</li>
+        <li>The hash code is compressed to a valid array index using the modulo operator: <code>index = hash % capacity</code>.</li>
+        <li>The value is stored at <code>bucket[index]</code>.</li>
+      </ol>
+      <pre><code>Key ("user_99") -> HashFunction() -> 84920412 -> % Capacity(16) -> Bucket Index [12]
+Direct RAM access: BaseAddress + (12 * BucketSize) -> Instant O(1)</code></pre>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 1 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Two Sum</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Instead of scanning all pairs in $O(n^2)$, store previously seen numbers in a hash map: <code>seen[num] = index</code>. For each current element, query if its complement <code>target - num</code> exists in the map in $O(1)$. Total: $O(n)$ time, $O(n)$ space.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 383 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Ransom Note</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Count frequency of characters in magazine using a hash map or 26-int array. Decrement counts while scanning note. Early return <code>false</code> if count drops below 0.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 380 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 5</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Insert Delete GetRandom O(1)</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> A hash table alone cannot pick a random element in $O(1)$ without an $O(n)$ key conversion. A dynamic array alone cannot delete an arbitrary item in $O(1)$. <em>Synergy:</em> Store items in a dynamic array, and map <code>val -> array_index</code> in a hash map. To delete in $O(1)$, swap the target element with the <strong>last element of the array</strong> and pop!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="collision-resolution">
+      <h2>3. Collision Resolution: Separate Chaining vs. Open Addressing</h2>
+      <p>
+        Because possible keys are infinite while table capacity is finite, two distinct keys will inevitably produce the same bucket index (the Pigeonhole Principle).
+      </p>
+      <ul>
+        <li>
+          <strong>Separate Chaining (Java HashMap):</strong> Each bucket points to a linked list of entries with the same index. In Java 8+, if a single bucket chain exceeds 8 entries, Java dynamically converts the linked list into a self-balancing <strong>Red-Black Tree</strong>, capping worst-case lookup at <strong><code>O(log n)</code></strong>.
+        </li>
+        <li>
+          <strong>Open Addressing (Python dict):</strong> All entries reside directly within the array. If <code>bucket[index]</code> is occupied, the algorithm probes another slot (linear probing: <code>index + 1</code>, or quadratic probing) until an empty cell is found.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="load-factor">
+      <h2>4. Load Factor &amp; The Cost of Dynamic Resizing</h2>
+      <p>
+        The <strong>Load Factor</strong> ($\alpha$) measures how full the hash table is:
+      </p>
+      <pre><code>Load Factor (α) = (Number of Stored Entries) / (Total Bucket Capacity)</code></pre>
+      <p>
+        Standard implementations (like Java's <code>HashMap</code>) set the default maximum load factor to <strong>0.75</strong>.
+        When $\alpha \ge 0.75$:
+      </p>
+      <ol>
+        <li>The hash table allocates a new bucket array of <strong>$2\times$ capacity</strong>.</li>
+        <li>Every single existing key must be <strong>rehashed</strong> to find its new bucket index in the doubled array.</li>
+      </ol>
+      <p>
+        Like dynamic arrays, this costly $O(n)$ resize happens exponentially less often, preserving <strong><code>O(1)</code> amortized</strong> insertions.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Two Sum</h2>
+      <p>
+        Solving <strong>LeetCode 1 (Grind 75)</strong> in optimal $O(n)$ time and $O(n)$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def two_sum(nums: list[int], target: int) -> list[int]:
+    """
+    LeetCode 1 (Grind 75) - Single-pass Hash Map.
+    Time Complexity:  O(n) - each lookup and insertion is O(1) average.
+    Space Complexity: O(n) - stores up to n elements in hash map.
+    """
+    seen = {}  # maps value -> index
+
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i
+
+    return []</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function twoSum(nums: number[], target: number): number[] {
+    // Time Complexity:  O(n) single pass
+    // Space Complexity: O(n)
+    const seen = new Map<number, number>();
+
+    for (let i = 0; i < nums.length; i++) {
+        const num = nums[i];
+        const complement = target - num;
+
+        if (seen.has(complement)) {
+            return [seen.get(complement)!, i];
+        }
+        seen.set(num, i);
+    }
+
+    return [];
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.HashMap;
+
+public class TwoSum {
+    /**
+     * LeetCode 1 (Grind 75) in O(n) time and O(n) space.
+     */
+    public static int[] twoSum(int[] nums, int target) {
+        HashMap&lt;Integer, Integer&gt; seen = new HashMap&lt;&gt;();
+
+        for (int i = 0; i &lt; nums.length; i++) {
+            int complement = target - nums[i];
+            if (seen.containsKey(complement)) {
+                return new int[] { seen.get(complement), i };
+            }
+            seen.put(nums[i], i);
+        }
+
+        return new int[0];
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your hash table internal mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="If the hash function maps all keys to the exact same bucket, all elements chain together in a single list, degrading lookup to linear O(n) time.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Worst-Case Degradation</span>
+        </div>
+        <div class="quiz-question">
+          Under what condition does a standard hash table's lookup time degrade from average <code>O(1)</code> to worst-case <code>O(n)</code>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Array capacity exceeds one million keys</div>
+          <div class="quiz-option">Keys are stored in sequential order</div>
+          <div class="quiz-option">All keys hash to identical bucket index</div>
+          <div class="quiz-option">Load factor drops below zero threshold</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Swapping the element to delete with the last array element allows removing the item from the tail in O(1) without incurring any element shifts.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Design Synergy</span>
+        </div>
+        <div class="quiz-question">
+          In LeetCode 380 (Insert Delete GetRandom O(1)), how does combining a dynamic array with a hash map enable <code>O(1)</code> deletion?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Shifts all remaining elements backward</div>
+          <div class="quiz-option">Swaps target with last array element</div>
+          <div class="quiz-option">Rehashes whole table on each removal</div>
+          <div class="quiz-option">Allocates new bucket array on delete</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0008-dynamic-size-sliding-windows.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0008: Dynamic-Size Sliding Windows</span>
+      </a>
+      <a href="0010-frequency-counting-and-prefix-sums.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0010: Frequency Counting &amp; Prefix Sums</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

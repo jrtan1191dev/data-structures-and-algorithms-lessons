@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0021: Backtracking Foundations: Subsets &amp; Permutations &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 11: Recursion &amp; Backtracking</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0021</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0021</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Backtracking Foundations: Subsets &amp; Permutations</h1>
+      <p class="subtitle">
+        State-space tree exploration, the canonical Choose &rarr; Explore &rarr; Un-choose invariant, and mutable path buffer reuse over heap reallocation.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>The Anatomy of State-Space Trees</h2>
+      <p>
+        Backtracking is a depth-first traversal across an implicit <strong>state-space decision tree</strong>. At every tree node, the algorithm makes a candidate decision, descends deeper, and crucially <em>undoes</em> that decision upon return (backtracking) to restore pristine state for sibling branches.
+      </p>
+
+      <div class="callout callout-info">
+        <strong>Heap Allocation vs Mutable Call-Stack Reuse:</strong> A naive implementation passes newly copied arrays (e.g. <code>path + [x]</code>) down recursion. This allocates $O(N)$ memory per call stack frame, generating millions of transient objects and triggering heavy garbage collector pressure. The canonical pattern maintains a <em>single mutable array buffer</em> on the heap, pushes the candidate, recurses, and pops it back off (costing $O(1)$ amortized per step). Deep copies are taken only when adding a valid state to the results list.
+      </div>
+
+      <h3>Subsets ($2^N$) vs Permutations ($N!$) Decision Models</h3>
+      <ul>
+        <li>
+          <strong>Subsets (Powerset):</strong> At each index $i$, we choose whether to include or exclude <code>nums[i]</code> (binary decision tree of depth $N$, total leaves $2^N$), or we branch across all remaining indices $\ge i$ to avoid permutations of identical sets.
+        </li>
+        <li>
+          <strong>Permutations:</strong> Ordering matters. Every unused candidate in the entire array is eligible at each step. We track used candidates via a boolean array or bitmask, branching across all unvisited elements (tree branch factor $N, N-1, \dots, 1$, total leaves $N!$).
+        </li>
+      </ul>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 78: Subsets</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Index-Gated Combinatorial Branching</td>
+              <td>To generate combinations without duplicates, pass <code>start_index</code> forward. Every visited node in the state space represents a valid subset of size $0 \le k \le N$.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 46: Permutations</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>State Visitation Tracking</td>
+              <td>Since sequence order distinguishes permutations, scan from index 0 at each level using a <code>boolean[] used</code> flag or in-place element swapping. Backtrack by toggling visited off.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 46: Permutations (Choose &rarr; Explore &rarr; Un-choose)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Single Mutable Buffer Backtracking</div>
+            <pre><code>from typing import List
+
+def permute(nums: List[int]) -> List[List[int]]:
+    results: List[List[int]] = []
+    used = [False] * len(nums)
+    path: List[int] = []
+
+    def backtrack():
+        # Base case: full permutation formed
+        if len(path) == len(nums):
+            results.append(path[:])  # Take snapshot copy
+            return
+
+        for i in range(len(nums)):
+            if not used[i]:
+                # Choose
+                used[i] = True
+                path.append(nums[i])
+
+                # Explore
+                backtrack()
+
+                # Un-choose (Backtrack)
+                path.pop()
+                used[i] = False
+
+    backtrack()
+    return results</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Mutable Path and Boolean Mask</div>
+            <pre><code>function permute(nums: number[]): number[][] {
+  const results: number[][] = [];
+  const used = new Array(nums.length).fill(false);
+  const path: number[] = [];
+
+  function backtrack(): void {
+    if (path.length === nums.length) {
+      results.push([...path]); // Clone current path
+      return;
+    }
+
+    for (let i = 0; i < nums.length; i++) {
+      if (!used[i]) {
+        // Choose
+        used[i] = true;
+        path.push(nums[i]);
+
+        // Explore
+        backtrack();
+
+        // Un-choose
+        path.pop();
+        used[i] = false;
+      }
+    }
+  }
+
+  backtrack();
+  return results;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: ArrayList Backtracking with Boolean Array</div>
+            <pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> results = new ArrayList<>();
+        boolean[] used = new boolean[nums.length];
+        backtrack(nums, used, new ArrayList<>(), results);
+        return results;
+    }
+
+    private void backtrack(int[] nums, boolean[] used, List<Integer> path, List<List<Integer>> results) {
+        if (path.size() == nums.length) {
+            results.add(new ArrayList<>(path)); // Deep copy snapshot
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]) {
+                // Choose
+                used[i] = true;
+                path.add(nums[i]);
+
+                // Explore
+                backtrack(nums, used, path, results);
+
+                // Un-choose
+                path.remove(path.size() - 1);
+                used[i] = false;
+            }
+        }
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="1" data-explanation="Passing a single mutable list buffer down the recursion and popping elements upon return (un-choosing) consumes only O(N) auxiliary space, avoiding O(N) heap allocations at each recursive call frame.">
+        <h3 class="quiz-question">Why is modifying and un-choosing a single mutable array buffer superior to passing copied slices during backtracking?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Copied array slices fail to maintain chronological ordering across recursive thread executions.</button>
+          <button type="button" class="quiz-option" data-index="1">A single buffer avoids allocating transient heap memory for every recursive call stack frame.</button>
+          <button type="button" class="quiz-option" data-index="2">Operating systems forbid duplicating array slices deeper than thirty-two call frames in memory.</button>
+          <button type="button" class="quiz-option" data-index="3">Passing copied slices prevents the CPU cache from prefetching next instructions accurately.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="2" data-explanation="Subsets (combinations) restrict future candidate choices to indices greater than or equal to current index to prevent duplicate permutations, while permutations scan all indices with a visited tracker.">
+        <h3 class="quiz-question">What fundamental mechanism prevents generating duplicate sets when producing subsets compared to permutations?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary search trees dynamically filter previously constructed sub-arrays during traversal.</button>
+          <button type="button" class="quiz-option" data-index="1">Hash tables calculate cryptographic SHA-256 signatures for candidate paths before recursion.</button>
+          <button type="button" class="quiz-option" data-index="2">Forward-moving index gates restrict future candidates to strictly advancing array positions.</button>
+          <button type="button" class="quiz-option" data-index="3">Randomized pivot selection guarantees that equivalent subsets are discarded automatically.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0020-the-top-k-elements-and-two-heaps-pattern.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0020: The Top-K Elements &amp; Two-Heaps Pattern</span>
+      </a>
+      <a href="0022-constrained-search-combinations-and-pruning.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0022: Constrained Search: Combinations &amp; Pruning</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

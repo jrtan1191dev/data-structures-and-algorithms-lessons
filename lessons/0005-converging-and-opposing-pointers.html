@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0005: Converging &amp; Opposing Two Pointers &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 3: Two Pointers</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0005</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0005</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+      </div>
+      <h1>Converging &amp; Opposing Two Pointers</h1>
+      <p class="subtitle">
+        How two boundary indices moving inward collapse brute-force O(n²) pair comparisons into an elegant, single-pass O(n) scan.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#mental-model" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Mental Model: Search Space Pruning</span>
+          </a>
+        </li>
+        <li>
+          <a href="#two-sum-ii" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Canonical Pattern: Two Sum II on Sorted Sequences</span>
+          </a>
+        </li>
+        <li>
+          <a href="#container-water" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Greedy Elimination: Container With Most Water</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Curated Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      The <strong>Two Pointers Pattern</strong> is the first and most fundamental technique in Maddy's 9 Core Patterns and the NeetCode roadmap. It transforms nested loops that test all pairs $(i, j)$ into a linear traversal by leveraging monotonic properties.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        When an interviewer mentions a <strong>sorted array</strong>, an <strong>in-place array manipulation</strong>, or asks for <strong>pair sum finding with $O(1)$ extra memory</strong>, your immediate instinct must jump to Two Pointers. It achieves the optimal $O(n)$ time while beating hash map approaches by requiring $O(1)$ auxiliary space.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="mental-model">
+      <h2>1. The Mental Model: Search Space Pruning</h2>
+      <p>
+        In an array of length <em>n</em>, there are $\frac{n(n-1)}{2}$ possible pairs. A brute-force algorithm tests every single pair using nested loops:
+      </p>
+      <pre><code>for i in range(n):
+    for j in range(i + 1, n):
+        # O(n²) pair comparisons</code></pre>
+      <p>
+        Converging pointers place <code>left = 0</code> at the beginning and <code>right = n - 1</code> at the end. At each step, we compute a value. Depending on whether that value is too small, too large, or optimal, we advance <strong>exactly one pointer</strong>.
+      </p>
+      <pre><code>Search Space Matrix (sorted array):
+       right ->
+      [2,   7,  11,  15]
+left [ .    .    .    . ]
+ |   [      .    .    . ]
+ v   [           .    . ]
+     [                . ]
+
+By moving 'right' leftward, we discard an ENTIRE COLUMN of invalid pairs in O(1)!
+By moving 'left' rightward, we discard an ENTIRE ROW of invalid pairs in O(1)!</code></pre>
+      <p>
+        Because each iteration moves at least one pointer closer to the other, the loop runs at most <em>n</em> times &rarr; strictly <strong><code>O(n)</code> time</strong> with <strong><code>O(1)</code> space</strong>.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="two-sum-ii">
+      <h2>2. Canonical Pattern: Two Sum II on Sorted Sequences</h2>
+      <p>
+        Given an array sorted in non-decreasing order, find two indices such that their sum equals <code>target</code>:
+      </p>
+      <ul>
+        <li><code>current_sum = nums[left] + nums[right]</code></li>
+        <li><strong>If current_sum == target:</strong> We found our unique pair! Return <code>[left, right]</code>.</li>
+        <li><strong>If current_sum &lt; target:</strong> The sum is too small. Because the array is sorted, <code>nums[right]</code> is already the maximum available element. Pairing it with any element to the left of <code>left</code> would yield an even smaller sum. Therefore, <code>left</code> cannot be part of any valid solution &rarr; <code>left += 1</code>.</li>
+        <li><strong>If current_sum &gt; target:</strong> The sum is too large. Pairing <code>nums[left]</code> with any element to the right would be even larger. Therefore, <code>right</code> cannot be part of any solution &rarr; <code>right -= 1</code>.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="container-water">
+      <h2>3. Greedy Elimination: Container With Most Water</h2>
+      <p>
+        Given <em>n</em> non-negative integers representing vertical lines, find two lines that together with the x-axis form a container holding the most water:
+      </p>
+      <pre><code>Area = (right - left) * min(height[left], height[right])</code></pre>
+      <p>
+        We start with the widest possible base: <code>left = 0</code>, <code>right = n - 1</code>.
+        To find a larger area with a narrower width, we <strong>must find a taller height</strong>. The current area is constrained entirely by the <em>shorter</em> of the two lines. Moving the pointer at the taller line cannot possibly increase the area (the width shrinks, and the limiting height remains at best equal).
+      </p>
+      <p>
+        Therefore, we greedily discard the shorter wall:
+      </p>
+      <pre><code>if height[left] &lt; height[right]:
+    left += 1
+else:
+    right -= 1</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations</h2>
+      <p>
+        Optimal implementations of <strong>Two Sum II</strong> ($O(n)$ time, $O(1)$ space) across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
+    """
+    Finds 1-indexed pair summing to target in non-decreasing array.
+    Time Complexity:  O(n) - at most n pointer moves.
+    Space Complexity: O(1) - auxiliary pointers only.
+    """
+    left = 0
+    right = len(numbers) - 1
+
+    while left < right:
+        current_sum = numbers[left] + numbers[right]
+        if current_sum == target:
+            # Return 1-indexed result as per interview standard
+            return [left + 1, right + 1]
+        elif current_sum < target:
+            left += 1  # Need a larger number
+        else:
+            right -= 1 # Need a smaller number
+
+    return []</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function twoSumSorted(numbers: number[], target: number): number[] {
+    // Time Complexity:  O(n) single pass
+    // Space Complexity: O(1) in-place
+    let left = 0;
+    let right = numbers.length - 1;
+
+    while (left < right) {
+        const currentSum = numbers[left] + numbers[right];
+        if (currentSum === target) {
+            return [left + 1, right + 1];
+        } else if (currentSum < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return [];
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class TwoPointers {
+    /**
+     * Two Sum II in O(n) time and O(1) auxiliary space.
+     */
+    public static int[] twoSumSorted(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.length - 1;
+
+        while (left < right) {
+            int currentSum = numbers[left] + numbers[right];
+            if (currentSum == target) {
+                return new int[] { left + 1, right + 1 };
+            } else if (currentSum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return new int[0];
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your two-pointer pruning mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Because the array is sorted, pairing nums[left] with any other candidate to the left of 'right' produces an even larger sum, so 'right' can be safely eliminated from consideration.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Search Pruning</span>
+        </div>
+        <div class="quiz-question">
+          In Two Sum II on a sorted array, when <code>nums[left] + nums[right] &gt; target</code>, why is decrementing <code>right</code> guaranteed not to miss the target?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Left pointer resets to origin</div>
+          <div class="quiz-option">Right pointer wraps around array</div>
+          <div class="quiz-option">Right value paired with anyone exceeds</div>
+          <div class="quiz-option">Binary search shifts bounds inwardly</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="In Container With Most Water, width always decreases as pointers converge; moving the taller wall cannot increase the bottleneck height, so only moving the shorter wall offers any possibility of a larger area.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Greedy Pruning</span>
+        </div>
+        <div class="quiz-question">
+          In the Container With Most Water problem, why do we specifically advance the pointer pointing to the shorter vertical line?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Shorter line holds the area</div>
+          <div class="quiz-option">Moving taller wall cannot increase area</div>
+          <div class="quiz-option">Array contains negative height values</div>
+          <div class="quiz-option">Water volume overflows memory buffer</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. Curated Primary Sources</h2>
+      <ul>
+        <li>
+          <strong>Video Lecture:</strong> <a href="https://www.youtube.com/watch?v=Q5QoGocSnjo" target="_blank" rel="noreferrer">Maddy &mdash; 9 Core DSA Patterns (Pattern 1: Two Pointers) &nearr;</a>. Why pointer convergence beats hash map memory usage.
+        </li>
+        <li>
+          <strong>NeetCode:</strong> <a href="https://neetcode.io/practice" target="_blank" rel="noreferrer">NeetCode 150 &mdash; Two Pointers Track &nearr;</a>. Practice Two Sum II, 3Sum, and Trapping Rain Water.
+        </li>
+        <li>
+          <strong>Study Cheatsheet:</strong> <a href="https://www.techinterviewhandbook.org/algorithms/array/" target="_blank" rel="noreferrer">Tech Interview Handbook &mdash; Array &amp; Two Pointers &nearr;</a>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0004-strings-and-byte-representation.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0004: Strings &amp; Byte Representation</span>
+      </a>
+      <a href="0006-fast-and-slow-pointers.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0006: Fast &amp; Slow Pointers</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

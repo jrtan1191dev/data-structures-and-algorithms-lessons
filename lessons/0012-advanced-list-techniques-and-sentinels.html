@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0012: Advanced List Techniques &amp; Sentinels &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 6: Linked Lists</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0012</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0012</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Advanced List Techniques &amp; Sentinels</h1>
+      <p class="subtitle">
+        Eliminating null checks with dummy nodes, combining list reversals with mid-finding, and the gold standard LRU Cache design pairing doubly linked lists with hash maps.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#dummy-nodes" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Dummy/Sentinel Node Superpower</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#three-part-synthesis" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Three-Part Synthesis: Reorder List</span>
+          </a>
+        </li>
+        <li>
+          <a href="#lru-cache" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>System Design Classic: The LRU Cache</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Merge Two Sorted Lists</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In production engineering and technical interviews, raw pointer manipulation easily leads to Null Pointer Exceptions (NPEs) or convoluted branching logic for boundary conditions (head or tail modifications). <strong>Sentinel Nodes</strong> and <strong>Composite Data Structures</strong> solve these issues with mathematical elegance.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        The <strong>LRU Cache (LeetCode 146)</strong> is one of the most frequently asked interview problems in Big Tech history. It tests whether you can integrate two disparate data structures&mdash;a <strong>Doubly Linked List</strong> and a <strong>Hash Map</strong>&mdash;to achieve strictly <code>O(1)</code> time for both <code>get</code> and <code>put</code> operations.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="dummy-nodes">
+      <h2>1. The Dummy/Sentinel Node Superpower</h2>
+      <p>
+        When modifying a linked list where the <strong>head itself might change</strong> (merging lists, deleting elements, partitioning), writing special cases for <code>head == null</code> clutters code and invites bugs.
+      </p>
+      <pre><code>Without Dummy Node:
+if head == null: return new_node
+if new_node.val < head.val:
+    new_node.next = head
+    head = new_node
+# Cluttered edge-case logic!
+
+With Dummy Node:
+dummy = ListNode(-1)
+dummy.next = head
+curr = dummy
+# All operations treat every node identically, including the original head!
+return dummy.next</code></pre>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 21 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Merge Two Sorted Lists</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Create <code>dummy = ListNode(0)</code>. Compare <code>l1.val</code> and <code>l2.val</code>, wire <code>curr.next</code> to the smaller node, and advance that list. Splice the non-empty remainder in $O(1)$ without a loop. Return <code>dummy.next</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 146 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 4</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">LRU Cache</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Map <code>key -> Node</code> in a Hash Map. Store nodes in a Doubly Linked List with dummy <code>head</code> and <code>tail</code> sentinels. Removing a node is $O(1)$ (`node.prev.next = node.next`). Inserting at head (MRU) is $O(1)$. Evicting least recently used (`tail.prev`) is $O(1)$.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 143 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 7</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Reorder List</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Integrates three foundational sub-skills: (1) Find list midpoint using slow/fast pointers, (2) Reverse second half in place, (3) Interleave alternating nodes from both halves in $O(1)$ space.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="three-part-synthesis">
+      <h2>3. Three-Part Synthesis: Reorder List</h2>
+      <p>
+        Reordering $L_0 \to L_1 \to \dots \to L_{n-1} \to L_n$ into $L_0 \to L_n \to L_1 \to L_{n-1} \to \dots$ without extra memory:
+      </p>
+      <pre><code>Original: [1] -> [2] -> [3] -> [4] -> [5] -> [6]
+
+Step 1: Fast/slow pointers find midpoint:
+First half:  [1] -> [2] -> [3] -> null
+Second half: [4] -> [5] -> [6] -> null
+
+Step 2: Reverse second half in place:
+Reversed second: [6] -> [5] -> [4] -> null
+
+Step 3: Interleave pointers p1 and p2:
+Result: [1] -> [6] -> [2] -> [5] -> [3] -> [4] -> null</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="lru-cache">
+      <h2>4. System Design Classic: The LRU Cache</h2>
+      <pre><code>[Dummy Head] <-> [Node Key: 2] <-> [Node Key: 1] <-> [Dummy Tail]
+      ^                                                     ^
+ (Most Recently Used)                              (Least Recently Used)
+
+HashMap:
+{
+  1: 0x4000 (Pointer to Node 1),
+  2: 0x2000 (Pointer to Node 2)
+}
+
+Operations:
+- get(key): Lookup pointer in map in O(1). Remove node from list and insert at Head.
+- put(key, val): If exists, update & move to Head. If capacity exceeded, evict tail.prev!</code></pre>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Merge Two Sorted Lists</h2>
+      <p>
+        Solving <strong>LeetCode 21 (Grind 75)</strong> in $O(n + m)$ time and $O(1)$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def merge_two_lists(list1: ListNode | None, list2: ListNode | None) -> ListNode | None:
+    """
+    LeetCode 21 (Grind 75) - Iterative with Sentinel Dummy Node.
+    Time Complexity:  O(n + m) - single pass through both lists.
+    Space Complexity: O(1) - in-place pointer adjustments.
+    """
+    dummy = ListNode(-1)
+    curr = dummy
+
+    while list1 and list2:
+        if list1.val <= list2.val:
+            curr.next = list1
+            list1 = list1.next
+        else:
+            curr.next = list2
+            list2 = list2.next
+        curr = curr.next
+
+    # Splice remaining non-empty tail in O(1)
+    curr.next = list1 if list1 else list2
+
+    return dummy.next</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>class ListNode {
+    val: number;
+    next: ListNode | null;
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+    }
+}
+
+function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+    // Time Complexity:  O(n + m)
+    // Space Complexity: O(1)
+    const dummy = new ListNode(-1);
+    let curr = dummy;
+
+    while (list1 !== null && list2 !== null) {
+        if (list1.val <= list2.val) {
+            curr.next = list1;
+            list1 = list1.next;
+        } else {
+            curr.next = list2;
+            list2 = list2.next;
+        }
+        curr = curr.next;
+    }
+
+    curr.next = list1 !== null ? list1 : list2;
+    return dummy.next;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class MergeLists {
+    /**
+     * LeetCode 21 (Grind 75) in O(n + m) time and O(1) space.
+     */
+    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode curr = dummy;
+
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                curr.next = list1;
+                list1 = list1.next;
+            } else {
+                curr.next = list2;
+                list2 = list2.next;
+            }
+            curr = curr.next;
+        }
+
+        curr.next = (list1 != null) ? list1 : list2;
+        return dummy.next;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your advanced list mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="A sentinel dummy node provides a fixed non-null anchor preceding the true head, eliminating branching for head insertions and deletions.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Sentinel Power</span>
+        </div>
+        <div class="quiz-question">
+          What is the primary architectural advantage of using a sentinel dummy head node in linked list manipulation algorithms?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Compresses memory allocated on heap</div>
+          <div class="quiz-option">Sorts incoming nodes by frequency</div>
+          <div class="quiz-option">Eliminates null edge cases cleanly</div>
+          <div class="quiz-option">Prevents cyclic loops during traversal</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Because doubly linked list nodes maintain references to both prev and next, disconnecting a node from the middle takes constant O(1) pointer updates without scanning from head.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">LRU Synergy</span>
+        </div>
+        <div class="quiz-question">
+          In the LRU Cache (LeetCode 146), why is a Doubly Linked List strictly preferred over a Singly Linked List?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Allows binary search over cached keys</div>
+          <div class="quiz-option">Enables O(1) removal of middle nodes</div>
+          <div class="quiz-option">Halves memory usage of each cache entry</div>
+          <div class="quiz-option">Automatically sorts entries by key value</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0011-singly-and-doubly-linked-lists.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0011: Singly &amp; Doubly Linked Lists</span>
+      </a>
+      <a href="0013-stacks-queues-and-deques.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0013: Stacks, Queues &amp; Deques</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

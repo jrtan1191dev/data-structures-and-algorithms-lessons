@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0025: 1D Dynamic Programming: Memoization vs Tabulation &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 13: Dynamic Programming</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0025</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0025</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>1D Dynamic Programming: Memoization vs Tabulation</h1>
+      <p class="subtitle">
+        Overlapping subproblems, top-down recursion stack frames vs bottom-up linear table cache locality, and state compression to O(1) memory.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Top-Down vs Bottom-Up in the Memory Hierarchy</h2>
+      <p>
+        Dynamic Programming (DP) solves complex problems by breaking them down into simpler <strong>overlapping subproblems</strong> that possess <strong>optimal substructure</strong>.
+      </p>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Top-Down (Memoization)</th>
+              <th>Bottom-Up (Tabulation)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Execution Model</strong></td>
+              <td>Recursive calls descending from target $N \to 0$.</td>
+              <td>Iterative <code>for</code> loop building up from base cases $0 \to N$.</td>
+            </tr>
+            <tr>
+              <td><strong>Memory Footprint</strong></td>
+              <td>$O(N)$ call stack frames + $O(N)$ memo table.</td>
+              <td>$O(N)$ flat array table in contiguous RAM (no call stack).</td>
+            </tr>
+            <tr>
+              <td><strong>CPU Cache Locality</strong></td>
+              <td>Non-linear stack jumps; cache hit rate varies.</td>
+              <td>Sequential array iteration; maximum hardware L1/L2 prefetching.</td>
+            </tr>
+            <tr>
+              <td><strong>Space Reduction</strong></td>
+              <td>Difficult; all active frames must remain in memory.</td>
+              <td>Trivial: if $dp[i]$ depends only on $dp[i-1]$ and $dp[i-2]$, compress to 2 variables ($O(1)$ RAM).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The State Transition Recurrence</h3>
+      <p>
+        In <strong>Coin Change (LC 322)</strong>, each subproblem represents the minimum coins required to make exact change for amount $a$:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Mathematical Recurrence Formula</div>
+        <pre><code>Base Case:
+dp[0] = 0
+dp[a] = +inf  (for all a > 0)
+
+Transition:
+dp[a] = min_{c in coins, c <= a} (dp[a - c] + 1)
+
+Result:
+dp[amount] if dp[amount] != +inf else -1</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 70: Climbing Stairs</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>Linear Fibonacci Recurrence</td>
+              <td>Ways to step $i$ equals ways to $(i-1) + (i-2)$. Compress $O(N)$ table into two register variables for $O(1)$ space.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 198: House Robber</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Non-Adjacent Selection</td>
+              <td>Choice at house $i$: rob current house + $dp[i-2]$, or skip current house ($dp[i-1]$). Compress to two scalar variables.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 322: Coin Change</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Unbounded Knapsack Tabulation</td>
+              <td>Initialize array of size <code>amount + 1</code> with infinity. Fill bottom-up from 1 to <code>amount</code> to achieve $O(\text{amount} \cdot \text{coins})$ time.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 139: Word Break</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>1D Boolean Segmentation</td>
+              <td>$dp[i]$ represents whether prefix $s[0 \dots i]$ can be segmented. Inner loop tests all suffixes against dictionary hash set.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 322: Coin Change ($O(A \cdot C)$ Time, $O(A)$ Space Tabulation)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: 1D Array Tabulation</div>
+            <pre><code>from typing import List
+
+def coinChange(coins: List[int], amount: int) -> int:
+    # Initialize table with amount + 1 (representing infinity)
+    dp = [amount + 1] * (amount + 1)
+    dp[0] = 0
+
+    for a in range(1, amount + 1):
+        for c in coins:
+            if a - c >= 0:
+                dp[a] = min(dp[a], dp[a - c] + 1)
+
+    return dp[amount] if dp[amount] <= amount else -1</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Fast Typed Number Array Tabulation</div>
+            <pre><code>function coinChange(coins: number[], amount: number): number {
+  const dp = new Array(amount + 1).fill(amount + 1);
+  dp[0] = 0;
+
+  for (let a = 1; a <= amount; a++) {
+    for (const c of coins) {
+      if (a - c >= 0) {
+        dp[a] = Math.min(dp[a], dp[a - c] + 1);
+      }
+    }
+  }
+
+  return dp[amount] > amount ? -1 : dp[amount];
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Primitive int[] Array Tabulation</div>
+            <pre><code>import java.util.Arrays;
+
+public class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+
+        for (int a = 1; a <= amount; a++) {
+            for (int c : coins) {
+                if (a - c >= 0) {
+                    dp[a] = Math.min(dp[a], dp[a - c] + 1);
+                }
+            }
+        }
+
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="0" data-explanation="Bottom-up tabulation computes subproblems iteratively across contiguous memory array cells, maximizing L1/L2 CPU cache hits and eliminating recursion stack frame overhead.">
+        <h3 class="quiz-question">Why does bottom-up tabulation demonstrate superior runtime performance over top-down memoization?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Sequential array access optimizes hardware CPU cache line prefetching.</button>
+          <button type="button" class="quiz-option" data-index="1">Iterative loops bypass integer division instructions during calculations.</button>
+          <button type="button" class="quiz-option" data-index="2">Operating systems dynamically compress bottom-up variables to 16 bits.</button>
+          <button type="button" class="quiz-option" data-index="3">Thread pools automatically parallelize linear loop iterations across cores.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="2" data-explanation="When a state transition dp[i] depends solely on a fixed window of preceding states (e.g. dp[i-1] and dp[i-2]), previous history beyond that window can be discarded, compressing memory to O(1).">
+        <h3 class="quiz-question">Under what condition can a 1D DP table of size N be compressed down to O(1) auxiliary space?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">When problem inputs are sorted ascendingly prior to state initialization.</button>
+          <button type="button" class="quiz-option" data-index="1">When all coin denominations share a single common greatest prime divisor.</button>
+          <button type="button" class="quiz-option" data-index="2">When state transitions depend only on a fixed number of prior subproblems.</button>
+          <button type="button" class="quiz-option" data-index="3">When recursive call stack depths never exceed sixteen consecutive frames.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0024-topological-sort-and-disjoint-set-union.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0024: Topological Sort &amp; Disjoint Set Union</span>
+      </a>
+      <a href="0026-2d-and-subsequence-dynamic-programming.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0026: 2D &amp; Subsequence Dynamic Programming</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

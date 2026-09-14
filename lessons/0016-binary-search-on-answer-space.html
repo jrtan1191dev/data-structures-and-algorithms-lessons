@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0016: Binary Search on Answer Space &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 8: Binary Search</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0016</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0016</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Binary Search on Answer Space</h1>
+      <p class="subtitle">
+        Moving beyond array indices. Using monotonic boolean predicate functions f(x) &rarr; {True, False} to find minimum feasible speeds, capacities, and costs in O(n log M) time.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#predicate-model" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Monotonic Predicate Mental Model</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#koko-breakdown" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Canonical Problem: Koko Eating Bananas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In advanced technical interviews, binary search is rarely used just to find an integer in an array. Instead, it is used to solve <strong>optimization problems</strong>: <em>"Find the minimum capacity to finish within D days"</em>, or <em>"Find the slowest speed to finish before the deadline."</em>
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        The signal to trigger this pattern is phrasing like: <strong>"Minimize the maximum"</strong> or <strong>"Find the minimum X such that condition Y holds."</strong> If a candidate solution $k$ makes the condition true, and all values $k' > k$ also make it true, you have a <strong>monotonic predicate</strong> ready for binary search!
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="predicate-model">
+      <h2>1. The Monotonic Predicate Mental Model</h2>
+      <p>
+        Instead of searching an input array, our search space is the <strong>domain of possible answers</strong>: $[low, high]$.
+        We write a helper function (the predicate):
+      </p>
+      <pre><code>can_finish(speed) -> bool:
+   Returns True if Koko can finish all piles within h hours at this speed.</code></pre>
+      <p>
+        Notice how this function behaves across candidate speeds:
+      </p>
+      <pre><code>Speed:       1       2       3       4       5       6       7 ...
+Feasible: [False,  False,  False,  True,   True,   True,   True]
+                                     ^
+                             We want the FIRST True!</code></pre>
+      <p>
+        Because the sequence of boolean answers is monotonic, we can binary search over the integer range $[1, \max(\text{piles})]$ in <code>O(log(max_speed))</code> steps!
+      </p>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 875 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 5</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Koko Eating Bananas</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Define search bounds <code>left = 1</code>, <code>right = max(piles)</code>. In the predicate, total hours spent is $\sum \lceil p / k \rceil$. If hours $\le h$, this speed is feasible &rarr; search lower speeds (`right = mid`). Otherwise, speed is too slow &rarr; search higher speeds (`left = mid + 1`).
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 981 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 5</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Time Based Key-Value Store</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Map <code>key -> list_of_(timestamp, value)</code>. Timestamps are strictly increasing by problem definition. Use binary search (right-boundary / upper bound) to find the largest timestamp $\le target$ in $O(\log n)$ time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="koko-breakdown">
+      <h2>3. Canonical Problem: Koko Eating Bananas</h2>
+      <p>
+        To avoid floating-point math when computing ceiling division $\lceil p / k \rceil$, use integer arithmetic:
+      </p>
+      <pre><code>hours_for_pile = (pile + k - 1) // k</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations</h2>
+      <p>
+        Solving <strong>LeetCode 875 (Grind 75)</strong> in $O(n \log M)$ time and $O(1)$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>import math
+
+def min_eating_speed(piles: list[int], h: int) -> int:
+    """
+    LeetCode 875 (Grind 75) - Binary Search on Answer Space.
+    Time Complexity:  O(n * log(max(piles)))
+    Space Complexity: O(1)
+    """
+    left = 1
+    right = max(piles)
+    ans = right
+
+    def can_finish(k: int) -> bool:
+        total_hours = sum(math.ceil(p / k) for p in piles)
+        return total_hours <= h
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if can_finish(mid):
+            ans = mid          # Feasible; try to find an even smaller speed
+            right = mid - 1
+        else:
+            left = mid + 1     # Too slow; must increase speed
+
+    return ans</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function minEatingSpeed(piles: number[], h: number): number {
+    let left = 1;
+    let right = Math.max(...piles);
+    let ans = right;
+
+    function canFinish(k: number): boolean {
+        let totalHours = 0;
+        for (const p of piles) {
+            totalHours += Math.ceil(p / k);
+            if (totalHours > h) return false; // Early exit
+        }
+        return totalHours <= h;
+    }
+
+    while (left <= right) {
+        const mid = left + Math.floor((right - left) / 2);
+
+        if (canFinish(mid)) {
+            ans = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    return ans;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class KokoEating {
+    /**
+     * LeetCode 875 (Grind 75) in O(n log M) time and O(1) space.
+     */
+    public static int minEatingSpeed(int[] piles, int h) {
+        int left = 1;
+        int right = 1;
+        for (int p : piles) {
+            right = Math.max(right, p);
+        }
+        int ans = right;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (canFinish(piles, h, mid)) {
+                ans = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+
+    private static boolean canFinish(int[] piles, int h, int k) {
+        long totalHours = 0;
+        for (int p : piles) {
+            totalHours += (p + k - 1) / k; // Safe integer ceil division
+            if (totalHours > h) return false;
+        }
+        return totalHours <= h;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your answer space binary search intuition:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Binary search on answer space works whenever the boolean feasibility predicate is monotonic: if a speed k works, all speeds greater than k also work, producing a sorted sequence of [False, ..., True].">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Predicate Invariant</span>
+        </div>
+        <div class="quiz-question">
+          What mathematical property must the feasibility predicate function satisfy for binary search on answer space to guarantee finding the optimal answer?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Input numbers must all be prime values</div>
+          <div class="quiz-option">Array values must be stored in reverse</div>
+          <div class="quiz-option">Predicate must be strictly monotonic boolean</div>
+          <div class="quiz-option">Predicate must evaluate in constant time</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="When can_finish(mid) returns True, mid is valid, but an even smaller speed might also be valid; therefore we record mid as current best and search left: right = mid - 1.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Boundary Shift</span>
+        </div>
+        <div class="quiz-question">
+          In Koko Eating Bananas, when <code>can_finish(mid)</code> returns <code>True</code>, why do we set <code>right = mid - 1</code>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Speed is invalid and must increase</div>
+          <div class="quiz-option">Speed is valid and smaller speed may work</div>
+          <div class="quiz-option">Bananas spoil after midpoint calculation</div>
+          <div class="quiz-option">Array size doubles on successful traversal</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0015-classic-binary-search-and-boundary-templates.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0015: Classic Binary Search</span>
+      </a>
+      <a href="0017-binary-tree-traversals-dfs-and-bfs.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0017: Binary Tree Traversals</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

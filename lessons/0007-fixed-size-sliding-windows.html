@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0007: Fixed-Size Sliding Windows &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 4: Sliding Window</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0007</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0007</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Fixed-Size Sliding Windows</h1>
+      <p class="subtitle">
+        Reusing interval state across contiguous subarrays. How moving a fixed frame of size k turns repeated O(k) recomputations into instantaneous O(1) state updates.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#mental-model" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The State Reuse Mental Model</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Problems &amp; Key Learning Takeaways</span>
+          </a>
+        </li>
+        <li>
+          <a href="#window-math" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The O(1) Update Formula: Enter &amp; Exit Mechanics</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations: Permutation in String</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Curated Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In many interview problems, you are asked to compute an aggregate (sum, average, maximum, anagram match) over every contiguous subarray or substring of fixed length <em>k</em>.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        The brute-force solution re-evaluates all <em>k</em> elements for every starting position, costing <code>O(n &times; k)</code>. By observing that adjacent windows share $k - 1$ overlapping elements, we subtract the exiting element and add the entering element in <strong><code>O(1)</code> time per step</strong>, yielding a strictly <strong><code>O(n)</code> linear runtime</strong>.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="mental-model">
+      <h2>1. The State Reuse Mental Model</h2>
+      <p>
+        Consider an array <code>[1, 3, 2, 6, -1, 4, 1]</code> with window size <code>k = 4</code>:
+      </p>
+      <pre><code>Window 0: [1,  3,  2,  6]           Sum = 12
+Window 1:     [3,  2,  6, -1]       Sum = 12 - 1 + (-1) = 10
+Window 2:         [2,  6, -1,  4]   Sum = 10 - 3 + 4    = 11
+Window 3:             [6, -1,  4, 1]Sum = 11 - 2 + 1    = 10
+
+Only 1 element leaves and 1 element enters!
+All middle (k - 2) elements remain unchanged.</code></pre>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Problems &amp; Key Learning Takeaways</h2>
+      <p>
+        Here are the canonical Grind 75 problems governed by the Fixed-Size Sliding Window pattern:
+      </p>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 643 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Maximum Average Subarray I</div>
+            <p class="row-desc">
+              <strong>Key Learning Takeaway:</strong> Build the initial window sum of the first <em>k</em> items in $O(k)$. Then slide from $i = k$ to $n-1$: <code>window_sum += nums[i] - nums[i - k]</code>. Never re-sum!
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 567 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Permutation in String</div>
+            <p class="row-desc">
+              <strong>Key Learning Takeaway:</strong> A permutation of <code>s1</code> inside <code>s2</code> is simply an anagram of exact length <code>len(s1)</code>. Use a fixed window of size <code>len(s1)</code> over <code>s2</code> with a 26-element character frequency array. Maintain a <code>matches</code> count (number of characters whose frequencies match) to verify equality in $O(1)$ rather than comparing 26 buckets every step.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 438 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Find All Anagrams in a String</div>
+            <p class="row-desc">
+              <strong>Key Learning Takeaway:</strong> Extends LeetCode 567 by collecting every starting index where the fixed window's frequency vector equals the pattern's frequency vector.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="window-math">
+      <h2>3. The O(1) Update Formula: Enter &amp; Exit Mechanics</h2>
+      <p>
+        Every fixed-window algorithm follows this invariant template:
+      </p>
+      <pre><code>1. INITIALIZE:
+   Compute state for window [0 ... k - 1]
+
+2. SLIDE (for i from k to n - 1):
+   entering_item = nums[i]
+   exiting_item  = nums[i - k]
+
+   update_state_add(entering_item)
+   update_state_remove(exiting_item)
+
+   record_best_result()</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations: Permutation in String</h2>
+      <p>
+        Solving <strong>LeetCode 567 (Grind 75)</strong> in optimal $O(n)$ time and $O(1)$ auxiliary space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def check_inclusion(s1: str, s2: str) -> bool:
+    """
+    LeetCode 567 (Grind 75) - Fixed Window of size len(s1).
+    Time Complexity:  O(len(s2)) - single linear pass.
+    Space Complexity: O(1) - two 26-element frequency arrays.
+    """
+    n1, n2 = len(s1), len(s2)
+    if n1 > n2:
+        return False
+
+    s1_counts = [0] * 26
+    s2_counts = [0] * 26
+
+    # 1. Initialize first window
+    for i in range(n1):
+        s1_counts[ord(s1[i]) - ord('a')] += 1
+        s2_counts[ord(s2[i]) - ord('a')] += 1
+
+    matches = sum(1 for c in range(26) if s1_counts[c] == s2_counts[c])
+
+    # 2. Slide window of size n1 across s2
+    for i in range(n1, n2):
+        if matches == 26:
+            return True
+
+        # Character entering window on right
+        r_idx = ord(s2[i]) - ord('a')
+        s2_counts[r_idx] += 1
+        if s2_counts[r_idx] == s1_counts[r_idx]:
+            matches += 1
+        elif s2_counts[r_idx] == s1_counts[r_idx] + 1:
+            matches -= 1
+
+        # Character exiting window on left
+        l_idx = ord(s2[i - n1]) - ord('a')
+        s2_counts[l_idx] -= 1
+        if s2_counts[l_idx] == s1_counts[l_idx]:
+            matches += 1
+        elif s2_counts[l_idx] == s1_counts[l_idx] - 1:
+            matches -= 1
+
+    return matches == 26</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function checkInclusion(s1: string, s2: string): boolean {
+    const n1 = s1.length;
+    const n2 = s2.length;
+    if (n1 > n2) return false;
+
+    const s1Count = new Int32Array(26);
+    const s2Count = new Int32Array(26);
+    const codeA = 'a'.charCodeAt(0);
+
+    // Initialize first window of size n1
+    for (let i = 0; i < n1; i++) {
+        s1Count[s1.charCodeAt(i) - codeA]++;
+        s2Count[s2.charCodeAt(i) - codeA]++;
+    }
+
+    let matches = 0;
+    for (let i = 0; i < 26; i++) {
+        if (s1Count[i] === s2Count[i]) matches++;
+    }
+
+    // Slide across s2
+    for (let i = n1; i < n2; i++) {
+        if (matches === 26) return true;
+
+        const enterIdx = s2.charCodeAt(i) - codeA;
+        s2Count[enterIdx]++;
+        if (s2Count[enterIdx] === s1Count[enterIdx]) matches++;
+        else if (s2Count[enterIdx] === s1Count[enterIdx] + 1) matches--;
+
+        const exitIdx = s2.charCodeAt(i - n1) - codeA;
+        s2Count[exitIdx]--;
+        if (s2Count[exitIdx] === s1Count[exitIdx]) matches++;
+        else if (s2Count[exitIdx] === s1Count[exitIdx] - 1) matches--;
+    }
+
+    return matches === 26;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class PermutationInString {
+    /**
+     * LeetCode 567 (Grind 75) in O(n2) time and O(1) auxiliary space.
+     */
+    public static boolean checkInclusion(String s1, String s2) {
+        int n1 = s1.length();
+        int n2 = s2.length();
+        if (n1 > n2) return false;
+
+        int[] s1Counts = new int[26];
+        int[] s2Counts = new int[26];
+
+        for (int i = 0; i < n1; i++) {
+            s1Counts[s1.charAt(i) - 'a']++;
+            s2Counts[s2.charAt(i) - 'a']++;
+        }
+
+        int matches = 0;
+        for (int i = 0; i < 26; i++) {
+            if (s1Counts[i] == s2Counts[i]) matches++;
+        }
+
+        for (int i = n1; i < n2; i++) {
+            if (matches == 26) return true;
+
+            int enterIdx = s2.charAt(i) - 'a';
+            s2Counts[enterIdx]++;
+            if (s2Counts[enterIdx] == s1Counts[enterIdx]) matches++;
+            else if (s2Counts[enterIdx] == s1Counts[enterIdx] + 1) matches--;
+
+            int exitIdx = s2.charAt(i - n1) - 'a';
+            s2Counts[exitIdx]--;
+            if (s2Counts[exitIdx] == s1Counts[exitIdx]) matches++;
+            else if (s2Counts[exitIdx] == s1Counts[exitIdx] - 1) matches--;
+        }
+
+        return matches == 26;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your fixed-window state mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Because adjacent windows overlap on k - 1 elements, updating the window sum requires only adding the entering element and subtracting the exiting element: O(1) work.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">State Reuse</span>
+        </div>
+        <div class="quiz-question">
+          When sliding a window of length <em>k</em> across an array of length <em>n</em>, why does the state update take strictly <code>O(1)</code> time instead of <code>O(k)</code>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Pointers avoid scanning input array</div>
+          <div class="quiz-option">Window size grows dynamically</div>
+          <div class="quiz-option">Only entering and exiting elements change</div>
+          <div class="quiz-option">Memory caches precompute intervals</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Maintaining a matches counter tracks how many character frequencies are equal; adjusting it in O(1) per enter/exit avoids checking all 26 alphabet buckets on every step.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Grind 75 Pattern</span>
+        </div>
+        <div class="quiz-question">
+          In Permutation in String (LeetCode 567), what is the key advantage of maintaining a <code>matches</code> count variable across the 26 alphabet characters?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Reduces space complexity to zero</div>
+          <div class="quiz-option">Verifies anagram match in O(1) time</div>
+          <div class="quiz-option">Sorts substrings in linear time</div>
+          <div class="quiz-option">Detects cyclic loops automatically</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. Curated Primary Sources</h2>
+      <ul>
+        <li>
+          <strong>Tech Interview Handbook:</strong> <a href="https://www.techinterviewhandbook.org/grind75" target="_blank" rel="noreferrer">Grind 75 Study Plan &nearr;</a>. See Permutation in String (Week 3) and Maximum Average Subarray.
+        </li>
+        <li>
+          <strong>Primary Watch:</strong> <a href="https://www.youtube.com/watch?v=Q5QoGocSnjo" target="_blank" rel="noreferrer">Maddy &mdash; 9 Core DSA Patterns (Pattern 2: Sliding Window) &nearr;</a>.
+        </li>
+        <li>
+          <strong>NeetCode:</strong> <a href="https://neetcode.io/problems/permutation-in-string" target="_blank" rel="noreferrer">Permutation in String Video Solution &nearr;</a>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0006-fast-and-slow-pointers.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0006: Fast &amp; Slow Pointers</span>
+      </a>
+      <a href="0008-dynamic-size-sliding-windows.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0008: Dynamic-Size Sliding Windows</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

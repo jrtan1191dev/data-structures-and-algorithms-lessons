@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0013: Stacks, Queues &amp; Deques &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 7: Stacks &amp; Queues</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0013</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0013</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Stacks, Queues &amp; Deques</h1>
+      <p class="subtitle">
+        LIFO vs. FIFO memory models, avoiding O(n) array shift traps with ring buffers and deques, and building O(1) tracking structures like Min Stack.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#lifo-fifo-mechanics" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>LIFO vs. FIFO Underlying Mechanics</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#queue-performance-trap" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The Queue Performance Trap: Pop(0) vs. Deque</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations: Valid Parentheses &amp; Min Stack</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      <strong>Stacks</strong> (Last-In, First-Out) and <strong>Queues</strong> (First-In, First-Out) restrict access to elements to guarantee strict ordering semantics. They form the backbone of language execution runtimes (the call stack) and foundational search algorithms (DFS and BFS).
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        In technical interviews, using a standard array as a queue via <code>arr.pop(0)</code> in Python or <code>arr.shift()</code> in JavaScript is an instant red flag. It triggers hidden <code>O(n)</code> memory copying on every dequeue! You must use <code>collections.deque</code> in Python, a ring buffer / <code>ArrayDeque</code> in Java, or a pointer-based queue in TypeScript.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="lifo-fifo-mechanics">
+      <h2>1. LIFO vs. FIFO Underlying Mechanics</h2>
+      <ul>
+        <li>
+          <strong>Stack (LIFO):</strong> Elements are added and removed from the <em>same end</em> (the top). Because append and pop from the tail of a dynamic array don't shift elements, standard arrays make optimal <code>O(1)</code> stacks.
+        </li>
+        <li>
+          <strong>Queue (FIFO):</strong> Elements enter at the tail (enqueue) and exit at the head (dequeue). Removing from index 0 in a regular array requires shifting all remaining items left &rarr; <code>O(n)</code>. To achieve <code>O(1)</code> dequeues, queues use a <strong>circular buffer</strong> or a <strong>doubly linked list</strong> (Deque).
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 20 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Valid Parentheses</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Push expected closing brackets (or push opening brackets and map to closing types via a hash map). When encountering a closing bracket, pop and verify equality. Verify <code>len(stack) == 0</code> at the end to catch unclosed opening brackets!
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 232 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Implement Queue using Stacks</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Dual-stack architecture (<code>in_stack</code> and <code>out_stack</code>). Push directly to <code>in_stack</code> in $O(1)$. When popping, only dump <code>in_stack</code> into <code>out_stack</code> when <code>out_stack</code> is empty. Each element is transferred at most once &rarr; $O(1)$ amortized!
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 155 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 3</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Min Stack</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Track the running minimum at every stack depth. Store pairs <code>(val, current_min)</code> in a single stack, or maintain a secondary <code>min_stack</code>. <code>getMin()</code> returns top of the min-tracker in strictly $O(1)$ time.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 150 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 3</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Evaluate Reverse Polish Notation</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Postfix evaluation. Operands are pushed onto stack. When an operator is met, pop top two operands (caution: order matters! <code>b = pop(), a = pop()</code> &rarr; compute <code>a op b</code>) and push the result back.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="queue-performance-trap">
+      <h2>3. The Queue Performance Trap: Pop(0) vs. Deque</h2>
+      <pre><code>Python:
+from collections import deque
+q = deque()
+q.append(10)      # O(1)
+q.popleft()       # O(1)  <-- NEVER use list.pop(0) which is O(n)!
+
+Java:
+Deque<Integer> q = new ArrayDeque<>();
+q.offerLast(10);  # O(1)
+q.pollFirst();    # O(1)  <-- Faster than LinkedList in RAM!
+
+TypeScript:
+// In JS/TS, unshift/shift on arrays are O(n). For production/interviews, 
+// a simple two-pointer index on an array or a linked-list node queue is O(1).</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations: Valid Parentheses &amp; Min Stack</h2>
+      <p>
+        Solving <strong>LeetCode 20 &amp; 155 (Grind 75)</strong> in $O(n)$ time and $O(n)$ space:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def is_valid_parentheses(s: str) -> bool:
+    """
+    LeetCode 20 (Grind 75) - Stack LIFO matching.
+    Time Complexity:  O(n) - single pass.
+    Space Complexity: O(n) - stack memory.
+    """
+    bracket_map = {')': '(', '}': '{', ']': '['}
+    stack = []
+
+    for char in s:
+        if char in bracket_map:
+            # Must match top of stack
+            top_element = stack.pop() if stack else '#'
+            if bracket_map[char] != top_element:
+                return False
+        else:
+            stack.append(char)
+
+    return len(stack) == 0
+
+class MinStack:
+    """
+    LeetCode 155 (Grind 75) - O(1) push, pop, top, getMin.
+    """
+    def __init__(self):
+        self.stack = []  # stores (val, min_so_far) tuples
+
+    def push(self, val: int) -> None:
+        current_min = val if not self.stack else min(val, self.stack[-1][1])
+        self.stack.append((val, current_min))
+
+    def pop(self) -> None:
+        self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1][0]
+
+    def getMin(self) -> int:
+        return self.stack[-1][1]</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function isValid(s: string): boolean {
+    const map: Record<string, string> = { ')': '(', '}': '{', ']': '[' };
+    const stack: string[] = [];
+
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (ch in map) {
+            const top = stack.length > 0 ? stack.pop() : '#';
+            if (top !== map[ch]) return false;
+        } else {
+            stack.push(ch);
+        }
+    }
+
+    return stack.length === 0;
+}
+
+class MinStack {
+    private stack: [number, number][] = [];
+
+    push(val: number): void {
+        const curMin = this.stack.length === 0 
+            ? val 
+            : Math.min(val, this.stack[this.stack.length - 1][1]);
+        this.stack.push([val, curMin]);
+    }
+
+    pop(): void {
+        this.stack.pop();
+    }
+
+    top(): number {
+        return this.stack[this.stack.length - 1][0];
+    }
+
+    getMin(): number {
+        return this.stack[this.stack.length - 1][1];
+    }
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class StackProblems {
+    public static boolean isValid(String s) {
+        Deque&lt;Character&gt; stack = new ArrayDeque&lt;&gt;();
+
+        for (char c : s.toCharArray()) {
+            if (c == '(') stack.push(')');
+            else if (c == '{') stack.push('}');
+            else if (c == '[') stack.push(']');
+            else if (stack.isEmpty() || stack.pop() != c) return false;
+        }
+
+        return stack.isEmpty();
+    }
+}
+
+class MinStack {
+    private Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+    private Deque&lt;Integer&gt; minStack = new ArrayDeque&lt;&gt;();
+
+    public void push(int val) {
+        stack.push(val);
+        int currentMin = minStack.isEmpty() ? val : Math.min(val, minStack.peek());
+        minStack.push(currentMin);
+    }
+
+    public void pop() {
+        stack.pop();
+        minStack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int getMin() {
+        return minStack.peek();
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your stack and queue mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="In Implement Queue using Stacks, transferring elements from in_stack to out_stack reverses their order, perfectly translating LIFO stack popping into FIFO queue order.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Queue Emulation</span>
+        </div>
+        <div class="quiz-question">
+          In Implement Queue using Stacks (LeetCode 232), why does dumping elements from <code>in_stack</code> into <code>out_stack</code> achieve correct FIFO queue order?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Sorts elements in descending sequence</div>
+          <div class="quiz-option">Dumping between stacks doubles capacity</div>
+          <div class="quiz-option">Two sequential LIFO reversals make FIFO</div>
+          <div class="quiz-option">Hash table indexes reverse queue order</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="By coupling each value with the minimum seen up to that point, popping removes the current element while automatically restoring the previous minimum in O(1).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Min Stack State</span>
+        </div>
+        <div class="quiz-question">
+          In Min Stack (LeetCode 155), why does tracking the running minimum at every stack frame guarantee constant <code>O(1)</code> time for <code>getMin()</code> after pops?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Binary tree stores current minimums</div>
+          <div class="quiz-option">Each frame preserves historic minimums</div>
+          <div class="quiz-option">Scans remaining elements sequentially</div>
+          <div class="quiz-option">Pointers reset to zero on each removal</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0012-advanced-list-techniques-and-sentinels.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0012: Advanced List Techniques &amp; Sentinels</span>
+      </a>
+      <a href="0014-monotonic-stack-and-monotonic-queue.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0014: Monotonic Stack &amp; Queue</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

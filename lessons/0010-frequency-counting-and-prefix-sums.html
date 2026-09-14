@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0010: Frequency Counting &amp; Prefix Sums &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 5: Hash Tables</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0010</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0010</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Frequency Counting &amp; Prefix Sums</h1>
+      <p class="subtitle">
+        Mastering two indispensable interview patterns: canonical key grouping with frequency maps, and the cumulative prefix sum difference identity P[j] - P[i] = K.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#frequency-maps" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>Frequency Maps &amp; Canonical Key Serialization</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#prefix-sums" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Prefix Sum Mechanics: Instant O(1) Range Queries</span>
+          </a>
+        </li>
+        <li>
+          <a href="#subarray-sum" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>The Difference Identity: Subarray Sum Equals K</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      Two distinct yet complementary techniques frequently appear in technical coding interviews: <strong>Frequency Counting</strong> (grouping items by common signatures) and <strong>Prefix Sums</strong> (accumulating running state to evaluate ranges in $O(1)$).
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        When an interview problem asks to count subarrays with a specific sum (even with negative numbers where sliding window fails!), your immediate reflex must be <strong>Prefix Sums + Hash Map</strong>. It transforms an $O(n^2)$ subarray scan into a single-pass $O(n)$ count.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="frequency-maps">
+      <h2>1. Frequency Maps &amp; Canonical Key Serialization</h2>
+      <p>
+        To group related items (like anagrams) together in a hash map, we need a <strong>canonical key</strong> that is identical for all variations of that group.
+      </p>
+      <ul>
+        <li><strong>Method A (Sorting):</strong> Sort the characters: <code>"eat" -> "aet"</code>, <code>"tea" -> "aet"</code>. Cost: $O(k \log k)$ per word of length <em>k</em>.</li>
+        <li><strong>Method B (Frequency Tuple):</strong> Count character frequencies: an array of 26 integers: <code>[1, 0, ..., 1, 1]</code> serialized as a string or tuple. Cost: strictly $O(k)$ linear time.</li>
+      </ul>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 242 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Valid Anagram</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Use a fixed 26-element integer array instead of a generic hash map to avoid hash overhead and dynamic heap allocations. Increment for <code>s</code>, decrement for <code>t</code>, and verify all buckets equal 0.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 49 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 4</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Group Anagrams</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Map <code>canonical_signature -> list_of_words</code> in a hash map. Serializing character frequency counts produces an $O(n \times k)$ optimal runtime.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 560 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Core</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Subarray Sum Equals K</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Maintain a running prefix sum. If <code>running_sum - k</code> was previously recorded in the frequency map, every occurrence represents a valid contiguous subarray ending at the current index!
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 128 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 6</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Longest Consecutive Sequence</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Put all numbers into a hash set. Only begin counting a streak if <code>num - 1</code> is NOT in the set (i.e. <code>num</code> is the true start of a streak). This ensures each number is checked at most twice &rarr; strictly $O(n)$ time!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="prefix-sums">
+      <h2>3. Prefix Sum Mechanics: Instant O(1) Range Queries</h2>
+      <p>
+        A prefix sum array stores cumulative sums from index 0:
+      </p>
+      <pre><code>nums:   [3,  4,  -2,   5,   1]
+prefix: [0,  3,   7,   5,  10,  11]  (with prefix[0] = 0)
+
+To compute sum of nums[1 ... 3] (4 + -2 + 5 = 7):
+sum(1, 3) = prefix[4] - prefix[1] = 10 - 3 = 7   --> Instant O(1)!</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="subarray-sum">
+      <h2>4. The Difference Identity: Subarray Sum Equals K</h2>
+      <p>
+        We want to find subarrays where $\text{sum}(i, j) = k$.
+        Using our prefix sum identity:
+      </p>
+      <pre><code>prefix[j] - prefix[i] = k  ===>  prefix[i] = prefix[j] - k</code></pre>
+      <p>
+        As we iterate through the array maintaining a <code>current_sum</code>, we ask:
+        <em>"How many times did we encounter a prefix sum equal to <code>current_sum - k</code> in the past?"</em>
+        By recording prefix sum counts in a hash map, we answer this in <strong><code>O(1)</code> time</strong>.
+      </p>
+      <p>
+        <strong>Crucial Base Case:</strong> Always initialize <code>seen_prefix = {0: 1}</code> to handle subarrays that start from index 0!
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations</h2>
+      <p>
+        Optimal implementation of <strong>Subarray Sum Equals K (LeetCode 560)</strong> in $O(n)$ time and $O(n)$ space:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def subarray_sum(nums: list[int], k: int) -> int:
+    """
+    LeetCode 560 (Grind 75) - Prefix Sum + Hash Map.
+    Time Complexity:  O(n) - single pass over nums.
+    Space Complexity: O(n) - prefix sum frequency map.
+    """
+    count = 0
+    current_sum = 0
+    prefix_freq = {0: 1}  # Base case: prefix sum of 0 occurred once
+
+    for num in nums:
+        current_sum += num
+        diff = current_sum - k
+
+        if diff in prefix_freq:
+            count += prefix_freq[diff]
+
+        prefix_freq[current_sum] = prefix_freq.get(current_sum, 0) + 1
+
+    return count</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function subarraySum(nums: number[], k: number): number {
+    // Time Complexity:  O(n)
+    // Space Complexity: O(n)
+    let count = 0;
+    let currentSum = 0;
+    const prefixFreq = new Map<number, number>();
+    prefixFreq.set(0, 1); // Base case
+
+    for (let i = 0; i < nums.length; i++) {
+        currentSum += nums[i];
+        const diff = currentSum - k;
+
+        if (prefixFreq.has(diff)) {
+            count += prefixFreq.get(diff)!;
+        }
+
+        prefixFreq.set(currentSum, (prefixFreq.get(currentSum) || 0) + 1);
+    }
+
+    return count;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.HashMap;
+
+public class SubarraySum {
+    /**
+     * LeetCode 560 (Grind 75) in O(n) time and O(n) space.
+     */
+    public static int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int currentSum = 0;
+        HashMap&lt;Integer, Integer&gt; prefixFreq = new HashMap&lt;&gt;();
+        prefixFreq.put(0, 1); // Base case
+
+        for (int num : nums) {
+            currentSum += num;
+            int diff = currentSum - k;
+
+            if (prefixFreq.containsKey(diff)) {
+                count += prefixFreq.get(diff);
+            }
+
+            prefixFreq.put(currentSum, prefixFreq.getOrDefault(currentSum, 0) + 1);
+        }
+
+        return count;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your frequency map and prefix sum mechanics:</p>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Because prefix[j] - prefix[i] = k translates to prefix[i] = prefix[j] - k, storing past prefix sums allows us to count all qualifying starting points in O(1).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Prefix Sum Identity</span>
+        </div>
+        <div class="quiz-question">
+          In Subarray Sum Equals K, why does querying <code>current_sum - k</code> in our hash map immediately count valid subarrays?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Difference matches target sum K</div>
+          <div class="quiz-option">Subarray values are strictly positive</div>
+          <div class="quiz-option">Array is sorted in ascending order</div>
+          <div class="quiz-option">Binary search shifts subarray pointers</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="3" data-explanation="Checking that num - 1 is not in the set guarantees we only start counting at the beginning of a streak, preventing repeated scanning of elements and ensuring strict O(n) runtime.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Streak Starter</span>
+        </div>
+        <div class="quiz-question">
+          In Longest Consecutive Sequence (LeetCode 128), why is the condition <code>if (num - 1 not in set)</code> essential to achieving linear <code>O(n)</code> time?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Eliminates negative numbers in set</div>
+          <div class="quiz-option">Avoids allocating memory on heap</div>
+          <div class="quiz-option">Pointers avoid checking duplicate values</div>
+          <div class="quiz-option">Only counts from streak beginnings</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0009-hash-tables-collisions-and-load-factors.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0009: Hash Tables, Collisions &amp; Load Factors</span>
+      </a>
+      <a href="0011-singly-and-doubly-linked-lists.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0011: Singly &amp; Doubly Linked Lists</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

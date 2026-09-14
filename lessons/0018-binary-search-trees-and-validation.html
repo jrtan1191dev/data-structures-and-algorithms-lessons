@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0018: Binary Search Trees &amp; Validation &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 9: Trees &amp; BST</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0018</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0018</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Binary Search Trees &amp; Validation</h1>
+      <p class="subtitle">
+        The global BST invariant, why local parent-child checks fail, range boundary propagation (-&infin;, +&infin;), and O(H) Lowest Common Ancestor search.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#bst-invariant" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Global BST Invariant &amp; The Local Trap</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#range-propagation" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The Range Propagation Pattern</span>
+          </a>
+        </li>
+        <li>
+          <a href="#lca-mechanics" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Lowest Common Ancestor: The Split Point Insight</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Validate BST &amp; LCA</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      A <strong>Binary Search Tree (BST)</strong> enforces an ordering rule that enables binary-search-like lookup in $O(H)$ time (where $H = \log n$ in balanced trees). However, validating and traversing BSTs requires strict adherence to global constraints.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        The most common rookie mistake in interviews: writing <code>if (node.left.val &lt; node.val &amp;&amp; node.right.val &gt; node.val)</code>. This only checks immediate children! A descendant deep in the right subtree could easily be smaller than the root, violating the global BST property.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="bst-invariant">
+      <h2>1. The Global BST Invariant &amp; The Local Trap</h2>
+      <pre><code>        10
+       /  \
+      5    15
+          /  \
+         6    20    <-- INVALID BST! 
+                     6 is greater than its parent (N/A) and less than 15,
+                     BUT 6 is in the right subtree of 10!
+                     6 < 10 violates the root invariant!</code></pre>
+      <p>
+        <strong>The Rule:</strong> Every node in the left subtree must be strictly less than the root, and every node in the right subtree must be strictly greater than the root.
+      </p>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 98 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 4</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Validate Binary Search Tree</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Pass allowable range bounds $(low, high)$ down the tree. For <code>node.left</code>, new range is $(low, node.val)$; for <code>node.right</code>, new range is $(node.val, high)$. Verify $low < node.val < high$ at every step.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 235 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Lowest Common Ancestor of a BST</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> The split point insight. If both $p$ and $q$ are smaller than root, LCA must lie in the left subtree. If both are larger, LCA must lie in the right subtree. The moment $p$ and $q$ split to opposite sides (or one equals root), the current node IS the LCA! Runs in $O(H)$ time and $O(1)$ space without recursion stack.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 230 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 6</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Kth Smallest Element in a BST</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> In-order traversal ($Left \to Root \to Right$) visits BST nodes in monotonically increasing order. Use an iterative in-order stack to stop early after processing $k$ nodes in $O(H + k)$ time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="range-propagation">
+      <h2>3. The Range Propagation Pattern</h2>
+      <pre><code>def is_valid_bst(root):
+    def validate(node, low, high):
+        if not node:
+            return True
+        if not (low < node.val < high):
+            return False
+        return (validate(node.left, low, node.val) and 
+                validate(node.right, node.val, high))
+
+    return validate(root, float('-inf'), float('inf'))</code></pre>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="lca-mechanics">
+      <h2>4. Lowest Common Ancestor: The Split Point Insight</h2>
+      <pre><code>def lowest_common_ancestor(root, p, q):
+    curr = root
+    while curr:
+        if p.val < curr.val and q.val < curr.val:
+            curr = curr.left   # Both nodes in left subtree
+        elif p.val > curr.val and q.val > curr.val:
+            curr = curr.right  # Both nodes in right subtree
+        else:
+            return curr        # Split point! curr is LCA!</code></pre>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Validate BST &amp; LCA</h2>
+      <p>
+        Solving <strong>LeetCode 98 &amp; 235 (Grind 75)</strong> across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def is_valid_bst(root: TreeNode | None) -> bool:
+    """LeetCode 98 (Grind 75) - Range boundary validation."""
+    def validate(node, low, high):
+        if not node: return True
+        if not (low < node.val < high): return False
+        return validate(node.left, low, node.val) and validate(node.right, node.val, high)
+    return validate(root, float('-inf'), float('inf'))
+
+def lowest_common_ancestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+    """LeetCode 235 (Grind 75) - Iterative LCA in O(H) time and O(1) space."""
+    curr = root
+    while curr:
+        if p.val < curr.val and q.val < curr.val:
+            curr = curr.left
+        elif p.val > curr.val and q.val > curr.val:
+            curr = curr.right
+        else:
+            return curr
+    return root</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function isValidBST(root: TreeNode | null): boolean {
+    function validate(node: TreeNode | null, low: number, high: number): boolean {
+        if (!node) return true;
+        if (node.val <= low || node.val >= high) return false;
+        return validate(node.left, low, node.val) && validate(node.right, node.val, high);
+    }
+    return validate(root, -Infinity, Infinity);
+}
+
+function lowestCommonAncestor(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
+    let curr = root;
+    while (curr) {
+        if (p!.val < curr.val && q!.val < curr.val) {
+            curr = curr.left;
+        } else if (p!.val > curr.val && q!.val > curr.val) {
+            curr = curr.right;
+        } else {
+            return curr;
+        }
+    }
+    return null;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class BSTProblems {
+    public boolean isValidBST(TreeNode root) {
+        return validate(root, null, null);
+    }
+
+    private boolean validate(TreeNode node, Integer low, Integer high) {
+        if (node == null) return true;
+        if ((low != null && node.val <= low) || (high != null && node.val >= high)) return false;
+        return validate(node.left, low, node.val) && validate(node.right, node.val, high);
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode curr = root;
+        while (curr != null) {
+            if (p.val < curr.val && q.val < curr.val) {
+                curr = curr.left;
+            } else if (p.val > curr.val && q.val > curr.val) {
+                curr = curr.right;
+            } else {
+                return curr;
+            }
+        }
+        return null;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your BST mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Passing range bounds (low, high) ensures that descendants deep in subtrees do not violate constraints established by higher ancestral root nodes.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Range Invariant</span>
+        </div>
+        <div class="quiz-question">
+          In Validate Binary Search Tree (LeetCode 98), why is checking <code>node.left.val &lt; node.val &lt; node.right.val</code> alone insufficient?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Fails when input tree contains duplicate zeros</div>
+          <div class="quiz-option">Leaves cannot evaluate comparisons on null pointers</div>
+          <div class="quiz-option">Deep descendants can violate ancestor boundaries</div>
+          <div class="quiz-option">Recursive call stack overflows on balanced trees</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="The split point is where p and q diverge to different subtrees (or one equals current node); because nodes are partitioned strictly by value, this split node is mathematically the Lowest Common Ancestor.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">LCA Split</span>
+        </div>
+        <div class="quiz-question">
+          In Lowest Common Ancestor of a BST (LeetCode 235), why is the current node guaranteed to be the LCA the moment $p$ and $q$ split to different branches?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Current node is deepest common ancestor</div>
+          <div class="quiz-option">Left and right child heights balance</div>
+          <div class="quiz-option">Both target nodes share identical values</div>
+          <div class="quiz-option">Pointers detect a circular tree reference</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0017-binary-tree-traversals-dfs-and-bfs.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0017: Binary Tree Traversals</span>
+      </a>
+      <a href="0019-binary-heap-mechanics-and-heapify.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0019: Binary Heap Mechanics &amp; Heapify</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

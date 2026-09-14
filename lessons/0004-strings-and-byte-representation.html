@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0004: Strings &amp; Byte Representation &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 2: Contiguous Memory</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0004</span>
+    </div>
+    <span class="row-meta">⏱ 7 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0004</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+      </div>
+      <h1>Strings &amp; Byte Representation</h1>
+      <p class="subtitle">
+        How text lives in memory, why string immutability causes hidden O(n²) bottlenecks, and how to manipulate characters at maximum speed.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#strings-in-ram" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>Strings in Physical RAM: Characters vs. Bytes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#immutability-trap" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>The Immutability Trap: Accidental O(n²) Concatenation</span>
+          </a>
+        </li>
+        <li>
+          <a href="#slicing-costs" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>String Slicing &amp; Substring Memory Copies</span>
+          </a>
+        </li>
+        <li>
+          <a href="#idiom-crosswalk" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Idiom Crosswalk</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Interactive Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Curated Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In virtually every interview problem involving text&mdash;palindromes, anagrams, DNA sequences, parsing&mdash;candidates fail not because their algorithm is wrong, but because they unknowingly trigger hidden <code>O(n)</code> heap allocations during string concatenation or slicing.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        In Python, TypeScript, and Java, strings are <strong>strictly immutable</strong>. Every single time you append a character with <code>s += c</code>, the runtime allocates a brand new character array and copies every single existing character over. A loop of <em>n</em> appends that looks linear is actually quadratic <code>O(n²)</code>!
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="strings-in-ram">
+      <h2>1. Strings in Physical RAM: Characters vs. Bytes</h2>
+      <p>
+        At the hardware level, computers only store bits (0s and 1s). A string is conceptually an array of characters, but physically it is encoded into bytes:
+      </p>
+      <ul>
+        <li><strong>ASCII:</strong> Each English character fits in exactly 1 byte (8 bits, 0&ndash;127).</li>
+        <li><strong>UTF-8:</strong> Variable-width encoding (1 to 4 bytes per character). Common English text takes 1 byte; accented glyphs take 2; emoji and Asian scripts take 3 to 4 bytes.</li>
+        <li><strong>UTF-16:</strong> Java and JavaScript historically use 16-bit code units (2 bytes each). Characters beyond the Basic Multilingual Plane (such as emojis) require 2 code units (surrogate pairs, 4 bytes).</li>
+      </ul>
+
+      <pre><code>Memory layout of ASCII string "DSA":
+Address:    0x1000   0x1001   0x1002
+Value:      0x44     0x53     0x41
+Character:  'D'      'S'      'A'</code></pre>
+      <p>
+        Because strings are contiguous arrays under the hood, accessing an ASCII character at a known index is <code>O(1)</code>. However, because languages protect string interning and thread safety, the underlying array is sealed and cannot be modified in place.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="immutability-trap">
+      <h2>2. The Immutability Trap: Accidental O(n²) Concatenation</h2>
+      <p>
+        Consider this naive pattern: building a reversed string character-by-character:
+      </p>
+      <pre><code>s = ""
+for char in input_string:
+    s = s + char  # DANGER: Allocates new string of length k and copies all k bytes!</code></pre>
+      <p>
+        On iteration 1, you copy 1 byte. On iteration 2, you copy 2 bytes. On iteration <em>n</em>, you copy <em>n</em> bytes.
+        The total operations performed:
+      </p>
+      <pre><code>1 + 2 + 3 + ... + n = (n * (n + 1)) / 2  ==&gt;  O(n²) Time Complexity!</code></pre>
+      <p>
+        For a string of 100,000 characters, an <code>O(n)</code> approach takes 0.01 seconds; an <code>O(n²)</code> approach takes over 30 seconds and exhausts heap memory.
+      </p>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="slicing-costs">
+      <h2>3. String Slicing &amp; Substring Memory Copies</h2>
+      <p>
+        A frequent misconception is that taking a slice like <code>s[i:j]</code> or <code>s.substring(i, j)</code> is an <code>O(1)</code> pointer operation.
+      </p>
+      <p>
+        In modern Python, TypeScript, and Java (post-JDK 7u6), <strong>slicing a string creates a brand new string copy in the heap</strong>.
+        If the substring has length <em>k</em>, slicing takes <strong><code>O(k)</code> time and <code>O(k)</code> auxiliary space</strong>.
+      </p>
+      <p>
+        <strong>Interview Rule:</strong> When checking palindromes or scanning substrings, <em>never</em> slice strings repeatedly inside a loop. Pass integer pointer indices (<code>left</code>, <code>right</code>) instead!
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="idiom-crosswalk">
+      <h2>4. Multi-Language Idiom Crosswalk</h2>
+      <p>
+        Here is how to properly construct strings in linear <code>O(n)</code> time across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code># INCORRECT: O(n²) time due to repeated string copying
+def slow_reverse(text: str) -> str:
+    res = ""
+    for ch in text:
+        res = ch + res  # O(n²) trap!
+    return res
+
+# OPTIMAL 1: List append + join -> strictly O(n) time & O(n) space
+def fast_builder(items: list[str]) -> str:
+    chunks = []
+    for item in items:
+        chunks.append(item)  # O(1) amortized
+    return "".join(chunks)   # Single O(n) pass memory allocation
+
+# OPTIMAL 2: Two-pointer in-place reversal using mutable list
+def reverse_chars(s: list[str]) -> None:
+    left, right = 0, len(s) - 1
+    while left < right:
+        s[left], s[right] = s[right], s[left]  # O(1) swap
+        left += 1
+        right -= 1</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>// INCORRECT: O(n²) string allocation trap
+function slowBuild(words: string[]): string {
+    let result = "";
+    for (const w of words) {
+        result += w; // Allocates brand new string each iteration!
+    }
+    return result;
+}
+
+// OPTIMAL 1: Array push + join() -> strictly O(n) time
+function fastBuild(words: string[]): string {
+    const buffer: string[] = [];
+    for (const w of words) {
+        buffer.push(w); // O(1) amortized
+    }
+    return buffer.join(""); // Single O(n) contiguous allocation
+}
+
+// OPTIMAL 2: In-place two-pointer reversal on character array
+function reverseString(s: string[]): void {
+    let left = 0;
+    let right = s.length - 1;
+    while (left < right) {
+        const temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>// INCORRECT: Repeated string concatenation creates n objects in heap
+public String slowBuild(String[] words) {
+    String res = "";
+    for (String w : words) {
+        res += w; // O(n²) reallocations!
+    }
+    return res;
+}
+
+// OPTIMAL 1: StringBuilder with amortized capacity doubling -> strictly O(n)
+public String fastBuild(String[] words) {
+    StringBuilder sb = new StringBuilder();
+    for (String w : words) {
+        sb.append(w); // O(1) amortized char array copy
+    }
+    return sb.toString(); // Single O(n) string creation
+}
+
+// OPTIMAL 2: In-place two-pointer on char array
+public void reverseString(char[] s) {
+    int left = 0;
+    int right = s.length - 1;
+    while (left < right) {
+        char temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        left++;
+        right--;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Interactive Retrieval Practice</h2>
+      <p>Test your string memory mechanics and runtime intuition:</p>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Because strings are immutable, each concatenation allocates a new string and copies all previous characters, yielding 1 + 2 + ... + n = O(n²) work.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Complexity Trap</span>
+        </div>
+        <div class="quiz-question">
+          What is the exact time complexity of repeatedly appending single characters to an immutable string in a loop of length <em>n</em> (e.g. <code>s += c</code>)?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Strictly constant O(1) time</div>
+          <div class="quiz-option">Strictly quadratic O(n²) time</div>
+          <div class="quiz-option">Logarithmic O(log n) time</div>
+          <div class="quiz-option">Linearithmic O(n log n) time</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="2" data-explanation="StringBuilder (or an array of characters) holds an internal mutable buffer that expands geometrically, avoiding repeated intermediate string allocations.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Buffer Architecture</span>
+        </div>
+        <div class="quiz-question">
+          Why does using Java's <code>StringBuilder</code> or Python's <code>"".join(list)</code> achieve optimal <code>O(n)</code> linear runtime when building strings?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Avoids allocating memory bytes</div>
+          <div class="quiz-option">Uses binary tree nodes</div>
+          <div class="quiz-option">Uses resizable mutable buffer</div>
+          <div class="quiz-option">Compresses characters on write</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. Curated Primary Sources</h2>
+      <ul>
+        <li>
+          <strong>Tech Interview Handbook:</strong> <a href="https://www.techinterviewhandbook.org/algorithms/string/" target="_blank" rel="noreferrer">String Algorithm Study Guide &nearr;</a>. Common corner cases, palindrome pointers, and anagram frequencies.
+        </li>
+        <li>
+          <strong>Primary Read:</strong> <a href="https://neetcode.io/roadmap" target="_blank" rel="noreferrer">NeetCode Roadmap &mdash; Arrays &amp; Hashing &nearr;</a>.
+        </li>
+      </ul>
+
+      <p class="mt-4">
+        <em>Have questions about UTF-8 encoding or string interning? Ask in your chat session to inspect memory behavior!</em>
+      </p>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0003-contiguous-memory-and-dynamic-arrays.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0003: Contiguous Memory &amp; Dynamic Arrays</span>
+      </a>
+      <a href="0005-converging-and-opposing-pointers.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0005: Converging &amp; Opposing Pointers</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

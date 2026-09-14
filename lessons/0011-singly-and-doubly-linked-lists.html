@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0011: Singly &amp; Doubly Linked Lists &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 6: Linked Lists</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0011</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0011</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Singly &amp; Doubly Linked Lists</h1>
+      <p class="subtitle">
+        Non-contiguous heap node architecture, pointer redirection mechanics, eliminating null pointer exceptions, and in-place O(1) space list reversal.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#heap-architecture" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>RAM Architecture: Contiguous Arrays vs. Heap Nodes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#reversal-mechanics" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The 3-Pointer In-Place Reversal Algorithm</span>
+          </a>
+        </li>
+        <li>
+          <a href="#fixed-gap-technique" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>The Fixed-Gap Technique: Remove Nth Node From End</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Reverse Linked List</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      While arrays rely on an unbroken, contiguous block of memory where random access is computed by mathematical offsets, <strong>Linked Lists</strong> abandon contiguous memory entirely. Each element is an independently allocated node in the heap that holds a payload and an explicit pointer/reference to the next node.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        Linked lists test your <strong>pointer discipline</strong>. Interviewers want to see whether you can rewire pointers in place without losing reference to remaining nodes, and whether you cleanly handle edge cases (empty lists, single-node lists, deleting head or tail) without crashing.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="heap-architecture">
+      <h2>1. RAM Architecture: Contiguous Arrays vs. Heap Nodes</h2>
+      <p>
+        In an array, elements are neighbors in RAM (instant cache locality). In a linked list, nodes are scattered across the heap:
+      </p>
+      <pre><code>Heap Memory Allocation:
+Node A [Val: 10 | Next: 0x4080] lives at 0x1000
+Node B [Val: 20 | Next: 0x2040] lives at 0x4080
+Node C [Val: 30 | Next: null  ] lives at 0x2040
+
+Traversal: To reach Node C, you MUST traverse A -> B -> C sequentially.
+Cost: O(n) access time. You cannot calculate address by index!</code></pre>
+      <p>
+        <strong>The Trade-off:</strong> Inserting or deleting a node <em>after a known pointer</em> is strictly <strong><code>O(1)</code> time</strong> (just redirect two pointers; no elements need shifting), whereas array insertions cost <code>O(n)</code>.
+      </p>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 206 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Reverse Linked List</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Master the 3-pointer pattern: <code>prev = null</code>, <code>curr = head</code>, <code>next_temp = curr.next</code>. Rewire <code>curr.next = prev</code> and advance pointers. Avoid recursive reversal to save $O(n)$ stack space.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 876 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 3</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Middle of the Linked List</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Fast/slow pointers. When <code>fast</code> reaches the end (or <code>fast.next == null</code>), <code>slow</code> is precisely at the middle node in a single pass without computing total length first.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 19 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 5</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Remove Nth Node From End of List</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Maintain a fixed gap of $n$ nodes between <code>fast</code> and <code>slow</code>. Advance <code>fast</code> by $n$ steps from a dummy node. Then advance both together until <code>fast.next == null</code>; <code>slow.next = slow.next.next</code> deletes the target node cleanly in one pass.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="reversal-mechanics">
+      <h2>3. The 3-Pointer In-Place Reversal Algorithm</h2>
+      <pre><code>Initial:
+prev = null, curr = [1], next = [2] -> [3] -> null
+
+Step 1: Save next node:        next_temp = curr.next
+Step 2: Reverse current link:  curr.next = prev
+Step 3: Advance prev:          prev = curr
+Step 4: Advance curr:          curr = next_temp
+
+When curr == null, prev points to the brand new head [3]!</code></pre>
+      <p>
+        Runs in strictly <strong><code>O(n)</code> time</strong> and <strong><code>O(1)</code> space</strong>.
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="fixed-gap-technique">
+      <h2>4. The Fixed-Gap Technique: Remove Nth Node From End</h2>
+      <p>
+        To remove the $n$-th node from the end without traversing twice:
+      </p>
+      <ol>
+        <li>Create a <code>dummy</code> node pointing to <code>head</code>. This handles the case where the head itself is deleted!</li>
+        <li>Place both <code>fast</code> and <code>slow</code> at <code>dummy</code>.</li>
+        <li>Advance <code>fast</code> forward by $n$ steps.</li>
+        <li>Advance both <code>fast</code> and <code>slow</code> one step at a time until <code>fast.next == null</code>.</li>
+        <li>Now <code>slow</code> is sitting directly before the target node &rarr; <code>slow.next = slow.next.next</code>.</li>
+      </ol>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Reverse Linked List</h2>
+      <p>
+        Solving <strong>LeetCode 206 (Grind 75)</strong> in $O(n)$ time and $O(1)$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def reverse_list(head: ListNode | None) -> ListNode | None:
+    """
+    LeetCode 206 (Grind 75) - In-place 3-pointer reversal.
+    Time Complexity:  O(n) single traversal.
+    Space Complexity: O(1) in-place rewiring.
+    """
+    prev = None
+    curr = head
+
+    while curr:
+        next_temp = curr.next  # 1. Save next reference
+        curr.next = prev       # 2. Reverse pointer
+        prev = curr            # 3. Advance prev
+        curr = next_temp       # 4. Advance curr
+
+    return prev  # New head of reversed list</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>class ListNode {
+    val: number;
+    next: ListNode | null;
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+    }
+}
+
+function reverseList(head: ListNode | null): ListNode | null {
+    // Time Complexity:  O(n)
+    // Space Complexity: O(1)
+    let prev: ListNode | null = null;
+    let curr: ListNode | null = head;
+
+    while (curr !== null) {
+        const nextTemp: ListNode | null = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+
+    return prev;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+public class ReverseLinkedList {
+    /**
+     * LeetCode 206 (Grind 75) in O(n) time and O(1) auxiliary space.
+     */
+    public static ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode nextTemp = curr.next; // 1. Save next node
+            curr.next = prev;              // 2. Reverse link
+            prev = curr;                   // 3. Step prev forward
+            curr = nextTemp;               // 4. Step curr forward
+        }
+
+        return prev;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your linked list pointer mechanics:</p>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Before assigning curr.next = prev, you must preserve the reference to curr.next in a temporary variable, otherwise the remainder of the list becomes unreachable in memory.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Pointer Preservation</span>
+        </div>
+        <div class="quiz-question">
+          Why must we store <code>next_temp = curr.next</code> before executing <code>curr.next = prev</code> in an iterative linked list reversal?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Prevents cyclic memory references</div>
+          <div class="quiz-option">Avoids losing access to remainder</div>
+          <div class="quiz-option">Forces heap garbage collection</div>
+          <div class="quiz-option">Allocates new sentinel nodes</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="3" data-explanation="Advancing fast n steps creates a gap of n nodes; when fast reaches the end, slow is positioned exactly one node before the target node to delete.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Fixed Gap</span>
+        </div>
+        <div class="quiz-question">
+          In Remove Nth Node From End of List (LeetCode 19), how does initializing a fixed gap of <em>n</em> steps between two pointers allow single-pass deletion?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Reverses list during traversal</div>
+          <div class="quiz-option">Counts total length beforehand</div>
+          <div class="quiz-option">Slow pointer sits on head node</div>
+          <div class="quiz-option">Slow lands directly before target</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0010-frequency-counting-and-prefix-sums.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0010: Frequency Counting &amp; Prefix Sums</span>
+      </a>
+      <a href="0012-advanced-list-techniques-and-sentinels.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0012: Advanced List Techniques &amp; Sentinels</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

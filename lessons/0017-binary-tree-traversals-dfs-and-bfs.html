@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0017: Binary Tree Traversals: DFS &amp; BFS &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 9: Trees &amp; BST</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0017</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0017</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Binary Tree Traversals: DFS &amp; BFS</h1>
+      <p class="subtitle">
+        Recursive divide-and-conquer call stacks, bottom-up tree invariants (height, diameter, balance), and batch level-order processing via queue snapshots.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#tree-recursion" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Recursive Tree Invariant</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#dfs-orders" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>DFS Traversal Strategies: Pre, In, and Post-Order</span>
+          </a>
+        </li>
+        <li>
+          <a href="#bfs-snapshot" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>BFS Level-Order: The Queue Snapshot Pattern</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Invert Tree &amp; Level Order</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      Trees are hierarchical, non-linear data structures. Every tree problem is fundamentally solved by <strong>dividing the problem into two subproblems</strong>: what needs to be done on the left child, what needs to be done on the right child, and how to combine them at the root.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        Nearly 20% of Grind 75 problems involve binary trees. The secret to writing clean code without messy state tracking is choosing the correct traversal: <strong>Pre-Order</strong> for top-down construction, <strong>Post-Order</strong> for bottom-up metric aggregation, and <strong>BFS</strong> for shortest paths and level-by-level outputs.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="tree-recursion">
+      <h2>1. The Recursive Tree Invariant</h2>
+      <p>
+        A binary tree node contains a value and references to two subtrees:
+      </p>
+      <pre><code>TreeNode {
+   val: int
+   left: TreeNode | null
+   right: TreeNode | null
+}</code></pre>
+      <p>
+        Every binary tree problem has the identical base case:
+      </p>
+      <pre><code>if root is None: return base_value</code></pre>
+      <p>
+        For Maximum Depth (LeetCode 104), the height of any tree is simply:
+      </p>
+      <pre><code>Height(node) = 1 + max(Height(node.left), Height(node.right))</code></pre>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 226 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Invert Binary Tree</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Maximize simplicity: recursively invert both subtrees, then swap references in place: <code>root.left, root.right = invert(root.right), invert(root.left)</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 104 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Maximum Depth of Binary Tree</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Post-order recursive DFS: compute depths of subtrees, add 1, and return to parent. Takes $O(n)$ time and $O(H)$ stack space.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 110 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Balanced Binary Tree</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Avoid naive top-down recursion which re-calculates depth at every node in $O(n^2)$. Use bottom-up post-order: return height if balanced, or return <code>-1</code> immediately as an early-exit sentinel if $|h_L - h_R| > 1$. Total: strictly $O(n)$ time.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 543 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 2</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Diameter of Binary Tree</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> The longest path between any two nodes may not pass through the root! At each node, path length is $h_L + h_R$. Update global maximum diameter while returning node height $1 + \max(h_L, h_R)$ up the recursion chain.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 102 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 3</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Binary Tree Level Order Traversal</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> The queue snapshot pattern. Measure current queue length $S = \text{len}(q)$ before loop. Run $S$ iterations to dequeue all nodes in the current layer while enqueuing their children for the next layer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="dfs-orders">
+      <h2>3. DFS Traversal Strategies: Pre, In, and Post-Order</h2>
+      <ul>
+        <li><strong>Pre-Order (Node, Left, Right):</strong> Process current node before its children. Used for duplicating or serializing trees.</li>
+        <li><strong>In-Order (Left, Node, Right):</strong> Used on Binary Search Trees to visit elements in sorted numerical order.</li>
+        <li><strong>Post-Order (Left, Right, Node):</strong> Process children first, then combine results at root. Mandatory for computing heights, subtree sizes, and bottom-up validations.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="bfs-snapshot">
+      <h2>4. BFS Level-Order: The Queue Snapshot Pattern</h2>
+      <pre><code>def level_order(root):
+    if not root: return []
+    res = []
+    q = deque([root])
+
+    while q:
+        level_size = len(q)  # SNAPSHOT: number of nodes in this exact level!
+        current_level = []
+
+        for _ in range(level_size):
+            node = q.popleft()
+            current_level.append(node.val)
+            if node.left:  q.append(node.left)
+            if node.right: q.append(node.right)
+
+        res.append(current_level)
+
+    return res</code></pre>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Invert Tree &amp; Level Order</h2>
+      <p>
+        Solving <strong>LeetCode 226 &amp; 102 (Grind 75)</strong> across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>from collections import deque
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def invert_tree(root: TreeNode | None) -> TreeNode | None:
+    """LeetCode 226 (Grind 75) - Recursive in-place swap."""
+    if not root:
+        return None
+    root.left, root.right = invert_tree(root.right), invert_tree(root.left)
+    return root
+
+def level_order(root: TreeNode | None) -> list[list[int]]:
+    """LeetCode 102 (Grind 75) - Queue Snapshot BFS."""
+    if not root:
+        return []
+    res, q = [], deque([root])
+    while q:
+        level = []
+        for _ in range(len(q)):
+            node = q.popleft()
+            level.append(node.val)
+            if node.left: q.append(node.left)
+            if node.right: q.append(node.right)
+        res.append(level)
+    return res</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>class TreeNode {
+    val: number;
+    left: TreeNode | null;
+    right: TreeNode | null;
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = val === undefined ? 0 : val;
+        this.left = left === undefined ? null : left;
+        this.right = right === undefined ? null : right;
+    }
+}
+
+function invertTree(root: TreeNode | null): TreeNode | null {
+    if (!root) return null;
+    const temp = invertTree(root.left);
+    root.left = invertTree(root.right);
+    root.right = temp;
+    return root;
+}
+
+function levelOrder(root: TreeNode | null): number[][] {
+    if (!root) return [];
+    const res: number[][] = [];
+    const q: TreeNode[] = [root];
+
+    while (q.length > 0) {
+        const levelSize = q.length;
+        const currentLevel: number[] = [];
+
+        for (let i = 0; i < levelSize; i++) {
+            const node = q.shift()!;
+            currentLevel.push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        }
+        res.push(currentLevel);
+    }
+    return res;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.*;
+
+public class TreeTraversals {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) return null;
+        TreeNode temp = invertTree(root.left);
+        root.left = invertTree(root.right);
+        root.right = temp;
+        return root;
+    }
+
+    public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if (root == null) return res;
+
+        Queue&lt;TreeNode&gt; q = new ArrayDeque&lt;&gt;();
+        q.offer(root);
+
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            List&lt;Integer&gt; level = new ArrayList&lt;&gt;();
+
+            for (int i = 0; i &lt; levelSize; i++) {
+                TreeNode node = q.poll();
+                level.add(node.val);
+                if (node.left != null) q.offer(node.left);
+                if (node.right != null) q.offer(node.right);
+            }
+            res.add(level);
+        }
+        return res;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your tree traversal mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Taking a snapshot of the queue size before the inner loop ensures we dequeue exactly the nodes belonging to the current depth level before processing children from the next level.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Queue Snapshot</span>
+        </div>
+        <div class="quiz-question">
+          In Binary Tree Level Order Traversal (LeetCode 102), why must we record <code>level_size = len(queue)</code> before the inner dequeue loop?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Prevents queue memory buffers from overflowing</div>
+          <div class="quiz-option">Allows binary search over queued tree nodes</div>
+          <div class="quiz-option">Delineates nodes belonging to current level</div>
+          <div class="quiz-option">Sorts children nodes by numerical values</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Post-order traversal evaluates the left and right subtrees first, allowing the parent to immediately detect height imbalances and bubble up a sentinel -1 without recomputing depths.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Bottom-Up Pruning</span>
+        </div>
+        <div class="quiz-question">
+          Why does a bottom-up post-order traversal in Balanced Binary Tree (LeetCode 110) achieve <code>O(n)</code> time while top-down recursion requires <code>O(n²)</code>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Subtree heights are passed upward without recomputation</div>
+          <div class="quiz-option">Bottom-up approach skips left subtrees entirely</div>
+          <div class="quiz-option">Allocates auxiliary hash maps for every node</div>
+          <div class="quiz-option">Tree nodes are stored in contiguous array memory</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0016-binary-search-on-answer-space.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0016: Binary Search on Answer Space</span>
+      </a>
+      <a href="0018-binary-search-trees-and-validation.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0018: Binary Search Trees &amp; Validation</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

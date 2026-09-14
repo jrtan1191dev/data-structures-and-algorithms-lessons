@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0006: Fast &amp; Slow Pointers (Floyd's Cycle) &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 3: Two Pointers</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0006</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0006</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+      </div>
+      <h1>Fast &amp; Slow Pointers (Floyd's Cycle)</h1>
+      <p class="subtitle">
+        How two pointers traversing at 1x and 2x velocities detect cycles, find midpoints, and locate duplicates in O(n) time with strictly O(1) space.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#velocity-differential" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Velocity Differential Principle</span>
+          </a>
+        </li>
+        <li>
+          <a href="#mathematical-proof" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Mathematical Proof of Cycle Convergence</span>
+          </a>
+        </li>
+        <li>
+          <a href="#finding-cycle-entrance" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Locating the Cycle Entrance: Phase 2</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Implementations: Find the Duplicate Number</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Curated Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      While converging pointers move in opposite directions on sorted sequences, <strong>Fast &amp; Slow Pointers</strong> (also known as <em>Floyd's Tortoise and Hare algorithm</em>) move in the <strong>same direction</strong> at different velocities.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        The naive way to detect cycles or find duplicates uses a hash set of visited nodes, costing <code>O(n)</code> auxiliary memory. Interviewers at FAANG tier specifically forbid extra memory to test whether you can apply Floyd's algorithm to achieve <strong><code>O(1)</code> space</strong>.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="velocity-differential">
+      <h2>1. The Velocity Differential Principle</h2>
+      <p>
+        We initialize two pointers at the starting node:
+      </p>
+      <ul>
+        <li><code>slow</code> moves <strong>1 step</strong> per iteration: <code>slow = slow.next</code></li>
+        <li><code>fast</code> moves <strong>2 steps</strong> per iteration: <code>fast = fast.next.next</code></li>
+      </ul>
+      <p>
+        <strong>Scenario A (Acyclic Sequence):</strong> If there is no cycle, <code>fast</code> (or <code>fast.next</code>) will hit <code>null</code> / the end of the list. We can safely conclude there is no loop in <code>O(n)</code> time. Furthermore, at the moment <code>fast</code> reaches the end, <code>slow</code> is positioned precisely at the <strong>middle node</strong>.
+      </p>
+      <p>
+        <strong>Scenario B (Cyclic Sequence):</strong> If a cycle exists, <code>fast</code> enters the loop first, followed by <code>slow</code>. Once both are inside the circular loop, the distance between them closes by exactly 1 step on every iteration. They are mathematically guaranteed to collide.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="mathematical-proof">
+      <h2>2. Mathematical Proof of Cycle Convergence</h2>
+      <p>
+        Suppose the cycle has length <em>C</em>. Once both pointers are in the cycle, let the distance from <code>slow</code> forward to <code>fast</code> be <em>D</em>:
+      </p>
+      <pre><code>On each tick:
+Distance traveled by slow: +1
+Distance traveled by fast: +2
+Relative gain by fast:     +1 step per tick
+
+Gap closing: (D - 1) mod C, (D - 2) mod C, ... -> 0</code></pre>
+      <p>
+        Because the gap decreases by 1 integer every step, <code>fast</code> cannot "jump over" <code>slow</code>. They must meet within at most <em>C</em> steps after <code>slow</code> enters the cycle.
+      </p>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="finding-cycle-entrance">
+      <h2>3. Locating the Cycle Entrance: Phase 2</h2>
+      <p>
+        Detecting that a cycle exists is only Phase 1. Finding the <strong>exact entry node</strong> of the cycle requires an elegant mathematical identity:
+      </p>
+      <pre><code>Let:
+L = distance from head to cycle entrance
+K = distance from cycle entrance to meeting point
+C = total length of the cycle
+
+Distance(slow) = L + K
+Distance(fast) = 2 * Distance(slow) = 2(L + K)
+
+Also, fast traveled an extra m full loops:
+Distance(fast) = L + K + m * C
+
+Equating both expressions:
+2(L + K) = L + K + m * C
+L + K = m * C
+L = m * C - K = (m - 1) * C + (C - K)</code></pre>
+      <p>
+        Notice what <code>(C - K)</code> represents: it is the distance from the <strong>meeting point to the cycle entrance</strong>!
+      </p>
+      <p>
+        <strong>The Algorithm:</strong> Keep <code>slow</code> at the meeting point. Move another pointer <code>p = head</code>. Advance both <code>p</code> and <code>slow</code> at <strong>1 step per tick</strong>. After exactly <em>L</em> steps, they collide at the entrance node!
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-in-action">
+      <h2>4. Multi-Language Implementations: Find the Duplicate Number</h2>
+      <p>
+        In LeetCode 287 (<em>Find the Duplicate Number</em>), we are given an array of $n + 1$ integers in the range $[1, n]$. By treating each array index as a node pointing to <code>nums[i]</code>, the duplicate number acts as the entrance to a cycle:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def find_duplicate(nums: list[int]) -> int:
+    """
+    Finds the duplicate in O(n) time and strictly O(1) space
+    without modifying the input array.
+    """
+    # Phase 1: Detect intersection within the cycle
+    slow = nums[0]
+    fast = nums[0]
+
+    while True:
+        slow = nums[slow]           # 1 step
+        fast = nums[nums[fast]]     # 2 steps
+        if slow == fast:
+            break
+
+    # Phase 2: Locate the entrance to the cycle
+    ptr1 = nums[0]
+    ptr2 = slow
+    while ptr1 != ptr2:
+        ptr1 = nums[ptr1]           # 1 step
+        ptr2 = nums[ptr2]           # 1 step
+
+    return ptr1</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function findDuplicate(nums: number[]): number {
+    // Time Complexity:  O(n)
+    // Space Complexity: O(1)
+    let slow = nums[0];
+    let fast = nums[0];
+
+    // Phase 1: Find meeting point in cycle
+    do {
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+    } while (slow !== fast);
+
+    // Phase 2: Find entrance of cycle
+    let ptr1 = nums[0];
+    let ptr2 = slow;
+    while (ptr1 !== ptr2) {
+        ptr1 = nums[ptr1];
+        ptr2 = nums[ptr2];
+    }
+
+    return ptr1;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class FloydCycle {
+    /**
+     * Finds the duplicate number in O(n) time and O(1) space.
+     */
+    public static int findDuplicate(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];
+
+        // Phase 1: Locate meeting point
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        // Phase 2: Locate cycle entrance
+        int ptr1 = nums[0];
+        int ptr2 = slow;
+        while (ptr1 != ptr2) {
+            ptr1 = nums[ptr1];
+            ptr2 = nums[ptr2];
+        }
+
+        return ptr1;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Active Retrieval Practice</h2>
+      <p>Test your cycle detection mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Because the fast pointer gains exactly 1 step on the slow pointer each iteration, the distance between them decreases by 1 modulo C, preventing any possibility of skipping past each other.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Relative Velocity</span>
+        </div>
+        <div class="quiz-question">
+          Why is the fast pointer guaranteed never to skip over the slow pointer inside a cycle of length <em>C</em>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Pointers travel in opposite directions</div>
+          <div class="quiz-option">Array memory buffers prevent collisions</div>
+          <div class="quiz-option">Relative distance changes by one unit</div>
+          <div class="quiz-option">Cycle length doubles on traversal</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="The algebraic derivation 2(L + K) = L + K + m*C yields L = (m-1)C + (C - K), proving that walking L steps from head and from meeting point collides exactly at the entry node.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Cycle Math</span>
+        </div>
+        <div class="quiz-question">
+          After the first meeting in Floyd's algorithm, why does resetting one pointer to <code>head</code> and moving both at 1x speed find the cycle entrance?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Head pointer jumps past cycle</div>
+          <div class="quiz-option">Distance from head equals remaining gap</div>
+          <div class="quiz-option">Both pointers reverse their directions</div>
+          <div class="quiz-option">Hash table stores previous locations</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. Curated Primary Sources</h2>
+      <ul>
+        <li>
+          <strong>Video Lecture:</strong> <a href="https://www.youtube.com/watch?v=LUm2ABqAs1w" target="_blank" rel="noreferrer">Abdul Bari &mdash; Linked List Cycle Detection &amp; Floyd's Algorithm &nearr;</a>. Deep theoretical walkthrough.
+        </li>
+        <li>
+          <strong>NeetCode:</strong> <a href="https://neetcode.io/problems/find-the-duplicate-number" target="_blank" rel="noreferrer">Find the Duplicate Number (LeetCode 287) &nearr;</a>.
+        </li>
+        <li>
+          <strong>Tech Interview Handbook:</strong> <a href="https://www.techinterviewhandbook.org/algorithms/linked-list/" target="_blank" rel="noreferrer">Linked List Cycle Corner Cases &nearr;</a>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0005-converging-and-opposing-pointers.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0005: Converging &amp; Opposing Pointers</span>
+      </a>
+      <a href="0007-fixed-size-sliding-windows.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0007: Fixed-Size Sliding Windows</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

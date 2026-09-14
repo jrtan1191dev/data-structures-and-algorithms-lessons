@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0015: Classic Binary Search &amp; Boundary Templates &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 8: Binary Search</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0015</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0015</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Classic Binary Search &amp; Boundary Templates</h1>
+      <p class="subtitle">
+        Eliminating 32-bit integer overflow, mastering exact match vs. left/right boundary templates, and finding targets in rotated sorted arrays in O(log n) time.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#repeated-halving" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Power of Logarithmic Halving</span>
+          </a>
+        </li>
+        <li>
+          <a href="#grind75-questions" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Grind 75 Questions &amp; Key Learning Points</span>
+          </a>
+        </li>
+        <li>
+          <a href="#overflow-bug" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The Classic Midpoint Overflow Bug</span>
+          </a>
+        </li>
+        <li>
+          <a href="#rotated-search" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Rotated Sorted Array: Identifying the Monotonic Half</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Multi-Language Implementations: Search in Rotated Sorted Array</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      Donald Knuth famously remarked: <em>"Although the basic idea of binary search is comparatively straightforward, the details can be surprisingly tricky."</em> It is a staple of technical interviews because boundary errors (off-by-one loops, infinite while loops) quickly reveal imprecise algorithmic reasoning.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        Whenever an array is sorted or partially sorted, an interviewer expects an <code>O(log n)</code> solution. A linear <code>O(n)</code> scan will be immediately rejected. For $n = 1,000,000,000$, binary search terminates in just 30 comparisons!
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="repeated-halving">
+      <h2>1. The Power of Logarithmic Halving</h2>
+      <p>
+        Binary search compares the target against the middle element <code>nums[mid]</code>. Because the sequence is monotonic:
+      </p>
+      <ul>
+        <li>If <code>nums[mid] == target</code>: Target found in <code>O(1)</code>.</li>
+        <li>If <code>nums[mid] &lt; target</code>: The target cannot possibly reside in the left half. Discard <code>[left ... mid]</code> &rarr; <code>left = mid + 1</code>.</li>
+        <li>If <code>nums[mid] &gt; target</code>: The target cannot reside in the right half. Discard <code>[mid ... right]</code> &rarr; <code>right = mid - 1</code>.</li>
+      </ul>
+      <p>
+        At each comparison, exactly half of the remaining search candidates are discarded: $\frac{n}{2}, \frac{n}{4}, \dots, 1 \implies \mathbf{O(\log n)}$ total steps.
+      </p>
+    </section>
+
+    <!-- Section 2: Grind 75 Alignment -->
+    <section id="grind75-questions">
+      <h2>2. Grind 75 Questions &amp; Key Learning Points</h2>
+      <div class="row-list">
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-blue">LeetCode 704 &bull; Easy</span>
+              <span class="badge badge-neutral">Grind 75 Week 1</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Binary Search</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Establish clean boundary invariants: <code>left = 0, right = len - 1</code> with <code>while left &lt;= right</code>. Compute safe midpoint and advance bounds by $\pm 1$ to guarantee termination.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 33 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Week 5</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Search in Rotated Sorted Array</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> An array rotated at an unknown pivot still contains at least one normally sorted half! Identify whether the left half is sorted (<code>nums[left] &le; nums[mid]</code>); if so, check if target falls in <code>[nums[left], nums[mid])</code>. Otherwise, the right half is sorted! Discard the unpromising half in $O(1)$.
+            </p>
+          </div>
+        </div>
+
+        <div class="row-item" style="border: 1px solid var(--color-border); border-radius: var(--radius-container); padding: var(--spacing-3) var(--spacing-4); margin-bottom: var(--spacing-3);">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="badge badge-warning">LeetCode 153 &bull; Medium</span>
+              <span class="badge badge-neutral">Grind 75 Core</span>
+            </div>
+            <div class="row-title" style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-top: 4px;">Find Minimum in Rotated Sorted Array</div>
+            <p class="row-desc">
+              <strong>Key Learning Point:</strong> Compare <code>nums[mid]</code> against <code>nums[right]</code>. If <code>nums[mid] &gt; nums[right]</code>, the pivot inflection point lies strictly in the right half (<code>left = mid + 1</code>). Otherwise, the minimum lies at or to the left of <code>mid</code> (<code>right = mid</code>).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="overflow-bug">
+      <h2>3. The Classic Midpoint Overflow Bug</h2>
+      <p>
+        In Java, C++, and languages with fixed 32-bit signed integers, calculating midpoint as:
+      </p>
+      <pre><code>int mid = (left + right) / 2; // BUG!</code></pre>
+      <p>
+        fails when <code>left + right &gt; 2,147,483,647</code>. The sum overflows into a negative number, triggering an <code>ArrayIndexOutOfBoundsException</code>.
+      </p>
+      <p>
+        <strong>The Universal Safe Recipe:</strong>
+      </p>
+      <pre><code>int mid = left + (right - left) / 2;</code></pre>
+      <p>
+        Because <code>right - left</code> can never exceed array capacity, overflow is mathematically impossible.
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="rotated-search">
+      <h2>4. Rotated Sorted Array: Identifying the Monotonic Half</h2>
+      <pre><code>Array: [4, 5, 6, 7, 0, 1, 2], Target = 0
+left = 0 (4), mid = 3 (7), right = 6 (2)
+
+Check Left Half: nums[left] <= nums[mid] (4 <= 7) -> TRUE! Left half is normally sorted!
+Is Target (0) in range [4, 7)? No.
+Therefore, target MUST be in right half! -> left = mid + 1</code></pre>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="code-in-action">
+      <h2>5. Multi-Language Implementations: Search in Rotated Sorted Array</h2>
+      <p>
+        Solving <strong>LeetCode 33 (Grind 75)</strong> in $O(\log n)$ time and $O(1)$ space across Python, TypeScript, and Java:
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code>def search_rotated(nums: list[int], target: int) -> int:
+    """
+    LeetCode 33 (Grind 75) - Rotated Binary Search.
+    Time Complexity:  O(log n) - halves search space each iteration.
+    Space Complexity: O(1) - boundary pointers only.
+    """
+    left = 0
+    right = len(nums) - 1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if nums[mid] == target:
+            return mid
+
+        # Determine which half is normally sorted
+        if nums[left] <= nums[mid]:
+            # Left half is sorted
+            if nums[left] <= target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        else:
+            # Right half is sorted
+            if nums[mid] < target <= nums[right]:
+                left = mid + 1
+            else:
+                right = mid - 1
+
+    return -1</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>function search(nums: number[], target: number): number {
+    // Time Complexity:  O(log n)
+    // Space Complexity: O(1)
+    let left = 0;
+    let right = nums.length - 1;
+
+    while (left <= right) {
+        const mid = left + Math.floor((right - left) / 2);
+
+        if (nums[mid] === target) return mid;
+
+        // Check if left half is sorted
+        if (nums[left] <= nums[mid]) {
+            if (nums[left] <= target && target < nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        } else {
+            // Right half is sorted
+            if (nums[mid] < target && target <= nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    }
+
+    return -1;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>public class RotatedBinarySearch {
+    /**
+     * LeetCode 33 (Grind 75) in O(log n) time and O(1) space.
+     */
+    public static int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] == target) return mid;
+
+            if (nums[left] <= nums[mid]) {
+                // Left half is sorted
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                // Right half is sorted
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="practice">
+      <h2>6. Active Retrieval Practice</h2>
+      <p>Test your binary search mechanics:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Calculating mid = left + (right - left) / 2 avoids the addition left + right, which in fixed 32-bit integer representations can exceed Integer.MAX_VALUE and wrap into negative numbers.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Arithmetic Safety</span>
+        </div>
+        <div class="quiz-question">
+          Why is <code>left + (right - left) / 2</code> mathematically and computationally preferred over <code>(left + right) / 2</code>?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Executes on floating point register units</div>
+          <div class="quiz-option">Guarantees binary division produces even numbers</div>
+          <div class="quiz-option">Prevents integer overflow in 32-bit registers</div>
+          <div class="quiz-option">Halves the number of machine instructions</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="A rotated sorted array split at any index leaves at least one contiguous half monotonically ordered; testing against that sorted range identifies the target half in O(1).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Rotated Invariant</span>
+        </div>
+        <div class="quiz-question">
+          In Search in Rotated Sorted Array (LeetCode 33), what core mathematical invariant allows binary search to continue running in <code>O(log n)</code> time?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Array contains no negative integer values</div>
+          <div class="quiz-option">At least one half is normally sorted</div>
+          <div class="quiz-option">Rotation pivot always sits at exact middle</div>
+          <div class="quiz-option">Elements are mirrored across array center</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Navigation between lessons -->
+    <section class="lesson-pager">
+      <a href="0014-monotonic-stack-and-monotonic-queue.html" class="pager-link prev">
+        <span class="pager-dir">&larr; Previous</span>
+        <span class="pager-title">0014: Monotonic Stack &amp; Queue</span>
+      </a>
+      <a href="0016-binary-search-on-answer-space.html" class="pager-link next">
+        <span class="pager-dir">Next &rarr;</span>
+        <span class="pager-title">0016: Binary Search on Answer Space</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

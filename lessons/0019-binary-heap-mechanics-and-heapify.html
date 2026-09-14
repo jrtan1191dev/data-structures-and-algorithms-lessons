@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0019: Binary Heap Mechanics &amp; Heapify &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 10: Heaps &amp; Priority Queues</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0019</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0019</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>Binary Heap Mechanics &amp; Heapify</h1>
+      <p class="subtitle">
+        Compact array representation of complete binary trees, cache locality benefits, Floyd's O(n) heapify proof, and multiway list consolidation.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Complete Binary Trees in Flat Memory</h2>
+      <p>
+        A <strong>complete binary tree</strong> has every level filled except possibly the last, which is filled from left to right. Because there are no interior gaps, a complete tree can be mapped directly into a contiguous dynamic array without storing any pointers:
+      </p>
+      <ul>
+        <li><strong>Root index:</strong> <code>0</code></li>
+        <li><strong>Left child of index <code>i</code>:</strong> <code>2*i + 1</code></li>
+        <li><strong>Right child of index <code>i</code>:</strong> <code>2*i + 2</code></li>
+        <li><strong>Parent of index <code>i</code>:</strong> <code>floor((i - 1) / 2)</code></li>
+      </ul>
+
+      <div class="callout callout-info">
+        <strong>Hardware Locality Advantage:</strong> Unlike a pointer-based binary search tree where traversing from parent to child requires dereferencing an arbitrary heap address (causing L1/L2 cache misses), an array-based binary heap resides in contiguous virtual memory pages. Sequential scans and upward/downward sift steps operate on contiguous cache lines.
+      </div>
+
+      <h3>Why Floyd's <code>build_heap</code> is O(n), not O(n log n)</h3>
+      <p>
+        Inserting $n$ items one by one into an initially empty heap performs $n$ sift-up steps, costing $O(n \log n)$. In contrast, Floyd's bottom-up <code>heapify</code> operates by sifting down from the lowest non-leaf node (index $\lfloor n/2 \rfloor - 1$) down to the root:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Mathematical Work Bound</div>
+        <pre><code>Height h=0: ~ n/2 nodes,    work = 0 steps
+Height h=1: ~ n/4 nodes,    work = 1 step
+Height h=2: ~ n/8 nodes,    work = 2 steps
+...
+Total Work S = Sum_{h=0}^{log n} (n / 2^(h+1)) * h = n * Sum_{h=0}^{log n} (h / 2^(h+1))
+
+Since the infinite series Sum_{h=1}^inf (h / 2^h) converges to 2:
+Total Operations <= 2 * n = O(n)</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 23: Merge k Sorted Lists</strong></td>
+              <td><span class="badge badge-purple">Hard</span></td>
+              <td>$k$-way Min-Heap Selection</td>
+              <td>Store only $k$ pointers in the min-heap at any time. Pop the minimum node, append to output, and push its <code>next</code> pointer. Reduces time from $O(k \cdot N)$ to $O(N \log k)$ while consuming only $O(k)$ auxiliary space.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 23: Merge k Sorted Lists ($O(N \log k)$ Time, $O(k)$ Space)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: heapq with Unique Counter Disambiguation</div>
+            <pre><code>import heapq
+from typing import List, Optional
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def mergeKLists(lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    dummy = ListNode(0)
+    curr = dummy
+    heap = []
+    
+    # Counter prevents comparing ListNode objects when vals are equal
+    counter = 0
+    for node in lists:
+        if node:
+            heapq.heappush(heap, (node.val, counter, node))
+            counter += 1
+            
+    while heap:
+        val, _, node = heapq.heappop(heap)
+        curr.next = node
+        curr = curr.next
+        
+        if node.next:
+            heapq.heappush(heap, (node.next.val, counter, node.next))
+            counter += 1
+            
+    return dummy.next</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Array-Backed MinHeap Implementation</div>
+            <pre><code>class ListNode {
+  val: number;
+  next: ListNode | null;
+  constructor(val = 0, next: ListNode | null = null) {
+    this.val = val;
+    this.next = next;
+  }
+}
+
+class MinHeap {
+  private data: ListNode[] = [];
+
+  push(node: ListNode): void {
+    this.data.push(node);
+    this.siftUp(this.data.length - 1);
+  }
+
+  pop(): ListNode | null {
+    if (this.data.length === 0) return null;
+    const top = this.data[0];
+    const bottom = this.data.pop()!;
+    if (this.data.length > 0) {
+      this.data[0] = bottom;
+      this.siftDown(0);
+    }
+    return top;
+  }
+
+  get size(): number { return this.data.length; }
+
+  private siftUp(i: number): void {
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (this.data[i].val < this.data[p].val) {
+        [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+        i = p;
+      } else break;
+    }
+  }
+
+  private siftDown(i: number): void {
+    const n = this.data.length;
+    while (2 * i + 1 < n) {
+      let smallest = 2 * i + 1;
+      const right = 2 * i + 2;
+      if (right < n && this.data[right].val < this.data[smallest].val) {
+        smallest = right;
+      }
+      if (this.data[smallest].val < this.data[i].val) {
+        [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];
+        i = smallest;
+      } else break;
+    }
+  }
+}
+
+function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
+  const heap = new MinHeap();
+  for (const node of lists) {
+    if (node) heap.push(node);
+  }
+
+  const dummy = new ListNode(0);
+  let curr = dummy;
+
+  while (heap.size > 0) {
+    const node = heap.pop()!;
+    curr.next = node;
+    curr = curr.next;
+    if (node.next) heap.push(node.next);
+  }
+
+  return dummy.next;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: PriorityQueue with Comparator</div>
+            <pre><code>import java.util.PriorityQueue;
+import java.util.Comparator;
+
+public class Solution {
+    public static class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int val) { this.val = val; }
+    }
+
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) return null;
+
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(
+            lists.length,
+            Comparator.comparingInt(a -> a.val)
+        );
+
+        for (ListNode node : lists) {
+            if (node != null) {
+                minHeap.offer(node);
+            }
+        }
+
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+
+        while (!minHeap.isEmpty()) {
+            ListNode smallest = minHeap.poll();
+            curr.next = smallest;
+            curr = curr.next;
+
+            if (smallest.next != null) {
+                minHeap.offer(smallest.next);
+            }
+        }
+
+        return dummy.next;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="2" data-explanation="Floyd's heapify algorithm builds a heap in O(n) time because the vast majority of nodes reside near the leaves (height h=0 and h=1) requiring at most 0 or 1 sift-down swaps, yielding a convergent sum that evaluates to 2n total operations.">
+        <h3 class="quiz-question">Why does Floyd's bottom-up heapify algorithm execute in strictly O(n) time rather than O(n log n)?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary heaps are stored in continuous RAM arrays that enable hardware SIMD instructions during sifting.</button>
+          <button type="button" class="quiz-option" data-index="1">Each sift operation uses binary search on ancestor nodes to locate swap destinations in O(1) steps.</button>
+          <button type="button" class="quiz-option" data-index="2">Most tree nodes are near the leaves where sifting down requires only zero or one swap operations.</button>
+          <button type="button" class="quiz-option" data-index="3">Dynamic memory paging guarantees that parent and child nodes always inhabit identical cache lines.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="1" data-explanation="When merging k sorted lists with N total nodes, maintaining a min-heap containing at most k list heads costs O(log k) per extraction/insertion, yielding O(N log k) total time and O(k) auxiliary memory.">
+        <h3 class="quiz-question">What is the exact asymptotic time and auxiliary space complexity of merging k sorted lists containing N total nodes via a min-heap?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Time complexity is O(N log N) using O(N) heap memory for all nodes.</button>
+          <button type="button" class="quiz-option" data-index="1">Time complexity is O(N log k) using O(k) heap memory for list heads.</button>
+          <button type="button" class="quiz-option" data-index="2">Time complexity is O(k log N) using O(k) heap memory for list heads.</button>
+          <button type="button" class="quiz-option" data-index="3">Time complexity is O(k * N) using O(1) heap memory for list heads.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0018-binary-search-trees-and-validation.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0018: Binary Search Trees &amp; Validation</span>
+      </a>
+      <a href="0020-the-top-k-elements-and-two-heaps-pattern.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0020: The Top-K Elements &amp; Two-Heaps Pattern</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

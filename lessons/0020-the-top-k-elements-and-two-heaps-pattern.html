@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0020: The Top-K Elements &amp; Two-Heaps Pattern &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 10: Heaps &amp; Priority Queues</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0020</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0020</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 75 Core</span>
+      </div>
+      <h1>The Top-K Elements &amp; Two-Heaps Pattern</h1>
+      <p class="subtitle">
+        Bounded-size heaps for streaming extremes, balancing dual heaps for dynamic median extraction, and avoiding total $O(n \log n)$ array sorts.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Bounded Heaps vs Full Sort</h2>
+      <p>
+        When searching for the $k$ largest elements in a dataset of size $N$ ($k \ll N$), sorting the entire array consumes $O(N \log N)$ time and $O(N)$ auxiliary memory (or mutates the input).
+      </p>
+      <p>
+        By maintaining a <strong>min-heap capped at size $k$</strong>, we process elements as a streaming pipeline:
+      </p>
+      <ul>
+        <li>For each incoming element $x$: push $x$ into the min-heap.</li>
+        <li>If heap size exceeds $k$, pop the root (which is the smallest of the top $k+1$ candidates).</li>
+        <li><strong>Final State:</strong> The heap retains the $k$ largest elements encountered, and the root is the $k$-th largest. Total time is $O(N \log k)$ with $O(k)$ memory.</li>
+      </ul>
+
+      <h3>The Two-Heaps Pattern for Dynamic Streaming Medians</h3>
+      <p>
+        To track the median of an incoming number stream in $O(\log n)$ insertion and $O(1)$ query time, split the dataset into two balanced halves:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Two-Heaps Invariants</div>
+        <pre><code>[ Lower Half: Max-Heap (small) ]  <=  [ Upper Half: Min-Heap (large) ]
+                  |                                     |
+              max_val                               min_val
+
+Invariants to maintain after every insertion:
+1. Ordering: max(small) <= min(large)
+2. Size Balance: len(small) == len(large)  OR  len(small) == len(large) + 1
+
+Median Extraction:
+- If odd:   small[0]
+- If even:  (small[0] + large[0]) / 2.0</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 215: Kth Largest Element in an Array</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Bounded Min-Heap of size $k$</td>
+              <td>Keep heap size at $k$. Evicting the minimum guarantees that the surviving elements are the $k$ largest, with root holding the $k$-th largest in $O(N \log k)$ time.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 347: Top K Frequent Elements</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Hash Count + Bounded Min-Heap</td>
+              <td>Hash table tallies frequencies in $O(N)$ time. Min-heap of size $k$ ordered by frequency yields $O(N + U \log k)$ where $U$ is unique element count.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 295: Find Median from Data Stream</strong></td>
+              <td><span class="badge badge-purple">Hard</span></td>
+              <td>Dual Balanced Heaps</td>
+              <td>A max-heap tracks the lower half while a min-heap tracks the upper half. Strict size balancing guarantees $O(\log N)$ insertion and instantaneous $O(1)$ median reads.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 295: Find Median from Data Stream ($O(\log N)$ Insert, $O(1)$ Find)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Dual Heaps with Negated Max-Heap Storage</div>
+            <pre><code>import heapq
+
+class MedianFinder:
+    def __init__(self):
+        # small: max-heap (invert signs for heapq)
+        # large: min-heap
+        self.small = []
+        self.large = []
+
+    def addNum(self, num: int) -> None:
+        # Step 1: Push to max-heap first
+        heapq.heappush(self.small, -num)
+        
+        # Step 2: Ensure small's largest <= large's smallest
+        if self.small and self.large and (-self.small[0] > self.large[0]):
+            val = -heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+            
+        # Step 3: Enforce size invariant: len(small) == len(large) or len(small) == len(large) + 1
+        if len(self.small) > len(self.large) + 1:
+            val = -heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+        elif len(self.large) > len(self.small):
+            val = heapq.heappop(self.large)
+            heapq.heappush(self.small, -val)
+
+    def findMedian(self) -> float:
+        if len(self.small) > len(self.large):
+            return float(-self.small[0])
+        return (-self.small[0] + self.large[0]) / 2.0</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Binary Heap Class with Custom Comparator</div>
+            <pre><code>class CustomHeap {
+  private heap: number[] = [];
+  constructor(private compare: (a: number, b: number) => number) {}
+
+  push(val: number): void {
+    this.heap.push(val);
+    let i = this.heap.length - 1;
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (this.compare(this.heap[i], this.heap[p]) < 0) {
+        [this.heap[i], this.heap[p]] = [this.heap[p], this.heap[i]];
+        i = p;
+      } else break;
+    }
+  }
+
+  pop(): number {
+    const top = this.heap[0];
+    const bottom = this.heap.pop()!;
+    if (this.heap.length > 0) {
+      this.heap[0] = bottom;
+      let i = 0;
+      const n = this.heap.length;
+      while (2 * i + 1 < n) {
+        let best = 2 * i + 1;
+        const right = 2 * i + 2;
+        if (right < n && this.compare(this.heap[right], this.heap[best]) < 0) {
+          best = right;
+        }
+        if (this.compare(this.heap[best], this.heap[i]) < 0) {
+          [this.heap[i], this.heap[best]] = [this.heap[best], this.heap[i]];
+          i = best;
+        } else break;
+      }
+    }
+    return top;
+  }
+
+  peek(): number { return this.heap[0]; }
+  get size(): number { return this.heap.length; }
+}
+
+class MedianFinder {
+  private small = new CustomHeap((a, b) => b - a); // Max-heap
+  private large = new CustomHeap((a, b) => a - b); // Min-heap
+
+  addNum(num: number): void {
+    this.small.push(num);
+
+    if (this.small.size > 0 && this.large.size > 0 && this.small.peek() > this.large.peek()) {
+      this.large.push(this.small.pop());
+    }
+
+    if (this.small.size > this.large.size + 1) {
+      this.large.push(this.small.pop());
+    } else if (this.large.size > this.small.size) {
+      this.small.push(this.large.pop());
+    }
+  }
+
+  findMedian(): number {
+    if (this.small.size > this.large.size) {
+      return this.small.peek();
+    }
+    return (this.small.peek() + this.large.peek()) / 2;
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Dual PriorityQueue Architecture</div>
+            <pre><code>import java.util.Collections;
+import java.util.PriorityQueue;
+
+public class MedianFinder {
+    private final PriorityQueue<Integer> small; // Max-heap for lower half
+    private final PriorityQueue<Integer> large; // Min-heap for upper half
+
+    public MedianFinder() {
+        this.small = new PriorityQueue<>(Collections.reverseOrder());
+        this.large = new PriorityQueue<>();
+    }
+
+    public void addNum(int num) {
+        small.offer(num);
+
+        // Enforce ordering invariant
+        if (!small.isEmpty() && !large.isEmpty() && small.peek() > large.peek()) {
+            large.offer(small.poll());
+        }
+
+        // Enforce size invariant
+        if (small.size() > large.size() + 1) {
+            large.offer(small.poll());
+        } else if (large.size() > small.size()) {
+            small.offer(large.poll());
+        }
+    }
+
+    public double findMedian() {
+        if (small.size() > large.size()) {
+            return (double) small.peek();
+        }
+        return ((double) small.peek() + large.peek()) / 2.0;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="0" data-explanation="To find the K largest elements in a stream, we keep a MIN-HEAP of size K. When an incoming value is larger than the root, we pop the root and push the new value. The surviving K elements are the largest, with root being the K-th largest.">
+        <h3 class="quiz-question">Which heap configuration optimally discovers the K largest elements in an unbounded streaming array?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">A min-heap of size K where smaller elements are evicted when capacity exceeds K.</button>
+          <button type="button" class="quiz-option" data-index="1">A max-heap of size K where larger elements are evicted when capacity exceeds K.</button>
+          <button type="button" class="quiz-option" data-index="2">An unbounded min-heap where all stream items are pushed and extracted at completion.</button>
+          <button type="button" class="quiz-option" data-index="3">An unbounded max-heap where all stream items are pushed and extracted at completion.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="3" data-explanation="The two-heaps median finder maintains the lower half in a max-heap and the upper half in a min-heap, allowing O(log N) balancing insertions and instantaneous O(1) median inspection without sorting.">
+        <h3 class="quiz-question">Why does the Two-Heaps pattern achieve O(1) time complexity for dynamic median retrieval?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Prefix sums over both heaps allow constant-time arithmetic evaluation of median values.</button>
+          <button type="button" class="quiz-option" data-index="1">Hash tables maintain cached pointers to the exact memory addresses of middle elements.</button>
+          <button type="button" class="quiz-option" data-index="2">Binary search across array leaves locates midpoints within logarithmic hardware cycles.</button>
+          <button type="button" class="quiz-option" data-index="3">The middle elements reside permanently at the roots of the two balanced priority queues.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0019-binary-heap-mechanics-and-heapify.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0019: Binary Heap Mechanics &amp; Heapify</span>
+      </a>
+      <a href="0021-backtracking-foundations-subsets-and-permutations.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0021: Backtracking Foundations: Subsets &amp; Permutations</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>
