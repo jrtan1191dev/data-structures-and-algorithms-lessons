@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Structures &amp; Algorithms Mastery &bull; Course Syllabus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="assets/astryx.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/quiz.js" defer></script>
+</head>
+
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Python &bull; TS &bull; Java</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <!-- Hero / Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">Interactive Syllabus &bull; Multi-Language Track</div>
+      <h1>Data Structures &amp; Algorithms</h1>
+      <p class="subtitle">
+        Mastering algorithmic intuition, asymptotic analysis, and memory mechanics from first principles across
+        <strong>Python</strong>, <strong>TypeScript</strong>, and <strong>Java</strong>.
+      </p>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Core Interactive Lessons</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Quick Reference Cheatsheets</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Languages Compared in Parallel</div>
+      </div>
+    </section>
+
+    <!-- Mission Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">🎯</span>
+        <h4>Mission &amp; Learning Architecture</h4>
+      </div>
+      <p>
+        Built for technical coding interview excellence and production engineering precision.
+        We prioritize <strong>underlying physical memory architecture</strong>, <strong>asymptotic runtime
+          intuition</strong>, and <strong>desirable difficulty</strong> (active recall retrieval checks) over rote
+        memorization.
+      </p>
+    </section>
+
+    <!-- Syllabus Controls Toolbar -->
+    <div class="syllabus-toolbar">
+      <div class="filter-group" role="tablist" aria-label="Filter lessons">
+        <button type="button" class="filter-btn active" data-filter="all">All Modules</button>
+        <button type="button" class="filter-btn" data-filter="foundations">Foundations</button>
+        <button type="button" class="filter-btn" data-filter="data-structures">Data Structures</button>
+        <button type="button" class="filter-btn" data-filter="reference">Reference</button>
+      </div>
+
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="search" class="search-input" placeholder="Filter lessons, Big-O, arrays..."
+          aria-label="Search lessons">
+      </div>
+    </div>
+
+    <!-- Module 1: Foundations & Algorithmic Complexity -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 1: Foundations &amp; Algorithmic Complexity</div>
+        <span class="module-tag">Foundations</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0001-big-o-and-algorithmic-intuition.html" class="row-item" data-category="foundations">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0001</span>
+              </span>
+              <span class="badge badge-blue">Foundations</span>
+            </div>
+            <div class="row-title">Big-O &amp; Algorithmic Intuition</div>
+            <p class="row-desc">
+              How computers experience scale. Comparing constant O(1), linear O(n), and quadratic O(n²) using brute
+              force vs. hash set implementations.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 6 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0002-the-full-complexity-spectrum.html" class="row-item" data-category="foundations">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0002</span>
+              </span>
+              <span class="badge badge-blue">Foundations</span>
+            </div>
+            <div class="row-title">The Full Complexity Spectrum &amp; Space Analysis</div>
+            <p class="row-desc">
+              Demystifying O(log n) repeated halving, O(n log n) divide-and-conquer, explosive tiers (2ⁿ and n!), and
+              auxiliary heap space vs. recursion call stack frames.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 2: Core Data Structures & Contiguous Memory -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 2: Core Data Structures &amp; Contiguous Memory</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0003-contiguous-memory-and-dynamic-arrays.html" class="row-item"
+          data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0003</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Contiguous Memory &amp; Dynamic Arrays</div>
+            <p class="row-desc">
+              Physical RAM addressing formulas, why indexing is instantaneous O(1), the cost of element shifts, and
+              geometric capacity doubling with amortized analysis.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 7 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <div class="row-item upcoming" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="neutral" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0004</span>
+              </span>
+              <span class="badge badge-neutral">Upcoming</span>
+            </div>
+            <div class="row-title">The Two Pointers Pattern</div>
+            <p class="row-desc">
+              Converging pointers, in-place reversal, pair sum optimization, and fast/slow cycle detection across sorted
+              and unsorted sequences.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Scheduled</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Reference Library -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Quick Reference Cheatsheets</div>
+        <span class="module-tag">Reference</span>
+      </div>
+
+      <div class="row-list">
+        <a href="reference/big-o-and-complexity.html" class="row-item" data-category="reference">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Reference</span>
+              </span>
+              <span class="badge badge-accent">Cheatsheet</span>
+            </div>
+            <div class="row-title">Big-O &amp; Algorithmic Complexity Cheatsheet</div>
+            <p class="row-desc">
+              Growth rate hierarchy, Golden Simplification Rules, and collection operations crosswalk across Python,
+              TypeScript, and Java.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Quick Reference</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="reference/arrays-and-dynamic-arrays.html" class="row-item" data-category="reference">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Reference</span>
+              </span>
+              <span class="badge badge-accent">Cheatsheet</span>
+            </div>
+            <div class="row-title">Arrays &amp; Dynamic Arrays Cheatsheet</div>
+            <p class="row-desc">
+              Memory offset formula, full operations complexity matrix (access, append, prepend, slice), and
+              language-specific resizing internals.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Quick Reference</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Curated Primary Resources -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">High-Trust Curated Primary Resources</div>
+        <span class="module-tag">Curated Links</span>
+      </div>
+
+      <ul class="resource-list">
+        <li class="resource-item">
+          <div>
+            <a href="https://neetcode.io/roadmap" target="_blank" rel="noreferrer">NeetCode Interactive DSA Roadmap
+              &nearr;</a>
+            <div class="resource-desc">Structured topic hierarchy and visual problem sequences.</div>
+          </div>
+          <span class="badge badge-neutral">Roadmap</span>
+        </li>
+        <li class="resource-item">
+          <div>
+            <a href="https://www.techinterviewhandbook.org/algorithms/study-cheatsheet/" target="_blank"
+              rel="noreferrer">Tech Interview Handbook Algorithm Cheatsheet &nearr;</a>
+            <div class="resource-desc">High-yield pattern and edge-case checklist.</div>
+          </div>
+          <span class="badge badge-neutral">Checklist</span>
+        </li>
+        <li class="resource-item">
+          <div>
+            <a href="https://www.youtube.com/@abdul_bari/videos" target="_blank" rel="noreferrer">Abdul Bari YouTube
+              Channel &nearr;</a>
+            <div class="resource-desc">Gold standard for deep conceptual and mathematical algorithm analysis.</div>
+          </div>
+          <span class="badge badge-neutral">Video Lectures</span>
+        </li>
+        <li class="resource-item">
+          <div>
+            <a href="https://www.youtube.com/watch?v=Q5QoGocSnjo" target="_blank" rel="noreferrer">Maddy: Fastest Way to
+              Learn DSA (9 Core Patterns) &nearr;</a>
+            <div class="resource-desc">Intuition-first interview preparation guide.</div>
+          </div>
+          <span class="badge badge-neutral">Strategy</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+
+</html>

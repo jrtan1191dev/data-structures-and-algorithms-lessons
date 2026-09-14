@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Arrays &amp; Dynamic Arrays &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Arrays Cheatsheet</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures</div>
+      <h1>Arrays &amp; Dynamic Arrays Cheatsheet</h1>
+      <p class="subtitle">Memory layouts, indexing arithmetic, operation costs, and language-specific dynamic resizing internals.</p>
+    </section>
+    <h2>1. The Contiguous Memory Formula</h2>
+    <p>
+      Arrays are sequential, unbroken blocks of bytes in RAM. Because every element has a uniform byte size, the CPU computes any element's memory address instantly:
+    </p>
+    <div class="callout">
+      <h4>Direct Indexing Address Calculation</h4>
+      <p>
+        <code>MemoryAddress(i) = BaseAddress + (i &times; SizeOfElement)</code><br>
+        Because this is a single multiplication and addition, looking up <code>arr[0]</code> and <code>arr[10,000,000]</code> both take <strong>O(1)</strong> time. Zero search is performed.
+      </p>
+    </div>
+
+    <h2>2. Operations Complexity Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Operation</th>
+          <th>Time Complexity</th>
+          <th>Space Complexity</th>
+          <th>Why?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Access by Index (<code>arr[i]</code>)</strong></td>
+          <td><code>O(1)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Direct memory offset computation</td>
+        </tr>
+        <tr>
+          <td><strong>Update by Index (<code>arr[i] = x</code>)</strong></td>
+          <td><code>O(1)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Overwrites value at exact memory location</td>
+        </tr>
+        <tr>
+          <td><strong>Append at End (Dynamic Array)</strong></td>
+          <td><code>O(1)</code> amortized</td>
+          <td><code>O(1)</code> amortized</td>
+          <td>Appends to spare capacity; resizes only when full</td>
+        </tr>
+        <tr>
+          <td><strong>Pop / Remove from End</strong></td>
+          <td><code>O(1)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Simply decrements internal length tracker</td>
+        </tr>
+        <tr>
+          <td><strong>Insert at Index <code>k</code></strong></td>
+          <td><code>O(n - k)</code> &rarr; <code>O(n)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Must shift all elements from index <code>k</code> to <code>n-1</code> rightward</td>
+        </tr>
+        <tr>
+          <td><strong>Delete at Index <code>k</code></strong></td>
+          <td><code>O(n - k)</code> &rarr; <code>O(n)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Must shift all elements from index <code>k+1</code> to <code>n-1</code> leftward</td>
+        </tr>
+        <tr>
+          <td><strong>Prepend at Beginning</strong></td>
+          <td><code>O(n)</code></td>
+          <td><code>O(1)</code></td>
+          <td>Must shift every single item right by 1 index</td>
+        </tr>
+        <tr>
+          <td><strong>Slice / Subarray (length <code>k</code>)</strong></td>
+          <td><code>O(k)</code></td>
+          <td><code>O(k)</code></td>
+          <td>Allocates a brand new array and copies <code>k</code> items</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. Dynamic Array Resizing Mechanisms</h2>
+    <p>
+      Fixed arrays cannot grow without overwriting adjacent RAM. Dynamic arrays solve this by maintaining two numbers: <strong>Length</strong> (elements used) and <strong>Capacity</strong> (total allocated slots in RAM).
+    </p>
+    <ul>
+      <li><strong>When Capacity is Exceeded:</strong> The system allocates a new array with geometric capacity (typically 1.5&times; or 2&times;), copies all existing items over (an <code>O(n)</code> operation), and frees the old block.</li>
+      <li><strong>Why Append is Amortized O(1):</strong> Doubling capacity ensures that an <code>O(n)</code> resize happens after <em>n</em> cheap <code>O(1)</code> operations. The total cost of inserting <em>n</em> items is roughly 2<em>n</em> steps, averaging out to ~2 operations per insertion.</li>
+    </ul>
+
+    <h2>4. Idiomatic Implementations</h2>
+    <div class="code-tabs">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-lang="python">Python</button>
+        <button class="tab-btn" data-lang="ts">TypeScript</button>
+        <button class="tab-btn" data-lang="java">Java</button>
+      </div>
+
+      <div class="tab-content active" data-lang="python">
+<pre><code># Python lists are dynamic arrays (pointers to objects)
+nums = [10, 20, 30]
+
+nums.append(40)         # O(1) amortized
+val = nums[2]           # O(1) random access
+nums.pop()              # O(1) removes last element
+
+# Costly operations:
+nums.insert(0, 99)      # O(n) shifts all elements right
+nums.pop(0)             # O(n) shifts all elements left
+sub = nums[1:3]         # O(k) creates a brand new copy!</code></pre>
+      </div>
+
+      <div class="tab-content" data-lang="ts">
+<pre><code>// TypeScript / JS Arrays are dynamic
+const nums: number[] = [10, 20, 30];
+
+nums.push(40);          // O(1) amortized append
+const val = nums[2];    // O(1) random access
+nums.pop();             // O(1) removes last element
+
+// Costly operations:
+nums.unshift(99);       // O(n) prepends and shifts right
+nums.shift();           // O(n) removes first and shifts left
+const sub = nums.slice(1, 3); // O(k) shallow copy of slice</code></pre>
+      </div>
+
+      <div class="tab-content" data-lang="java">
+<pre><code>// Java distinguishes fixed arrays (int[]) vs dynamic (ArrayList)
+import java.util.ArrayList;
+
+// Fixed array (cannot change length)
+int[] fixed = new int[5]; // Allocated in contiguous RAM
+fixed[0] = 10;            // O(1)
+
+// Dynamic array
+ArrayList&lt;Integer&gt; nums = new ArrayList&lt;&gt;();
+nums.add(10);            // O(1) amortized
+nums.add(20);
+int val = nums.get(1);   // O(1)
+nums.remove(nums.size() - 1); // O(1) removes last
+
+// Costly operations:
+nums.add(0, 99);         // O(n) shifts all elements
+nums.remove(0);          // O(n) shifts all elements</code></pre>
+      </div>
+    </div>
+    <div class="lesson-footer-nav">
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Return to Syllabus</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+      <a href="../lessons/0003-contiguous-memory-and-dynamic-arrays.html" class="nav-card">
+        <span class="nav-card-sub">Go to Lesson 0003 &rarr;</span>
+        <span class="nav-card-title">0003: Contiguous Memory &amp; Dynamic Arrays</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

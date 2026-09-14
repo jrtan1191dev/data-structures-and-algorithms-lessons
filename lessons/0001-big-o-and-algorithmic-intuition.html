@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0001: Big-O &amp; Algorithmic Intuition &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-blue">Foundations</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 1: Foundations</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0001</span>
+    </div>
+    <span class="row-meta">⏱ 6 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0001</span>
+        </span>
+        <span>&bull;</span>
+        <span>Foundations</span>
+      </div>
+      <h1>Big-O &amp; Algorithmic Intuition</h1>
+      <p class="subtitle">
+        How computers experience scale, and how to classify runtime and memory growth instantly.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#scaling-spectrum" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Scaling Spectrum</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-in-action" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>Code in Action: Three Languages Compared</span>
+          </a>
+        </li>
+        <li>
+          <a href="#trade-off" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>The Fundamental Trade-Off: Time vs. Space</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Active Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Curated Primary Resources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In coding interviews and production systems, your code will rarely fail because of a syntax error.
+      It fails because an algorithm that runs smoothly on 10 items grinds to a halt on 100,000 items.
+      <strong>Big-O notation</strong> is the language engineers use to describe how an algorithm's resource usage (time and memory) scales as the input size <em>n</em> grows toward infinity.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        In an interview, before writing a single line of code, interviewers expect you to state the brute-force complexity, propose an optimal target (e.g. going from <code>O(n²)</code> down to <code>O(n)</code> using extra space), and justify why. This lesson builds that exact intuition.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="scaling-spectrum">
+      <h2>1. The Scaling Spectrum</h2>
+      <p>
+        Instead of counting wall-clock milliseconds (which depend on CPU clock speed and hardware), we count <strong>fundamental operations</strong> relative to input size <em>n</em>:
+      </p>
+
+      <ul>
+        <li><code>O(1)</code> &mdash; <strong>Constant Time:</strong> Instant. Looking up a known index in an array or grabbing a key from a hash map. Whether <em>n</em> = 10 or <em>n</em> = 10,000,000, execution time stays identical.</li>
+        <li><code>O(n)</code> &mdash; <strong>Linear Time:</strong> Directly proportional. If you loop through an array of <em>n</em> elements to find a maximum, doubling <em>n</em> doubles the iterations.</li>
+        <li><code>O(n²)</code> &mdash; <strong>Quadratic Time:</strong> The danger zone. Nested loops comparing every element against every other element. When <em>n</em> = 10,000, <em>n</em>² = 100,000,000 operations&mdash;pushing standard interview execution limits.</li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="code-in-action">
+      <h2>2. Code in Action: Three Languages Compared</h2>
+      <p>
+        Examine this common interview task: checking whether an array contains any duplicates. Compare the naive nested comparison (<code>O(n²)</code>) vs. the hash set approach (<code>O(n)</code>):
+      </p>
+
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code># O(n) Time, O(n) Space: Using a Hash Set
+def has_duplicate(nums: list[int]) -> bool:
+    seen = set()
+    for num in nums:          # Runs n times
+        if num in seen:       # O(1) average lookup
+            return True
+        seen.add(num)         # O(1) insert
+    return False
+
+# Naive Brute Force: O(n²) Time, O(1) Space
+def has_duplicate_brute(nums: list[int]) -> bool:
+    n = len(nums)
+    for i in range(n):
+        for j in range(i + 1, n): # Nested loop over remainder
+            if nums[i] == nums[j]:
+                return True
+    return False</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>// O(n) Time, O(n) Space: Using a Hash Set
+function hasDuplicate(nums: number[]): boolean {
+    const seen = new Set&lt;number&gt;();
+    for (const num of nums) {      // Runs n times
+        if (seen.has(num)) {       // O(1) average lookup
+            return true;
+        }
+        seen.add(num);             // O(1) insert
+    }
+    return false;
+}
+
+// Naive Brute Force: O(n²) Time, O(1) Space
+function hasDuplicateBrute(nums: number[]): boolean {
+    for (let i = 0; i &lt; nums.length; i++) {
+        for (let j = i + 1; j &lt; nums.length; j++) { // Nested loop
+            if (nums[i] === nums[j]) return true;
+        }
+    }
+    return false;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.HashSet;
+
+public class Solution {
+    // O(n) Time, O(n) Space: Using a Hash Set
+    public static boolean hasDuplicate(int[] nums) {
+        HashSet&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+        for (int num : nums) {        // Runs n times
+            if (seen.contains(num)) { // O(1) average lookup
+                return true;
+            }
+            seen.add(num);            // O(1) insert
+        }
+        return false;
+    }
+
+    // Naive Brute Force: O(n²) Time, O(1) Space
+    public static boolean hasDuplicateBrute(int[] nums) {
+        for (int i = 0; i &lt; nums.length; i++) {
+            for (int j = i + 1; j &lt; nums.length; j++) { // Nested loop
+                if (nums[i] == nums[j]) return true;
+            }
+        }
+        return false;
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="trade-off">
+      <h2>3. The Fundamental Trade-Off: Time vs. Space</h2>
+      <p>
+        Notice what happened in the code implementations above:
+      </p>
+      <ul>
+        <li><strong>Brute Force:</strong> Uses <code>O(1)</code> extra memory (zero auxiliary allocations), but pays with <code>O(n²)</code> execution time.</li>
+        <li><strong>Optimized Set:</strong> Reduces runtime down to <code>O(n)</code> by allocating <code>O(n)</code> auxiliary memory in a hash set.</li>
+      </ul>
+      <p>
+        This is the single most pervasive engineering trade-off in computer science: <em>spending auxiliary space to eliminate redundant runtime</em>.
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="practice">
+      <h2>4. Active Retrieval Practice</h2>
+      <p>Test your understanding before advancing. Click an option to check your recall:</p>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Scanning n items with an O(1) lookup inside takes n × 1 = n operations, which is linear O(n).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Complexity</span>
+        </div>
+        <div class="quiz-question">
+          An algorithm traverses an array of length <em>n</em>. Inside each iteration, it performs a single constant-time hash map lookup. What is the overall runtime?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Constant time complexity O(1)</div>
+          <div class="quiz-option">Linear time complexity O(n)</div>
+          <div class="quiz-option">Quadratic complexity O(n²)</div>
+          <div class="quiz-option">Logarithmic complexity O(log n)</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Sequential loops on independent inputs are additive. Because A and B can scale independently, the tightest representation is O(A + B).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Notation</span>
+        </div>
+        <div class="quiz-question">
+          You are given two distinct arrays of lengths <em>A</em> and <em>B</em>. You loop over array <em>A</em> completely, and then subsequently loop over array <em>B</em> completely. What is the overall time complexity?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Quadratic power notation O(N²)</div>
+          <div class="quiz-option">Multiplied cross notation O(A &times; B)</div>
+          <div class="quiz-option">Linear sum notation O(A + B)</div>
+          <div class="quiz-option">Constant baseline notation O(1)</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="resources">
+      <h2>5. Curated Primary Resources</h2>
+      <p>
+        To reinforce your mental model, explore these high-trust primary explanations:
+      </p>
+      <ul>
+        <li>
+          <strong>Primary Theory Watch:</strong> <a href="https://www.youtube.com/watch?v=0IAPZzGSbME" target="_blank" rel="noreferrer">Abdul Bari &mdash; 1.1 Introduction to Algorithms &amp; Analysis &nearr;</a>. The gold standard for visual frequency counts.
+        </li>
+        <li>
+          <strong>Strategic Pattern Watch:</strong> <a href="https://www.youtube.com/watch?v=Q5QoGocSnjo" target="_blank" rel="noreferrer">Maddy &mdash; Fastest Way to Learn DSA (9 Core Patterns) &nearr;</a>. Focus on pattern recognition over panic.
+        </li>
+      </ul>
+
+      <div class="footer-prompt">
+        <strong>Prompt Your AI Teacher:</strong> If anything about Big-O, space trade-offs, or language specifics feels unclear, ask right away before moving to Lesson 0002!
+      </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <div class="lesson-footer-nav">
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Return to Syllabus</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+      <a href="./0002-the-full-complexity-spectrum.html" class="nav-card">
+        <span class="nav-card-sub">Next Lesson &rarr;</span>
+        <span class="nav-card-title">0002: The Full Complexity Spectrum</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

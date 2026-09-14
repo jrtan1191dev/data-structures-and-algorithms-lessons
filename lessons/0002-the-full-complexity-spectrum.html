@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0002: The Full Complexity Spectrum &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-blue">Foundations</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 1: Foundations</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0002</span>
+    </div>
+    <span class="row-meta">⏱ 8 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0002</span>
+        </span>
+        <span>&bull;</span>
+        <span>Foundations</span>
+      </div>
+      <h1>The Full Complexity Spectrum &amp; Space Analysis</h1>
+      <p class="subtitle">
+        Demystifying <code>O(log n)</code>, <code>O(n log n)</code>, <code>O(2ⁿ)</code>, and how space complexity actually behaves in physical RAM.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#spectrum" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Complete Time Spectrum Compared</span>
+          </a>
+        </li>
+        <li>
+          <a href="#divide-conquer" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>What is O(n log n)? (Divide &amp; Conquer)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#space-complexity" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Space Complexity: What Counts?</span>
+          </a>
+        </li>
+        <li>
+          <a href="#code-demos" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Demonstrations (Binary Search &amp; Merge Sort)</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Interactive Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>High-Trust Primary Sources</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      In Lesson 0001, we explored the baseline contrast between constant <code>O(1)</code>, linear <code>O(n)</code>, and quadratic <code>O(n²)</code>.
+      However, the vast majority of optimized interview solutions and high-performance algorithms live in the spaces between: specifically <strong><code>O(log n)</code></strong> and <strong><code>O(n log n)</code></strong>, or when exploring exhaustive combinatorial choices, <strong><code>O(2ⁿ)</code></strong> and <strong><code>O(n!)</code></strong>.
+    </p>
+
+    <!-- Callout: Log Intuition -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>The Logarithm Intuition</h4>
+      </div>
+      <p>
+        In computer science, log <em>n</em> almost always means log₂ <em>n</em> (base 2). Ask yourself: <em>"How many times can I divide n in half before reaching 1?"</em><br>
+        If <em>n</em> = 16: 16 &rarr; 8 &rarr; 4 &rarr; 2 &rarr; 1 &rarr; <strong>4 steps</strong> (log₂ 16 = 4).<br>
+        If <em>n</em> = 1,000,000: log₂(1,000,000) &approx; <strong>20 steps</strong>!<br>
+        An <code>O(log n)</code> algorithm transforms a million operations into twenty.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="spectrum">
+      <h2>1. The Complete Time Spectrum Compared</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Complexity</th>
+              <th>Mechanical Meaning</th>
+              <th>Common Encounters</th>
+              <th>Operations for <em>n</em> = 1,000,000</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>O(1)</code></td>
+              <td>Direct lookup without iterating</td>
+              <td>Array index, Hash map get</td>
+              <td>1 operation</td>
+            </tr>
+            <tr>
+              <td><code>O(log n)</code></td>
+              <td>Halving the search space each step</td>
+              <td>Binary Search, BST lookup</td>
+              <td>~20 operations</td>
+            </tr>
+            <tr>
+              <td><code>O(n)</code></td>
+              <td>Touching every element once</td>
+              <td>Single loop, linear scan</td>
+              <td>1,000,000 operations</td>
+            </tr>
+            <tr>
+              <td><code>O(n log n)</code></td>
+              <td>log <em>n</em> levels of work, each doing <em>n</em> steps</td>
+              <td>Merge Sort, Quick Sort, Timsort</td>
+              <td>~20,000,000 operations</td>
+            </tr>
+            <tr>
+              <td><code>O(n²)</code></td>
+              <td>Nested loops over input</td>
+              <td>Comparing all pairs, Bubble sort</td>
+              <td>1,000,000,000,000 (Timeout!)</td>
+            </tr>
+            <tr>
+              <td><code>O(2ⁿ)</code></td>
+              <td>Two recursive branches at every step</td>
+              <td>All subsets, power set, brute recursion</td>
+              <td>Exceeds atoms in universe for <em>n</em> &gt; 300</td>
+            </tr>
+            <tr>
+              <td><code>O(n!)</code></td>
+              <td>Every permutation of elements</td>
+              <td>Traveling Salesperson (brute force)</td>
+              <td>Uncomputable for <em>n</em> &ge; 15</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="divide-conquer">
+      <h2>2. What is <code>O(n log n)</code>? (Divide &amp; Conquer)</h2>
+      <p>
+        Why do standard production sorting algorithms (Merge Sort, Python's Timsort, Java's Dual-Pivot Quicksort, JavaScript's V8 Timsort) take <code>O(n log n)</code> time?
+      </p>
+      <p>
+        Imagine taking an array of <em>n</em> items:
+      </p>
+      <ol>
+        <li>You divide it in half repeatedly until each sub-array has length 1. How deep is this tree of divisions? <strong>log <em>n</em> levels deep</strong>.</li>
+        <li>At each level of the tree, you merge the split pieces back together. Across all segments on any given level, you process exactly <strong><em>n</em> total elements</strong>.</li>
+        <li>Total operations = <code>(Work per level) &times; (Number of levels)</code> = <em>n</em> &times; log <em>n</em> = <strong><code>O(n log n)</code></strong>.</li>
+      </ol>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="space-complexity">
+      <h2>3. Space Complexity: What Counts?</h2>
+      <p>
+        Beginners frequently misunderstand space complexity. Space complexity is <strong>not</strong> just new variables or arrays you allocate. It consists of two distinct components:
+      </p>
+      <ul>
+        <li><strong>1. Auxiliary Heap Space:</strong> New arrays, HashSets, HashMaps, or objects you explicitly construct.</li>
+        <li><strong>2. Call Stack Space (Recursion):</strong> Every time a function calls itself, the computer allocates a stack frame to remember local variables and return addresses. Deep recursion requires memory proportional to the maximum call stack depth.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-header">
+          <span class="callout-icon">🔍</span>
+          <h4>Iterative vs. Recursive Space Contrast</h4>
+        </div>
+        <p>
+          <strong>Iterative Binary Search:</strong> Runs in <code>O(log n)</code> time and requires <code>O(1)</code> space (only two pointers: <code>left</code> and <code>right</code>).<br>
+          <strong>Recursive Binary Search:</strong> Runs in <code>O(log n)</code> time, but consumes <code>O(log n)</code> auxiliary space on the call stack due to log <em>n</em> recursive frames.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="code-demos">
+      <h2>4. Multi-Language Demonstrations</h2>
+
+      <h3>Example A: <code>O(log n)</code> Time, <code>O(1)</code> Space &mdash; Iterative Binary Search</h3>
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code># Time: O(log n) -> cuts search interval in half every loop
+# Space: O(1) -> only uses two integer pointers
+def binary_search(nums: list[int], target: int) -> int:
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1      # Discard left half
+        else:
+            right = mid - 1     # Discard right half
+    return -1</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>// Time: O(log n) -> search range halved each step
+// Space: O(1) -> no heap allocation, no recursion stack
+function binarySearch(nums: number[], target: number): number {
+    let left = 0;
+    let right = nums.length - 1;
+    while (left <= right) {
+        const mid = Math.floor(left + (right - left) / 2);
+        if (nums[mid] === target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            left = mid + 1;     // Discard left half
+        } else {
+            right = mid - 1;    // Discard right half
+        }
+    }
+    return -1;
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>// Time: O(log n) -> halves search space on each iteration
+// Space: O(1) -> constant auxiliary primitive variables
+public class Search {
+    public static int binarySearch(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;     // Discard left half
+            } else {
+                right = mid - 1;    // Discard right half
+            }
+        }
+        return -1;
+    }
+}</code></pre>
+        </div>
+      </div>
+
+      <h3>Example B: <code>O(n log n)</code> Time, <code>O(n)</code> Space &mdash; Merge Sort Anatomy</h3>
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code># Time: O(n log n) -> log(n) split levels * O(n) merge work per level
+# Space: O(n) -> temporary arrays allocated during merge
+def merge_sort(nums: list[int]) -> list[int]:
+    if len(nums) <= 1:
+        return nums
+    
+    mid = len(nums) // 2
+    left = merge_sort(nums[:mid])    # Recurse on left half
+    right = merge_sort(nums[mid:])   # Recurse on right half
+    
+    # Merge step: O(n) time, O(n) temporary space
+    merged = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i]); i += 1
+        else:
+            merged.append(right[j]); j += 1
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>// Time: O(n log n) -> log(n) tree depth, O(n) work per level
+// Space: O(n) -> requires auxiliary buffer to merge sub-arrays
+function mergeSort(nums: number[]): number[] {
+    if (nums.length <= 1) return nums;
+
+    const mid = Math.floor(nums.length / 2);
+    const left = mergeSort(nums.slice(0, mid));
+    const right = mergeSort(nums.slice(mid));
+
+    const merged: number[] = [];
+    let i = 0, j = 0;
+    while (i < left.length && j < right.length) {
+        if (left[i] <= right[j]) {
+            merged.push(left[i++]);
+        } else {
+            merged.push(right[j++]);
+        }
+    }
+    return merged.concat(left.slice(i)).concat(right.slice(j));
+}</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>// Time: O(n log n)
+// Space: O(n) -> auxiliary temp array needed for merging
+public class MergeSort {
+    public static void sort(int[] arr, int l, int r) {
+        if (l >= r) return;
+        int m = l + (r - l) / 2;
+        sort(arr, l, m);
+        sort(arr, m + 1, r);
+        merge(arr, l, m, r); // O(n) work copying to temp array
+    }
+
+    private static void merge(int[] arr, int l, int m, int r) {
+        int[] temp = new int[r - l + 1]; // O(n) auxiliary space
+        int i = l, j = m + 1, k = 0;
+        while (i <= m && j <= r) {
+            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
+            else temp[k++] = arr[j++];
+        }
+        while (i <= m) temp[k++] = arr[i++];
+        while (j <= r) temp[k++] = arr[j++];
+        System.arraycopy(temp, 0, arr, l, temp.length);
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Interactive Retrieval Practice</h2>
+      <p>Test your intuition on log scaling and space allocation:</p>
+
+      <div class="quiz-box" data-correct="3" data-explanation="A tree with log(n) levels doing O(n) cumulative work per level multiplies out to O(n log n).">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Divide &amp; Conquer</span>
+        </div>
+        <div class="quiz-question">
+          An algorithm divides an array in half log <em>n</em> times to form a recursive tree, and at each level of the tree performs <code>O(n)</code> total work combining elements. What is the overall time complexity?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Pure logarithmic notation O(log n)</div>
+          <div class="quiz-option">Standard linear notation O(n)</div>
+          <div class="quiz-option">Quadratic nested notation O(n²)</div>
+          <div class="quiz-option">Linearithmic runtime notation O(n log n)</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="1" data-explanation="Recursive binary search does not allocate auxiliary heap arrays, but each recursive call adds a stack frame. Halving n yields log(n) stack frames.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Space Analysis</span>
+        </div>
+        <div class="quiz-question">
+          A recursive binary search divides the search space in half at each step until finding the target, storing no extra arrays. What is its auxiliary space complexity?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Constant heap allocation O(1)</div>
+          <div class="quiz-option">Logarithmic stack frames O(log n)</div>
+          <div class="quiz-option">Linear array allocation O(n)</div>
+          <div class="quiz-option">Quadratic recursive frames O(n²)</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. High-Trust Primary Source</h2>
+      <p>
+        For the definitive mathematical breakdown of Divide-and-Conquer recurrence relations:
+      </p>
+      <ul>
+        <li>
+          <strong>Primary Watch:</strong> <a href="https://www.youtube.com/watch?v=ak-pzUQ3m0g" target="_blank" rel="noreferrer">Abdul Bari &mdash; 2.6.1 Merge Sort Algorithm &amp; Analysis &nearr;</a>. Bari methodically traces why the recursion tree has log <em>n</em> levels and why merging costs <code>O(n)</code> per level.
+        </li>
+      </ul>
+
+      <div class="footer-prompt">
+        <strong>Next Question for You:</strong> Does the distinction between auxiliary heap space (arrays/objects) and call stack space (recursion depth) feel intuitive? When you are ready, continue to <strong>Lesson 0003</strong> to uncover physical memory layouts and dynamic arrays!
+      </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <div class="lesson-footer-nav">
+      <a href="./0001-big-o-and-algorithmic-intuition.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Lesson</span>
+        <span class="nav-card-title">0001: Big-O &amp; Algorithmic Intuition</span>
+      </a>
+      <a href="./0003-contiguous-memory-and-dynamic-arrays.html" class="nav-card">
+        <span class="nav-card-sub">Next Lesson &rarr;</span>
+        <span class="nav-card-title">0003: Contiguous Memory &amp; Dynamic Arrays</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

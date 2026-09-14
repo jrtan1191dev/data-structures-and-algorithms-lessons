@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0003: Contiguous Memory &amp; Dynamic Arrays &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 2: Core Data Structures</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0003</span>
+    </div>
+    <span class="row-meta">⏱ 7 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0003</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+      </div>
+      <h1>Contiguous Memory &amp; Dynamic Arrays</h1>
+      <p class="subtitle">
+        Why index access is pure math, why shifting is expensive, and how dynamic arrays resize behind the scenes.
+      </p>
+    </section>
+
+    <!-- Outline / Table of Contents -->
+    <nav class="outline-card" aria-label="Lesson Contents">
+      <div class="outline-title">
+        <span>📑</span>
+        <span>Table of Contents</span>
+      </div>
+      <ul class="outline-list">
+        <li>
+          <a href="#memory-layout" class="outline-link">
+            <span class="outline-num">01.</span>
+            <span>The Physical Memory Layout</span>
+          </a>
+        </li>
+        <li>
+          <a href="#shifting-cost" class="outline-link">
+            <span class="outline-num">02.</span>
+            <span>The Inherent Cost: Insertion &amp; Deletion</span>
+          </a>
+        </li>
+        <li>
+          <a href="#amortized-analysis" class="outline-link">
+            <span class="outline-num">03.</span>
+            <span>Dynamic Arrays &amp; Amortized Analysis</span>
+          </a>
+        </li>
+        <li>
+          <a href="#idiom-crosswalk" class="outline-link">
+            <span class="outline-num">04.</span>
+            <span>Multi-Language Idiom Crosswalk</span>
+          </a>
+        </li>
+        <li>
+          <a href="#practice" class="outline-link">
+            <span class="outline-num">05.</span>
+            <span>Interactive Retrieval Practice</span>
+          </a>
+        </li>
+        <li>
+          <a href="#resources" class="outline-link">
+            <span class="outline-num">06.</span>
+            <span>High-Trust Primary Source</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>
+      Nearly every complex data structure&mdash;strings, hash tables, heaps, graphs, matrix grids&mdash;is built directly on top of <strong>arrays</strong>.
+      To write high-performance software and crack technical interviews, you must understand how arrays physically live in your computer's RAM.
+    </p>
+
+    <!-- Callout -->
+    <section class="callout">
+      <div class="callout-header">
+        <span class="callout-icon">💡</span>
+        <h4>Tied to Your Interview Mission</h4>
+      </div>
+      <p>
+        In interview problems (like Two Pointers, Sliding Window, or Prefix Sums), interviewers will scrutinize whether you mutate arrays in-place or accidentally trigger hidden <code>O(n)</code> shifts (e.g. using <code>nums.insert(0, x)</code> or <code>nums.shift()</code>). This lesson ensures you avoid those traps instinctively.
+      </p>
+    </section>
+
+    <!-- Section 1 -->
+    <section id="memory-layout">
+      <h2>1. The Physical Memory Layout</h2>
+      <p>
+        Think of your computer's RAM as an immense row of consecutively numbered mailboxes, each holding 1 byte of data.
+        When you create an array, the operating system reserves a <strong>contiguous (unbroken) block of mailboxes</strong>.
+      </p>
+
+      <p>
+        Because the block is unbroken and each element takes up the exact same number of bytes (for example, 4 bytes for a 32-bit integer), the CPU never needs to "search" for an item by index. It computes the physical address using basic multiplication:
+      </p>
+
+      <pre><code>TargetAddress = BaseAddress + (Index &times; ElementSizeInBytes)</code></pre>
+
+      <p>
+        If your array begins at memory address <code>1000</code> and stores 4-byte integers:
+      </p>
+      <ul>
+        <li>Index 0 lives at: <code>1000 + (0 &times; 4) = 1000</code></li>
+        <li>Index 1 lives at: <code>1000 + (1 &times; 4) = 1004</code></li>
+        <li>Index 1,000,000 lives at: <code>1000 + (1,000,000 &times; 4) = 4,001,000</code></li>
+      </ul>
+      <p>
+        Computing an offset takes a single CPU clock cycle. This is why array indexing <code>arr[i]</code> is strictly <strong><code>O(1)</code> constant time</strong>.
+      </p>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="shifting-cost">
+      <h2>2. The Inherent Cost: Insertion &amp; Deletion</h2>
+      <p>
+        The rigid contiguous nature that gives arrays lightning-fast access also creates their biggest weakness: <strong>resizing and shifting</strong>.
+      </p>
+      <ul>
+        <li><strong>Inserting at index 0 (Prepend):</strong> Every existing item must be copied one slot to the right to make room. For an array of length <em>n</em>, this requires <em>n</em> shifts &rarr; <strong><code>O(n)</code> time</strong>.</li>
+        <li><strong>Deleting at index 0:</strong> Removing the first item leaves a hole. Every remaining item must shift one slot to the left &rarr; <strong><code>O(n)</code> time</strong>.</li>
+        <li><strong>Appending at the end:</strong> If there is empty space at the end, zero shifts are required &rarr; <strong><code>O(1)</code> time</strong>.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="amortized-analysis">
+      <h2>3. Dynamic Arrays &amp; Amortized Analysis</h2>
+      <p>
+        In languages like Python (<code>list</code>), JavaScript/TypeScript (<code>Array</code>), and Java (<code>ArrayList</code>), arrays grow dynamically as you append items. How is that possible if RAM must be contiguous?
+      </p>
+      <p>
+        A dynamic array maintains an underlying fixed array and tracks two metrics:
+      </p>
+      <ol>
+        <li><strong>Length (Size):</strong> How many actual elements are stored.</li>
+        <li><strong>Capacity:</strong> How many memory slots are allocated in RAM.</li>
+      </ol>
+
+      <p>
+        When the array runs out of capacity (i.e., Length == Capacity):
+      </p>
+      <ol>
+        <li>It allocates a new contiguous block in RAM with <strong>double the capacity</strong> (2&times;).</li>
+        <li>It copies all <em>n</em> existing elements into the new block (an <code>O(n)</code> operation).</li>
+        <li>It frees the old block and inserts the new item.</li>
+      </ol>
+
+      <div class="callout">
+        <div class="callout-header">
+          <span class="callout-icon">📈</span>
+          <h4>Why is Append "Amortized O(1)"?</h4>
+        </div>
+        <p>
+          Yes, the doubling step takes <code>O(n)</code> time. But it happens so infrequently that the cost is spread out ("amortized") over thousands of previous cheap appends.<br><br>
+          Doubling from capacity 1 to 2, 4, 8, 16... means after inserting <em>n</em> elements, the total number of copied items across all resizes never exceeds <em>2n</em>. Dividing <em>2n</em> by <em>n</em> operations gives an average cost of roughly <strong>2 operations per append</strong> &rarr; <strong><code>O(1)</code> amortized</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section id="idiom-crosswalk">
+      <h2>4. Multi-Language Idiom Crosswalk</h2>
+      <div class="code-tabs">
+        <div class="tab-nav">
+          <div class="tab-buttons">
+            <button type="button" class="tab-btn active" data-lang="python">Python</button>
+            <button type="button" class="tab-btn" data-lang="ts">TypeScript</button>
+            <button type="button" class="tab-btn" data-lang="java">Java</button>
+          </div>
+        </div>
+
+        <div class="tab-content active" data-lang="python">
+<pre><code># Python lists are dynamic arrays under the hood
+nums = [10, 20, 30]
+
+# O(1) Fast Operations:
+nums.append(40)       # O(1) amortized append at end
+val = nums[1]         # O(1) direct index access
+nums.pop()            # O(1) remove from end
+
+# O(n) Slow Operations:
+nums.insert(0, 99)    # O(n) shifts entire array right!
+nums.pop(0)           # O(n) shifts entire array left!
+sub = nums[1:3]       # O(k) creates a brand new copy of slice!</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="ts">
+<pre><code>// TypeScript / JS Arrays are dynamic arrays
+const nums: number[] = [10, 20, 30];
+
+// O(1) Fast Operations:
+nums.push(40);        // O(1) amortized append
+const val = nums[1];  // O(1) direct index access
+nums.pop();           // O(1) remove from end
+
+// O(n) Slow Operations:
+nums.unshift(99);     // O(n) prepends and shifts all elements right!
+nums.shift();         // O(n) removes head and shifts all elements left!
+const sub = nums.slice(1, 3); // O(k) shallow copy of slice</code></pre>
+        </div>
+
+        <div class="tab-content" data-lang="java">
+<pre><code>import java.util.ArrayList;
+
+public class ArrayDemo {
+    public static void main(String[] args) {
+        // Fixed primitive array: length cannot change
+        int[] fixed = new int[3];
+        fixed[0] = 10; // O(1) direct memory access
+
+        // Dynamic ArrayList: resizes by 1.5x when full
+        ArrayList&lt;Integer&gt; nums = new ArrayList&lt;&gt;();
+        
+        // O(1) Fast Operations:
+        nums.add(10);          // O(1) amortized append
+        int val = nums.get(0); // O(1) direct access
+        nums.remove(nums.size() - 1); // O(1) remove from end
+
+        // O(n) Slow Operations:
+        nums.add(0, 99);       // O(n) shifts elements right
+        nums.remove(0);        // O(n) shifts elements left
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section id="practice">
+      <h2>5. Interactive Retrieval Practice</h2>
+      <p>Test your memory model intuition:</p>
+
+      <div class="quiz-box" data-correct="2" data-explanation="Array indexing is pure arithmetic: BaseAddress + (Index × Size). It jumps directly to the target byte without scanning.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 1</span>
+          </div>
+          <span class="quiz-badge">Memory Math</span>
+        </div>
+        <div class="quiz-question">
+          Why is accessing an element in an array by its index <code>arr[i]</code> an <code>O(1)</code> constant time operation?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Sequential pointer scanning traversal</div>
+          <div class="quiz-option">Binary search range division</div>
+          <div class="quiz-option">Direct memory address calculation</div>
+          <div class="quiz-option">Dynamic capacity buffer allocation</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+
+      <div class="quiz-box" data-correct="3" data-explanation="Because doubling the capacity happens exponentially less often as the array grows, the cumulative resize work spread over n appends averages out to constant time per insertion.">
+        <div class="quiz-header-row">
+          <div class="quiz-header">
+            <span>🧠</span>
+            <span>Knowledge Check 2</span>
+          </div>
+          <span class="quiz-badge">Amortized Math</span>
+        </div>
+        <div class="quiz-question">
+          When appending to a dynamic array at full capacity, the array doubles its capacity and copies all items. Why is the overall append operation classified as <code>O(1)</code> amortized?
+        </div>
+        <div class="quiz-options">
+          <div class="quiz-option">Copying happens every time</div>
+          <div class="quiz-option">Modern hardware skips copying</div>
+          <div class="quiz-option">Pointers avoid memory shifts</div>
+          <div class="quiz-option">Averaged over repeated operations</div>
+        </div>
+        <div class="quiz-feedback"></div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="resources">
+      <h2>6. High-Trust Primary Source</h2>
+      <p>
+        To see memory allocation visualized on the chalkboard:
+      </p>
+      <ul>
+        <li>
+          <strong>Primary Watch:</strong> <a href="https://www.youtube.com/watch?v=1jtrfq_f0iU" target="_blank" rel="noreferrer">Abdul Bari &mdash; 2.1 Array ADT &amp; Representation in Memory &nearr;</a>. Stack vs. heap allocation of arrays and memory addressing math.
+        </li>
+      </ul>
+
+      <div class="footer-prompt">
+        <strong>Warning for Interviews:</strong> In many interview questions, candidates slice arrays (e.g. <code>nums[1:]</code> or <code>nums.slice()</code>) inside loops without realizing that copying makes the algorithm accidentally <code>O(n²)</code>!
+      </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <div class="lesson-footer-nav">
+      <a href="./0002-the-full-complexity-spectrum.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Lesson</span>
+        <span class="nav-card-title">0002: The Full Complexity Spectrum</span>
+      </a>
+      <a href="../reference/arrays-and-dynamic-arrays.html" class="nav-card">
+        <span class="nav-card-sub">Reference Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Arrays &amp; Dynamic Arrays Cheatsheet</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

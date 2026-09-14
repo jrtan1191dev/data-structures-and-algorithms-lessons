@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Big-O &amp; Algorithmic Complexity Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Big-O Cheatsheet</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Foundations</div>
+      <h1>Big-O &amp; Algorithmic Complexity Cheatsheet</h1>
+      <p class="subtitle">Quick reference guide for asymptotic analysis, operational rules, and memory scaling.</p>
+    </section>
+    <h2>1. The Growth Hierarchy</h2>
+    <p>Big-O measures how time or space requirements grow as the input size <em>n</em> approaches infinity. Always aim for the lowest feasible tier:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Notation</th>
+          <th>Name</th>
+          <th>Typical Operations</th>
+          <th>Input Size Tolerance (10⁷ ops/sec)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>O(1)</code></td>
+          <td>Constant</td>
+          <td>Array index lookup, Hash map get/set, Math calculation</td>
+          <td>Virtually unlimited (10⁹+)</td>
+        </tr>
+        <tr>
+          <td><code>O(log n)</code></td>
+          <td>Logarithmic</td>
+          <td>Binary Search, Balanced BST search</td>
+          <td>Extremely large (10⁸+)</td>
+        </tr>
+        <tr>
+          <td><code>O(n)</code></td>
+          <td>Linear</td>
+          <td>Single loop, Array scan, String traversal</td>
+          <td><em>n</em> &le; 10⁷</td>
+        </tr>
+        <tr>
+          <td><code>O(n log n)</code></td>
+          <td>Linearithmic</td>
+          <td>Merge Sort, Quick Sort (avg), Heap operations on <em>n</em> items</td>
+          <td><em>n</em> &le; 10⁶</td>
+        </tr>
+        <tr>
+          <td><code>O(n²)</code></td>
+          <td>Quadratic</td>
+          <td>Nested loops over input, Bubble sort, Compare all pairs</td>
+          <td><em>n</em> &le; 1,000 &hellip; 5,000</td>
+        </tr>
+        <tr>
+          <td><code>O(2ⁿ)</code></td>
+          <td>Exponential</td>
+          <td>Recursive subsets, brute-force search without memoization</td>
+          <td><em>n</em> &le; 20 &hellip; 25</td>
+        </tr>
+        <tr>
+          <td><code>O(n!)</code></td>
+          <td>Factorial</td>
+          <td>Generating all permutations, brute force Traveling Salesperson</td>
+          <td><em>n</em> &le; 10 &hellip; 12</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Golden Simplification Rules</h2>
+    <ul>
+      <li><strong>Rule 1: Drop Constants.</strong> <code>O(2n + 5) &rarr; O(n)</code>. At scale, the slope factor doesn't alter the asymptotic curve.</li>
+      <li><strong>Rule 2: Drop Non-Dominant Terms.</strong> <code>O(n² + 100n + 5000) &rarr; O(n²)</code>. The highest-order power dwarfs everything else as <em>n &rarr; &infin;</em>.</li>
+      <li><strong>Rule 3: Separate Inputs Use Separate Variables.</strong> Traversing array <code>A</code> then array <code>B</code> is <code>O(|A| + |B|)</code>, not <code>O(2n)</code>. Nested iteration is <code>O(|A| &times; |B|)</code>.</li>
+      <li><strong>Rule 4: Multi-Step Algorithms Add or Multiply:</strong>
+        <ul>
+          <li>Sequential steps: <strong>Add</strong> complexities: <code>O(A + B)</code>.</li>
+          <li>Nested operations (doing work inside a loop): <strong>Multiply</strong> complexities: <code>O(A &times; B)</code>.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>3. Time vs. Space: Two Memory Categories</h2>
+    <ul>
+      <li><strong>Auxiliary Heap Space:</strong> Memory explicitly allocated for data structures (e.g. <code>new HashSet()</code>, <code>list.append()</code>).</li>
+      <li><strong>Call Stack Space:</strong> Memory consumed by recursive function calls. Maximum recursion depth directly dictates call stack space:
+        <ul>
+          <li>Balanced Divide &amp; Conquer (e.g. binary search, merge sort): log₂ <em>n</em> frames &rarr; <code>O(log n)</code> space.</li>
+          <li>Unbalanced or linear recursion (e.g. traversing linked list recursively): <em>n</em> frames &rarr; <code>O(n)</code> space.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>4. Fundamental Structure Complexities</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data Structure</th>
+          <th>Access</th>
+          <th>Search</th>
+          <th>Insertion</th>
+          <th>Deletion</th>
+          <th>Space</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Array (Contiguous)</strong></td>
+          <td><code>O(1)</code></td>
+          <td><code>O(n)</code></td>
+          <td><code>O(n)</code> (shift)</td>
+          <td><code>O(n)</code> (shift)</td>
+          <td><code>O(n)</code></td>
+        </tr>
+        <tr>
+          <td><strong>Dynamic Array (Append)</strong></td>
+          <td><code>O(1)</code></td>
+          <td><code>O(n)</code></td>
+          <td><code>O(1)*</code> (amortized)</td>
+          <td><code>O(1)</code> (at end)</td>
+          <td><code>O(n)</code></td>
+        </tr>
+        <tr>
+          <td><strong>Hash Map / Hash Table</strong></td>
+          <td>N/A</td>
+          <td><code>O(1)</code> avg</td>
+          <td><code>O(1)</code> avg</td>
+          <td><code>O(1)</code> avg</td>
+          <td><code>O(n)</code></td>
+        </tr>
+        <tr>
+          <td><strong>Singly Linked List</strong></td>
+          <td><code>O(n)</code></td>
+          <td><code>O(n)</code></td>
+          <td><code>O(1)</code> (at head)</td>
+          <td><code>O(1)</code> (given node)</td>
+          <td><code>O(n)</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><em>*Amortized insertion in dynamic arrays accounts for occasional resizing and copying (<code>O(n)</code>) distributed across many <code>O(1)</code> appends.</em></p>
+
+    <h2>5. Multi-Language Idiom Crosswalk</h2>
+    <div class="code-tabs">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-lang="python">Python</button>
+        <button class="tab-btn" data-lang="ts">TypeScript</button>
+        <button class="tab-btn" data-lang="java">Java</button>
+      </div>
+      <div class="tab-content active" data-lang="python">
+<pre><code># Python Primitives & Dynamic Structures
+# List (Dynamic Array): O(1) index, O(1) amortized append, O(n) insert/delete inside
+arr = [1, 2, 3]
+arr.append(4)         # O(1)
+first = arr[0]        # O(1)
+
+# Dict (Hash Map) & Set (Hash Set): O(1) avg lookup / insert
+lookup = {"a": 1, "b": 2}
+if "a" in lookup:     # O(1) average
+    print(lookup["a"])</code></pre>
+      </div>
+      <div class="tab-content" data-lang="ts">
+<pre><code>// TypeScript Primitives & Dynamic Structures
+// Array (Dynamic): O(1) index, O(1) push, O(n) unshift/splice
+const arr: number[] = [1, 2, 3];
+arr.push(4);          // O(1)
+const first = arr[0]; // O(1)
+
+// Map & Set: O(1) avg lookup / insert
+const lookup = new Map&lt;string, number&gt;();
+lookup.set("a", 1);   // O(1)
+if (lookup.has("a")) { // O(1)
+    console.log(lookup.get("a"));
+}</code></pre>
+      </div>
+      <div class="tab-content" data-lang="java">
+<pre><code>// Java Primitives & Collections
+// ArrayList (Dynamic Array): O(1) get, O(1) amortized add, O(n) remove/add at index
+import java.util.ArrayList;
+import java.util.HashMap;
+
+ArrayList&lt;Integer&gt; arr = new ArrayList&lt;&gt;();
+arr.add(1);           // O(1) amortized
+int first = arr.get(0); // O(1)
+
+// HashMap: O(1) avg get/put
+HashMap&lt;String, Integer&gt; lookup = new HashMap&lt;&gt;();
+lookup.put("a", 1);   // O(1)
+if (lookup.containsKey("a")) { // O(1)
+    System.out.println(lookup.get("a"));
+}</code></pre>
+      </div>
+    </div>
+    <div class="lesson-footer-nav">
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Return to Syllabus</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+      <a href="../lessons/0001-big-o-and-algorithmic-intuition.html" class="nav-card">
+        <span class="nav-card-sub">Next Lesson &rarr;</span>
+        <span class="nav-card-title">0001: Big-O &amp; Algorithmic Intuition</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>
