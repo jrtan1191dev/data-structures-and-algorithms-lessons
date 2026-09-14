@@ -1,0 +1,33 @@
+{
+  "name": "dsa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:theme": "npx astryx theme build src/themes/scholar/scholarTheme.ts --out assets/astryx-theme-scholar.css",
+    "build:css": "npm run build:theme && cat node_modules/@astryxdesign/core/src/reset.css node_modules/@astryxdesign/core/dist/astryx.css assets/astryx-theme-scholar.css > assets/astryx.css",
+    "doctor": "npx astryx doctor",
+    "test": "npm run build:css && npm run doctor"
+  },
+  "astryx": {
+    "theme": "scholar"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrtan1191dev/data-structures-and-algorithms-lessons.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jrtan1191dev/data-structures-and-algorithms-lessons/issues"
+  },
+  "homepage": "https://github.com/jrtan1191dev/data-structures-and-algorithms-lessons#readme",
+  "dependencies": {
+    "@astryxdesign/cli": "^0.6.1",
+    "@astryxdesign/core": "^0.6.1",
+    "@astryxdesign/theme-neutral": "^0.6.1",
+    "@stylexjs/stylex": "^0.19.0"
+  }
+}

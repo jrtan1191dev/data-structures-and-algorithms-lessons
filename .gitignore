@@ -1,0 +1,73 @@
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Editor and IDE directories/files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Dependencies & package managers
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs, temporary directories & caches
+dist/
+build/
+out/
+assets/scholar.js
+assets/scholar.d.ts
+.cache/
+.parcel-cache/
+tmp/
+temp/
+coverage/
+.nyc_output/
+
+# Language-specific artifacts (common in DSA practice)
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+ENV/
+
+# Compiled binaries / Object files
+*.o
+*.obj
+*.exe
+*.out
+*.class
+
+# Agentic AI Coding Tools
+.agents
+.claude
+.kiro
