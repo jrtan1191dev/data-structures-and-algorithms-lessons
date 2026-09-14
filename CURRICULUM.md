@@ -43,6 +43,10 @@ A comprehensive, first-principles curriculum for technical interview mastery and
 | | **0024** | Topological Sort & Disjoint Set Union (DSU) | In-degree calculation & Kahn's algorithm, Union-Find with path compression and rank optimization | Course Schedule, Course Schedule II, Redundant Connection | **Completed** |
 | **Module 13: Dynamic Programming (DP)** | **0025** | 1D Dynamic Programming: Memoization vs Tabulation | Optimal substructure, overlapping subproblems, top-down memoization vs bottom-up state transitions, space compression ($O(n) \to O(1)$) | Climbing Stairs, House Robber, Coin Change | **Completed** |
 | | **0026** | 2D & Subsequence Dynamic Programming | 2D state matrices, decision choices, prefix matching, 0/1 Knapsack pattern | Longest Common Subsequence, Edit Distance, Partition Equal Subset Sum | **Completed** |
+| **Module 14: Intervals & Scheduling** | **0027** | Interval Manipulation & Overlap Consolidation | Start-time vs end-time sorting invariants, mutual exclusion condition `curr.start < prev.end`, interval insertion, sweep-line algorithms | Merge Intervals, Insert Interval, Non-overlapping Intervals, Meeting Rooms I & II | **Completed** |
+| **Module 15: Bit Manipulation & Binary Operations** | **0028** | Bitwise Arithmetic & Binary Masking | Two's complement integer representation, XOR self-cancellation property ($x \oplus x = 0$), Brian Kernighan's bit-clearing trick ($n \mathrel{\&} (n-1)$), bitmasking subsets | Single Number, Number of 1 Bits, Counting Bits, Missing Number, Reverse Bits | **Completed** |
+| **Module 16: Tries & Prefix Trees** | **0029** | Prefix Trees & Multi-String Search | 26-ary tree node pointer architecture, prefix querying mechanics vs exact match, trie-guided backtracking, pruning search space on 2D grids | Implement Trie (Prefix Tree), Design Add and Search Words Data Structure, Word Search II | **Completed** |
+| **Module 17: Matrix Simulation & Geometric Transforms** | **0030** | Matrix In-Place Manipulations & Simulations | 2D row-major memory stride calculation (`base + (row * cols + col) * size`), boundary contraction, matrix transposition and column reflection for $90^\circ$ rotation, first-row/first-column state markers for $O(1)$ space | Spiral Matrix, Rotate Image, Set Matrix Zeroes | **Completed** |
 
 ---
 
@@ -52,9 +56,18 @@ A comprehensive, first-principles curriculum for technical interview mastery and
 | :--- | :--- | :--- |
 | **Big-O & Algorithmic Complexity** | Growth rate hierarchy, Golden Simplification Rules, language collections matrix | **Completed** |
 | **Arrays & Dynamic Arrays** | Memory offset formula, operation time/space matrix, internal resizing mechanics | **Completed** |
-| **Two Pointers & Sliding Window** | Template patterns, pointer movement conditions, window expansion/shrink invariants | Scheduled |
-| **Trees & Graph Traversals** | Traversal templates (DFS recursive/iterative, BFS queue, Kahn's algorithm, DSU) | Scheduled |
-| **Dynamic Programming Decision Framework** | State identification, transition equation derivation, space optimization strategies | Scheduled |
+| **Hash Tables & Prefix Sums** | Collision resolution (chaining vs open addressing), load factor math, prefix sum identities | **Completed** |
+| **Two Pointers & Sliding Window** | Opposing, fast-slow, fixed-window, and dynamic-window templates with boundary condition checklists | **Completed** |
+| **Linked Lists, Stacks & Monotonic** | Sentinel/dummy patterns, in-place list reversal, circular ring buffer math, monotonic templates | **Completed** |
+| **Binary Search & Answer Space** | Overflow-safe midpoints, boundary insertion templates, rotated arrays, answer space reduction | **Completed** |
+| **Heaps & Top-K Patterns** | Complete binary tree array indexing, Floyd's O(N) heapify, bounded Top-K, dual-heap streaming median | **Completed** |
+| **Trees & Graph Traversals** | Traversal templates (DFS recursive/iterative, BFS queue, Kahn's algorithm, DSU) | **Completed** |
+| **Backtracking & State Pruning** | Choose-explore-unchoose paradigm, combinatorial branching models, branch-and-bound pruning | **Completed** |
+| **Dynamic Programming Decision Framework** | State identification, transition equation derivation, space optimization strategies | **Completed** |
+| **Interview Corner Cases Checklist** | Universal pre-flight edge-case verification checklist across all core data structures | **Completed** |
+| **Intervals & Scheduling Mechanics** | Sorting preconditions, overlap consolidation rules, greedy interval scheduling algorithms, concurrent meeting room allocations | **Completed** |
+| **Bit Manipulation & Binary Operations** | Hardware ALU bitwise primitives, XOR self-cancellation rules, bitmask recipes, binary arithmetic without arithmetic operators | **Completed** |
+| **Trie & Prefix Tree Architecture** | 26-ary tree node pointer architecture, prefix querying mechanics, wildcard depth-first searches, exponential multi-string grid pruning | **Completed** |
 
 ---
 
@@ -106,3 +119,20 @@ Mapping the canonical [Tech Interview Handbook Grind 75](https://www.techintervi
 | **Climbing Stairs** | 70 | Easy | Dynamic Programming | **Lesson 0025** | 1D Fibonacci recurrence $dp[i] = dp[i-1] + dp[i-2]$; space compression from $O(n)$ array to two $O(1)$ variables. |
 | **Coin Change** | 322 | Medium | Dynamic Programming | **Lesson 0025** | Unbounded Knapsack pattern: $dp[a] = \min(dp[a], 1 + dp[a - c])$ initialized to $\infty$. |
 | **Longest Common Subsequence** | 1143 | Medium | Dynamic Programming | **Lesson 0026** | 2D grid recurrence: if $s1[i] == s2[j] \implies 1 + dp[i+1][j+1]$, else $\max(dp[i+1][j], dp[i][j+1])$. |
+| **Merge Intervals** | 56 | Medium | Intervals | **Lesson 0027** | Sort by start time; merge greedily if `curr.start <= prev.end` by setting `prev.end = max(prev.end, curr.end)`. |
+| **Insert Interval** | 57 | Medium | Intervals | **Lesson 0027** | 3-phase partition: collect strictly before, merge all overlapping into new interval, append strictly after in single $O(n)$ pass. |
+| **Non-overlapping Intervals** | 435 | Medium | Intervals | **Lesson 0027** | Interval scheduling theorem: sort by end time; greedily keep intervals that finish earliest to leave maximum room. |
+| **Meeting Rooms** | 252 | Easy | Intervals | **Lesson 0027** | Sort by start time; adjacent pair conflict check (`intervals[i].start < intervals[i-1].end`) in $O(n \log n)$. |
+| **Meeting Rooms II** | 253 | Medium | Intervals | **Lesson 0027** | Chronological event sweep line or min-heap of active room end times to track peak concurrent overlap in $O(n \log n)$. |
+| **Single Number** | 136 | Easy | Bit Manipulation | **Lesson 0028** | XOR reduction: $x \oplus x = 0$ and $x \oplus 0 = x$; duplicate pairs self-annihilate leaving unique element in $O(n)$ time, $O(1)$ space. |
+| **Number of 1 Bits** | 191 | Easy | Bit Manipulation | **Lesson 0028** | Brian Kernighan's algorithm: repeatedly evaluate $n = n \mathrel{\&} (n - 1)$ to strip lowest set bit in iterations equal to set bit count. |
+| **Counting Bits** | 338 | Easy | Bit Manipulation / DP | **Lesson 0028** | Dynamic programming transition $dp[i] = dp[i \gg 1] + (i \mathrel{\&} 1)$ reusing computed bit counts in linear $O(n)$ time. |
+| **Missing Number** | 268 | Easy | Bit Manipulation | **Lesson 0028** | XOR all indices $0 \dots n$ with all array values; matching pairs cancel out leaving missing index in $O(n)$ time and $O(1)$ space. |
+| **Reverse Bits** | 190 | Easy | Bit Manipulation | **Lesson 0028** | Shift result left and extract rightmost bit of input via $(n \mathrel{\&} 1)$ across 32 fixed hardware cycles. |
+| **Implement Trie (Prefix Tree)** | 208 | Medium | Trie | **Lesson 0029** | 26-ary pointer array tree; insert, search, and startsWith execute in deterministic $O(L)$ time where $L$ is word length. |
+| **Design Add and Search Words Data Structure** | 211 | Medium | Trie | **Lesson 0029** | Trie traversal with DFS branching: on wildcard `.` branch to all 26 non-null child paths; otherwise advance single child pointer. |
+| **Word Search II** | 212 | Hard | Trie / Backtracking | **Lesson 0029** | Multi-string search on 2D grid: prune DFS against prefix tree; prune matched leaf nodes dynamically to prevent redundant search. |
+| **Spiral Matrix** | 54 | Medium | Matrix | **Lesson 0030** | Contracting 4-boundary pointers (`top`, `bottom`, `left`, `right`) with boundary-crossing parity checks before bottom/left scans. |
+| **Rotate Image** | 48 | Medium | Matrix | **Lesson 0030** | In-place matrix decomposition: transpose matrix along main diagonal ($M[i][j] \leftrightarrow M[j][i]$), then reverse each row horizontally. |
+| **Set Matrix Zeroes** | 73 | Medium | Matrix | **Lesson 0030** | In-place zero marking using matrix row 0 and column 0 as state buffers with two boolean flags for origin lines, achieving $O(1)$ auxiliary space. |
+
