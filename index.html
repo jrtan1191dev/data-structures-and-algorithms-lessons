@@ -46,12 +46,12 @@
     <!-- Stats Banner -->
     <section class="stats-grid">
       <div class="stat-card">
-        <div class="stat-number">3</div>
+        <div class="stat-number">26 <span style="font-size: var(--font-size-base); font-weight: var(--font-weight-normal); color: var(--color-text-secondary);">/ 26</span></div>
         <div class="stat-label">Core Interactive Lessons</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">2</div>
-        <div class="stat-label">Quick Reference Cheatsheets</div>
+        <div class="stat-number">13</div>
+        <div class="stat-label">Structured Course Modules</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">3</div>
@@ -79,12 +79,13 @@
         <button type="button" class="filter-btn active" data-filter="all">All Modules</button>
         <button type="button" class="filter-btn" data-filter="foundations">Foundations</button>
         <button type="button" class="filter-btn" data-filter="data-structures">Data Structures</button>
+        <button type="button" class="filter-btn" data-filter="algorithms">Algorithms</button>
         <button type="button" class="filter-btn" data-filter="reference">Reference</button>
       </div>
 
       <div class="search-input-wrap">
         <span class="search-icon">🔍</span>
-        <input type="search" class="search-input" placeholder="Filter lessons, Big-O, arrays..."
+        <input type="search" class="search-input" placeholder="Filter lessons, Big-O, arrays, two pointers..."
           aria-label="Search lessons">
       </div>
     </div>
@@ -171,25 +172,576 @@
           </div>
         </a>
 
-        <div class="row-item upcoming" data-category="data-structures">
+        <a href="lessons/0004-strings-and-byte-representation.html" class="row-item"
+          data-category="data-structures">
           <div class="row-main">
             <div class="row-topline">
               <span class="status-dot-wrap">
-                <span class="status-dot" data-variant="neutral" aria-hidden="true"></span>
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
                 <span class="row-num">Lesson 0004</span>
               </span>
-              <span class="badge badge-neutral">Upcoming</span>
+              <span class="badge badge-purple">Data Structures</span>
             </div>
-            <div class="row-title">The Two Pointers Pattern</div>
+            <div class="row-title">Strings &amp; Byte Representation</div>
             <p class="row-desc">
-              Converging pointers, in-place reversal, pair sum optimization, and fast/slow cycle detection across sorted
-              and unsorted sequences.
+              String immutability, UTF-8 vs. UTF-16 code units, StringBuilder / char arrays, and string slicing overhead across Python, TypeScript, and Java.
             </p>
           </div>
           <div class="row-aside">
-            <span class="row-meta">Scheduled</span>
+            <span class="row-meta">⏱ 7 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
           </div>
-        </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 3: The Two Pointers Pattern -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 3: The Two Pointers Pattern</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0005-converging-and-opposing-pointers.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0005</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Converging &amp; Opposing Pointers</div>
+            <p class="row-desc">
+              Left and right boundaries moving toward center, monotonic reduction of search spaces, Two Sum II, and in-place sequence reversal.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0006-fast-and-slow-pointers.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0006</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Fast &amp; Slow Pointers (Floyd's Cycle)</div>
+            <p class="row-desc">
+              Pointer speed differentials (1x vs 2x), mathematical convergence proof in circular topologies, and array duplicate detection.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 4: The Sliding Window Pattern -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 4: The Sliding Window Pattern</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0007-fixed-size-sliding-windows.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0007</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Fixed-Size Sliding Windows</div>
+            <p class="row-desc">
+              Reusing state across adjacent intervals, O(1) state updates (+ enter - exit), anagram frequency matching, and rolling aggregations.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0008-dynamic-size-sliding-windows.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0008</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Dynamic-Size Sliding Windows</div>
+            <p class="row-desc">
+              Greedy window expansion, inner contraction loops, state preservation with hash tables, and Minimum Window Substring.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 5: Hash Tables & Frequency Analysis -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 5: Hash Tables &amp; Frequency Analysis</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0009-hash-tables-collisions-and-load-factors.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0009</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Hash Tables, Collisions &amp; Load Factors</div>
+            <p class="row-desc">
+              Hash functions, bucket arrays, separate chaining vs. open addressing, dynamic resizing thresholds, and worst-case O(n) degradation.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0010-frequency-counting-and-prefix-sums.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0010</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Frequency Counting &amp; Prefix Sums</div>
+            <p class="row-desc">
+              Counter maps, cumulative running sums, difference lookups (P[j] - P[i] = K), Subarray Sum Equals K, and Group Anagrams.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 6: Linked Lists & Node Pointers -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 6: Linked Lists &amp; Node Pointers</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0011-singly-and-doubly-linked-lists.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0011</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Singly &amp; Doubly Linked Lists</div>
+            <p class="row-desc">
+              Heap node allocation, pointer redirection, sentinel/dummy nodes to eliminate edge cases, and in-place list reversal.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0012-advanced-list-techniques-and-sentinels.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0012</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Advanced List Techniques &amp; Sentinels</div>
+            <p class="row-desc">
+              Multi-pointer coordination, recursive vs. iterative list merges, and combining doubly linked lists with hash maps for LRU cache.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 7: Stacks, Queues & Monotonic Sequences -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 7: Stacks, Queues &amp; Monotonic Sequences</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0013-stacks-queues-and-deques.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0013</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Stacks, Queues &amp; Deques</div>
+            <p class="row-desc">
+              LIFO vs. FIFO memory models, call stack execution frames, ring buffers, Min Stack design, and Valid Parentheses.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0014-monotonic-stack-and-monotonic-queue.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0014</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Monotonic Stack &amp; Monotonic Queue</div>
+            <p class="row-desc">
+              Maintaining strictly monotonic ordering, Next Greater Element in linear time, Daily Temperatures, and Largest Rectangle in Histogram.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 8: Binary Search & Search Space Reduction -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 8: Binary Search &amp; Search Space Reduction</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0015-classic-binary-search-and-boundary-templates.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0015</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Classic Binary Search &amp; Boundary Templates</div>
+            <p class="row-desc">
+              Safe midpoint calculation avoiding integer overflow, lower bound vs. upper bound templates, and search in rotated sorted arrays.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0016-binary-search-on-answer-space.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0016</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Binary Search on Answer Space</div>
+            <p class="row-desc">
+              Monotonic boolean predicate functions f(x) -> {True, False}, minimizing maximums, Koko Eating Bananas, and Capacity to Ship Packages.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 9: Trees & Binary Search Trees -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 9: Trees &amp; Binary Search Trees</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0017-binary-tree-traversals-dfs-and-bfs.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0017</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Binary Tree Traversals: DFS &amp; BFS</div>
+            <p class="row-desc">
+              Pre-order, in-order, post-order recursive call stacks, iterative BFS queue traversal, maximum depth, and tree diameter invariants.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0018-binary-search-trees-and-validation.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0018</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Binary Search Trees &amp; Validation</div>
+            <p class="row-desc">
+              The BST invariant (Left &lt; Root &lt; Right), range boundary validation (-&infin;, +&infin;), Lowest Common Ancestor, and balanced BST mechanics.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 10: Heaps, Priority Queues & Top-K Elements -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 10: Heaps, Priority Queues &amp; Top-K Elements</div>
+        <span class="module-tag">Data Structures</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0019-binary-heap-mechanics-and-heapify.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0019</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">Binary Heap Mechanics &amp; Heapify</div>
+            <p class="row-desc">
+              Array layout of complete binary trees, sift-up, sift-down, linear O(n) build-heap intuition, and priority queue implementations.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 8 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0020-the-top-k-elements-and-two-heaps-pattern.html" class="row-item" data-category="data-structures">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0020</span>
+              </span>
+              <span class="badge badge-purple">Data Structures</span>
+            </div>
+            <div class="row-title">The Top-K Elements &amp; Two Heaps Pattern</div>
+            <p class="row-desc">
+              Min-heap of size K for K-largest elements, dual balancing heaps (max-heap + min-heap) for streaming medians, and Top K Frequent.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 11: Backtracking & State Space Trees -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 11: Backtracking &amp; State Space Trees</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0021-backtracking-foundations-subsets-and-permutations.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0021</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Backtracking Foundations: Subsets &amp; Permutations</div>
+            <p class="row-desc">
+              State space tree exploration, the choose-explore-unchoose paradigm, recursion tree branching factor, and duplicate prevention.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0022-constrained-search-combinations-and-pruning.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0022</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Constrained Search: Combinations &amp; Grid Traversal</div>
+            <p class="row-desc">
+              Branch pruning with boundary checks, visited coordinate backtracking, Combination Sum, Word Search, and N-Queens.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 12: Graphs: Traversals & Topological Order -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 12: Graphs: Traversals &amp; Topological Order</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0023-graph-representations-and-core-traversals.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0023</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Graph Representations &amp; Core Traversals</div>
+            <p class="row-desc">
+              Adjacency list vs. matrix memory models, BFS shortest unweighted path, DFS connected components, Number of Islands, and Clone Graph.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0024-topological-sort-and-disjoint-set-union.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0024</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">Topological Sort &amp; Disjoint Set Union (DSU)</div>
+            <p class="row-desc">
+              In-degree tracking &amp; Kahn's algorithm (Course Schedule), Union-Find with rank and path compression, and Redundant Connection.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Module 13: Dynamic Programming (DP) -->
+    <section class="module-section">
+      <div class="module-header">
+        <div class="module-title">Module 13: Dynamic Programming (DP)</div>
+        <span class="module-tag">Algorithms</span>
+      </div>
+
+      <div class="row-list">
+        <a href="lessons/0025-1d-dynamic-programming-memoization-vs-tabulation.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0025</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">1D Dynamic Programming: Memoization vs. Tabulation</div>
+            <p class="row-desc">
+              Optimal substructure, overlapping subproblems, top-down recursion with memoization vs. bottom-up tabulation, and space compression.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 9 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
+
+        <a href="lessons/0026-2d-and-subsequence-dynamic-programming.html" class="row-item" data-category="algorithms">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+                <span class="row-num">Lesson 0026</span>
+              </span>
+              <span class="badge badge-accent">Algorithms</span>
+            </div>
+            <div class="row-title">2D &amp; Subsequence Dynamic Programming</div>
+            <p class="row-desc">
+              2D state grids, subproblem decision matrices, prefix matching, Longest Common Subsequence, Edit Distance, and 0/1 Knapsack patterns.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">⏱ 10 min read</span>
+            <span class="row-arrow" aria-hidden="true">&rarr;</span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -242,6 +794,63 @@
             <span class="row-arrow" aria-hidden="true">&rarr;</span>
           </div>
         </a>
+
+        <div class="row-item upcoming" data-category="reference">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="neutral" aria-hidden="true"></span>
+                <span class="row-num">Reference</span>
+              </span>
+              <span class="badge badge-neutral">Upcoming</span>
+            </div>
+            <div class="row-title">Two Pointers &amp; Sliding Window Cheatsheet</div>
+            <p class="row-desc">
+              Opposing, fast-slow, fixed-window, and dynamic-window templates with boundary condition checklists.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Scheduled</span>
+          </div>
+        </div>
+
+        <div class="row-item upcoming" data-category="reference">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="neutral" aria-hidden="true"></span>
+                <span class="row-num">Reference</span>
+              </span>
+              <span class="badge badge-neutral">Upcoming</span>
+            </div>
+            <div class="row-title">Tree &amp; Graph Traversals Cheatsheet</div>
+            <p class="row-desc">
+              Recursive DFS, iterative DFS with explicit stacks, queue BFS, topological sort (Kahn's), and Union-Find templates.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Scheduled</span>
+          </div>
+        </div>
+
+        <div class="row-item upcoming" data-category="reference">
+          <div class="row-main">
+            <div class="row-topline">
+              <span class="status-dot-wrap">
+                <span class="status-dot" data-variant="neutral" aria-hidden="true"></span>
+                <span class="row-num">Reference</span>
+              </span>
+              <span class="badge badge-neutral">Upcoming</span>
+            </div>
+            <div class="row-title">Dynamic Programming Decision Framework</div>
+            <p class="row-desc">
+              State dimension identification, recurrence relation recipes, base cases, and 2D-to-1D space compression patterns.
+            </p>
+          </div>
+          <div class="row-aside">
+            <span class="row-meta">Scheduled</span>
+          </div>
+        </div>
       </div>
     </section>
 
