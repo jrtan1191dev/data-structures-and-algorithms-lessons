@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Problem-Solving Intuition &amp; Pattern Recognition &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Problem-Solving Intuition</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Problem-Solving Framework</div>
+      <h1>Problem-Solving Intuition &amp; Pattern Recognition Guide</h1>
+      <p class="subtitle">Maddy Zhang's transition mindset, the constraint-to-complexity budget, pattern visual triggers, and escaping the tutorial trap.</p>
+    </section>
+
+    <!-- 1. The Core Philosophy -->
+    <h2>1. The Core Philosophy: Patterns Over Grinding</h2>
+    <div class="callout">
+      <h4>Why Mindless Grinding Fails</h4>
+      <p>
+        Solving 500+ LeetCode problems blindly leads to cognitive burnout, forgetting, and panic when an interviewer modifies an edge condition.
+        Top-tier software engineers (Google, Meta, Amazon) do not memorize individual problems; they internalize <strong>a small set of core algorithmic patterns</strong> and follow a structured <strong>transition mindset</strong> to systematically deconstruct unseen prompts.
+      </p>
+    </div>
+
+    <!-- 2. The 4-Phase Diagnostic Engine -->
+    <h2>2. The 4-Phase Diagnostic Engine (Transition Mindset)</h2>
+    <p>
+      Never begin coding immediately. When presented with any interview problem, execute these 4 phases sequentially:
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Phase 1: Constraint Budgeting</h3>
+        <p>Inspect the bounds of $N$. The problem constraints dictate the maximum allowable time complexity before you write a single line.</p>
+      </div>
+      <div class="card">
+        <h3>Phase 2: State Naive Brute Force</h3>
+        <p>State the obvious solution ($O(N^2)$, $O(2^N)$). This proves problem comprehension, establishes a baseline, and secures initial credit.</p>
+      </div>
+      <div class="card">
+        <h3>Phase 3: Isolate Redundant Waste</h3>
+        <p>Ask: <em>Where is the computer doing redundant work?</em> Are we repeatedly rescanning arrays, recalculating sums, or exploring overlapping trees?</p>
+      </div>
+      <div class="card">
+        <h3>Phase 4: Select Invariant &amp; Pattern</h3>
+        <p>Deploy the minimal data structure or technique whose mathematical invariant permanently eliminates the redundant work identified in Phase 3.</p>
+      </div>
+    </div>
+
+    <!-- 3. Constraint-to-Complexity Budget -->
+    <h2>3. The Constraint-to-Complexity Budget Table</h2>
+    <p>Modern interview execution environments process roughly $10^7$ to $10^8$ operations per second. Use the size of $N$ to immediately narrow your search space:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Input Size ($N$)</th>
+          <th>Max Viable Complexity</th>
+          <th>Target Patterns to Consider</th>
+          <th>Typical Problem Archetypes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>N &le; 10 &ndash; 12</code></td>
+          <td>$O(N!)$ or $O(N^2 \cdot 2^N)$</td>
+          <td>Permutations, Traveling Salesperson</td>
+          <td>N-Queens, generating all valid sequences</td>
+        </tr>
+        <tr>
+          <td><code>N &le; 20 &ndash; 25</code></td>
+          <td>$O(2^N)$ or $O(N \cdot 2^N)$</td>
+          <td>Backtracking, Bitmask Dynamic Programming</td>
+          <td>Subsets, Combination Sum, Word Search</td>
+        </tr>
+        <tr>
+          <td><code>N &le; 100 &ndash; 500</code></td>
+          <td>$O(N^3)$</td>
+          <td>3D/2D Matrix DP, All-Pairs Shortest Path</td>
+          <td>Floyd-Warshall, 3Sum Brute Force</td>
+        </tr>
+        <tr>
+          <td><code>N &le; 1,000 &ndash; 2,000</code></td>
+          <td>$O(N^2)$</td>
+          <td>2D DP, Nested Array Checks</td>
+          <td>Longest Common Subsequence, Edit Distance</td>
+        </tr>
+        <tr>
+          <td><code>N &le; 100,000 &ndash; 1,000,000</code></td>
+          <td>$O(N \log N)$ or $O(N)$</td>
+          <td>Two Pointers, Sliding Window, Monotonic Stack, Hash Maps, Heaps</td>
+          <td>Two Sum, Subarray Sum Equals K, Daily Temperatures, Merge Intervals</td>
+        </tr>
+        <tr>
+          <td><code>N &ge; 1,000,000,000</code></td>
+          <td>$O(\log N)$ or $O(1)$</td>
+          <td>Binary Search on Answer, Bit Manipulation, Math</td>
+          <td>Koko Eating Bananas, Single Number, Reverse Bits</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. The 9 Core Pattern Recognition Triggers -->
+    <h2>4. The 9 Core Pattern Recognition Triggers</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th>Visual Problem Cues &amp; Keywords</th>
+          <th>The Underlying Invariant</th>
+          <th>Canonical Benchmark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Two Pointers</strong></td>
+          <td>Sorted array, search for pair/triplet, palindrome, in-place reverse, $O(1)$ memory requested</td>
+          <td>Monotonicity of sorted values: moving pointer eliminates entire row/column from search matrix</td>
+          <td>Two Sum II, 3Sum, Container With Most Water</td>
+        </tr>
+        <tr>
+          <td><strong>2. Sliding Window</strong></td>
+          <td>Contiguous subarray/substring, "longest/shortest window satisfying condition $K$"</td>
+          <td>State reuse: adding entering element and subtracting exiting element in $O(1)$</td>
+          <td>Longest Substring Without Repeating, Minimum Window Substring</td>
+        </tr>
+        <tr>
+          <td><strong>3. Hash Map &amp; Prefix Sums</strong></td>
+          <td>Frequency counting, fast lookup, "number of subarrays with sum equal to $K$"</td>
+          <td>Difference identity: $P[j] - P[i] = K \implies P[i] = P[j] - K$; trade space for $O(1)$ time</td>
+          <td>Subarray Sum Equals K, Group Anagrams, Two Sum</td>
+        </tr>
+        <tr>
+          <td><strong>4. Monotonic Stack/Queue</strong></td>
+          <td>"Next greater element", "previous smaller element", histogram bar heights, temperatures</td>
+          <td>Monotonic candidate pruning: pop any element that can never again be an optimal answer</td>
+          <td>Daily Temperatures, Largest Rectangle in Histogram</td>
+        </tr>
+        <tr>
+          <td><strong>5. Binary Search</strong></td>
+          <td>Sorted array, or monotonic condition $f(x) \to \{\text{True}, \text{False}\}$, "minimize the maximum"</td>
+          <td>Binary partition: check mid-point predicate to discard 50% of candidate search space</td>
+          <td>Binary Search, Search in Rotated Array, Koko Eating Bananas</td>
+        </tr>
+        <tr>
+          <td><strong>6. Trees &amp; Graphs (BFS/DFS)</strong></td>
+          <td>Hierarchical parent-child data, shortest path in unweighted maze, island clusters, cycle detection</td>
+          <td>Queue for minimum hop layers (BFS); Call stack for exhaustive path depth (DFS); In-degrees for Kahn's</td>
+          <td>Level Order Traversal, Number of Islands, Course Schedule</td>
+        </tr>
+        <tr>
+          <td><strong>7. Intervals &amp; Sweep-Line</strong></td>
+          <td>Start/end timestamps, scheduling conflicts, room bookings, range intersections</td>
+          <td>Sort by start (consolidation) or end (greedy max non-overlapping); sweep line across time events</td>
+          <td>Merge Intervals, Meeting Rooms II, Non-overlapping Intervals</td>
+        </tr>
+        <tr>
+          <td><strong>8. Backtracking</strong></td>
+          <td>"Find ALL valid configurations", combinations, permutations, word board search</td>
+          <td>State-space tree exploration using Choose &rarr; Explore &rarr; Unchoose with branch-and-bound pruning</td>
+          <td>Subsets, Combination Sum, Word Search</td>
+        </tr>
+        <tr>
+          <td><strong>9. Dynamic Programming</strong></td>
+          <td>"Find maximum/minimum cost", "count total distinct ways", overlapping subproblems</td>
+          <td>Optimal substructure: solve subproblem once and cache (memoization / bottom-up tabulation)</td>
+          <td>Climbing Stairs, Coin Change, Longest Common Subsequence</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 5. Code Demonstration: Transitioning from Brute Force to Invariant -->
+    <h2>5. The Transition in Practice: Subarray Sum Equals K</h2>
+    <p>
+      Observe how Maddy Zhang's transition mindset converts an $O(N^2)$ brute force into an optimal $O(N)$ single-pass solution:
+    </p>
+
+    <div class="code-tabs">
+      <div class="tab-header">
+        <button type="button" class="tab-btn active" data-lang="python">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="typescript">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java">Java 21</button>
+      </div>
+
+      <div class="tab-content active" data-lang="python">
+<pre><code># 1. NAIVE BRUTE FORCE: O(N²) Time, O(1) Space
+def subarray_sum_naive(nums: list[int], k: int) -> int:
+    count = 0
+    for i in range(len(nums)):
+        running = 0
+        for j in range(i, len(nums)):
+            running += nums[j]
+            if running == k:
+                count += 1
+    return count
+
+# 2. IDENTIFY REDUNDANT WASTE:
+# We repeatedly re-sum overlapping slices. If we know prefix sum P[j] and P[i-1],
+# the slice sum is P[j] - P[i-1] == k  ==>  P[i-1] == P[j] - k.
+
+# 3. OPTIMAL PATTERN (Prefix Sum + Hash Map): O(N) Time, O(N) Space
+def subarray_sum_optimal(nums: list[int], k: int) -> int:
+    prefix_counts = {0: 1}  # Base case: empty prefix has sum 0
+    curr_sum = 0
+    total_matches = 0
+    for num in nums:
+        curr_sum += num
+        needed = curr_sum - k
+        total_matches += prefix_counts.get(needed, 0)
+        prefix_counts[curr_sum] = prefix_counts.get(curr_sum, 0) + 1
+    return total_matches</code></pre>
+      </div>
+
+      <div class="tab-content" data-lang="typescript">
+<pre><code>// 1. NAIVE BRUTE FORCE: O(N²) Time, O(1) Space
+export function subarraySumNaive(nums: number[], k: number): number {
+  let count = 0;
+  for (let i = 0; i < nums.length; i++) {
+    let running = 0;
+    for (let j = i; j < nums.length; j++) {
+      running += nums[j];
+      if (running === k) count++;
+    }
+  }
+  return count;
+}
+
+// 3. OPTIMAL PATTERN (Prefix Sum + Map): O(N) Time, O(N) Space
+export function subarraySumOptimal(nums: number[], k: number): number {
+  const prefixCounts = new Map<number, number>();
+  prefixCounts.set(0, 1);
+  let currSum = 0;
+  let totalMatches = 0;
+  for (const num of nums) {
+    currSum += num;
+    const needed = currSum - k;
+    totalMatches += prefixCounts.get(needed) ?? 0;
+    prefixCounts.set(currSum, (prefixCounts.get(currSum) ?? 0) + 1);
+  }
+  return totalMatches;
+}</code></pre>
+      </div>
+
+      <div class="tab-content" data-lang="java">
+<pre><code>import java.util.HashMap;
+import java.util.Map;
+
+public class SubarraySumTransition {
+    // 1. NAIVE BRUTE FORCE: O(N²) Time, O(1) Space
+    public static int subarraySumNaive(int[] nums, int k) {
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int running = 0;
+            for (int j = i; j < nums.length; j++) {
+                running += nums[j];
+                if (running == k) count++;
+            }
+        }
+        return count;
+    }
+
+    // 3. OPTIMAL PATTERN (Prefix Sum + HashMap): O(N) Time, O(N) Space
+    public static int subarraySumOptimal(int[] nums, int k) {
+        Map<Integer, Integer> prefixCounts = new HashMap<>();
+        prefixCounts.put(0, 1);
+        int currSum = 0;
+        int totalMatches = 0;
+        for (int num : nums) {
+            currSum += num;
+            int needed = currSum - k;
+            totalMatches += prefixCounts.getOrDefault(needed, 0);
+            prefixCounts.put(currSum, prefixCounts.getOrDefault(currSum, 0) + 1);
+        }
+        return totalMatches;
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- 6. The 30-Minute Deliberate Practice Protocol -->
+    <h2>6. The 30-Minute Deliberate Practice Protocol (Escaping "Tutorial Hell")</h2>
+    <div class="callout">
+      <h4>How to Build Permanent Problem-Solving Muscle</h4>
+      <ol>
+        <li><strong>The 15-Minute Solitary Struggle:</strong> Open the problem with a scratchpad or whiteboard. For 15 minutes, forbid yourself from viewing hints, solutions, or comments. Draw out pointer positions, diagram array indices, and trace two concrete test cases by hand.</li>
+        <li><strong>Look Up the Pattern, Never the Code:</strong> If completely stuck after 15 minutes, look up <em>only the pattern name</em> (e.g., "Sliding Window" or "Monotonic Stack"). Re-attempt to translate that pattern to your problem.</li>
+        <li><strong>Active Reproduction:</strong> If you must view an optimal solution, study the invariant for 2 minutes, close the solution tab, wait 2 minutes, and re-implement it from an empty editor.</li>
+        <li><strong>The 2-Week Spaced Retrieval:</strong> Tag the problem in your tracking log and re-solve it cold two weeks later. This moves knowledge from fragile fluency into permanent storage strength.</li>
+      </ol>
+    </div>
+
+    <!-- 7. Active Retrieval Quiz -->
+    <h2>7. Active Retrieval Practice</h2>
+    <section class="quiz-container" aria-label="Intuition Check">
+      <div class="quiz-card"
+           data-question="When an array has N = 100,000 and the problem asks for the maximum subarray sum of fixed length K, which pattern and target complexity must you immediately select?"
+           data-correct="1"
+           data-explanation="With N = 100,000, quadratic O(N²) time will exceed the 1-second budget (~10^10 operations). A fixed-size sliding window updates the sum in O(1) per step, achieving O(N) time and O(1) auxiliary space.">
+        <div class="quiz-question">
+          When an array has N = 100,000 and the problem asks for the maximum subarray sum of fixed length K, which pattern and target complexity must you immediately select?
+        </div>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary search on answer space running in logarithmic O(log N) time.</button>
+          <button type="button" class="quiz-option" data-index="1">Fixed-size sliding window running in single-pass linear O(N) time.</button>
+          <button type="button" class="quiz-option" data-index="2">Dynamic programming state matrix running in quadratic O(N²) time.</button>
+          <button type="button" class="quiz-option" data-index="3">Backtracking search tree running in exponential O(2^N) time.</button>
+        </div>
+        <div class="quiz-feedback" hidden></div>
+      </div>
+    </section>
+
+    <!-- 8. Curated Primary Sources -->
+    <h2>8. Curated Primary Sources</h2>
+    <ul class="resource-list">
+      <li class="resource-item">
+        <div>
+          <a href="https://www.youtube.com/watch?v=Q5QoGocSnjo" target="_blank" rel="noreferrer">
+            Maddy Zhang: "Fastest Way to Learn DSA (Even If your Logic is WEAK)" &nearr;
+          </a>
+          <p>Pattern recognition over brute force, the 30-minute daily practice rule, and escaping the tutorial trap.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://www.techinterviewhandbook.org/algorithms/study-cheatsheet/" target="_blank" rel="noreferrer">
+            Tech Interview Handbook: Algorithm Study Cheatsheet &nearr;
+          </a>
+          <p>Yangshun Tay's battle-tested interview edge-case checklist, pattern recognition rules, and time budgeting.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://neetcode.io/roadmap" target="_blank" rel="noreferrer">
+            NeetCode Interactive DSA Roadmap &nearr;
+          </a>
+          <p>Hierarchical visual roadmap connecting data structures and algorithms in logical dependency order.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://www.youtube.com/@abdul_bari/videos" target="_blank" rel="noreferrer">
+            Abdul Bari: Algorithms Lecture Series &nearr;
+          </a>
+          <p>Theoretical proofs for asymptotic analysis, divide-and-conquer, greedy invariants, and dynamic programming.</p>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Followup Callout -->
+    <div class="callout" style="margin-top: var(--spacing-xl);">
+      <h4>Questions on Problem-Solving Intuition?</h4>
+      <p>
+        Your AI tutor is ready to analyze any problem with you using this 4-phase framework. Ask: <em>"Walk me through the transition from brute force to optimal for [Problem Name]."</em>
+      </p>
+    </div>
+  </main>
+</body>
+</html>
