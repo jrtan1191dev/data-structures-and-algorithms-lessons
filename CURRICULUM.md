@@ -56,6 +56,22 @@ In competitive programming and technical interviews (assuming standard $\approx 
 - **Active Code Reproduction**: If you must read an optimal solution, close the solution window, wait 2 minutes, and implement it from first principles in Python, TypeScript, or Java.
 - **Verify Edge Cases**: Run mental tests on empty input, single element, duplicates, and negative numbers before finishing.
 
+### 5. The MIT 48-Hour Learning Framework (Hasen Kuniyama Method)
+To compress months of algorithmic study into rapid, durable mastery, use AI as an intellectual sparring partner asking three high-leverage diagnostic questions:
+1. **The 5 Core Expert Mental Models**:
+   - *Hardware Locality*: 64-byte L1/L2 cache lines make contiguous arrays $10\times\text{--}50\times$ faster than pointer nodes.
+   - *Monotonic Search Space Pruning*: Discard chunks of pairs/candidates without inspecting them.
+   - *Spatial Complementarity*: Look backward into memory to match complementary pieces ($target - val$).
+   - *Recursive Decomposition*: Model problems as directed acyclic graphs of identical subproblems.
+   - *Information-Theoretic Bounds*: Comparison sorting cannot beat $\Omega(N \log N)$ because $h \ge \log_2(N!) \approx N \log_2 N$.
+2. **Where Experts Disagree (The Architectural Debates)**:
+   - Quicksort vs Mergesort (Cache locality vs worst-case stability).
+   - Separate Chaining vs Open Addressing (Graceful degradation vs contiguous cache hits).
+   - Top-Down Memoization vs Bottom-Up Tabulation (Sparse graph exploration vs rolling-variable $O(1)$ space).
+   - In-Place Mutation vs Immutability ($O(1)$ allocations vs thread safety).
+3. **The 10 Litmus Tests (True Understanding vs Memorization)**:
+   - Use our diagnostic litmus tests (e.g. why dynamic arrays double geometrically vs $+100$, why Dijkstra fails on negative edges, why sliding window is $O(N)$ despite nested while loops) to test true mastery.
+
 ---
 
 ## Master Module & Lesson Map
@@ -100,6 +116,7 @@ In competitive programming and technical interviews (assuming standard $\approx 
 | Cheatsheet | Content Coverage | Status |
 | :--- | :--- | :--- |
 | **Problem-Solving Intuition & Pattern Recognition** | 4-phase transition mindset, constraint-to-complexity budget, 9 pattern visual cues, deliberate practice protocol | **Completed** |
+| **Expert Mental Models, Debates & Litmus Tests** | MIT 48-hour learning method: 5 expert models, 6 architectural debates, 10 deep understanding litmus tests | **Completed** |
 | **Big-O & Algorithmic Complexity** | Growth rate hierarchy, Golden Simplification Rules, language collections matrix | **Completed** |
 | **Arrays & Dynamic Arrays** | Memory offset formula, operation time/space matrix, internal resizing mechanics | **Completed** |
 | **Hash Tables & Prefix Sums** | Collision resolution (chaining vs open addressing), load factor math, prefix sum identities | **Completed** |

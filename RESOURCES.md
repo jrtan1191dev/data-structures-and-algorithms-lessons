@@ -20,6 +20,8 @@
   The 5 optimization heuristics: BUD (Bottlenecks, Unnecessary work, Duplicated work), DIY (Do It Yourself on paper), Simplify & Generalize, Base Case & Build, and Data Structure Brainstorm. Use for: breaking down brute-force solutions when stuck.
 - [Book: "The Algorithm Design Manual" by Steven Skiena](https://www.algorist.com/)
   Intuition over formalism, war stories, algorithmic catalog mapping, and loop invariants. Use for: understanding how to model unseen problems as graphs, sets, or search trees.
+- [Article: "How AI Can Compress a Semester of Learning into 48 Hours" by Hasen Kuniyama](https://www.linkedin.com/posts/hasen-kuniyama-316002a7_how-ai-can-compress-a-semester-of-learning-activity-7436494951988936704-c5MA)
+  Methodology used by an MIT graduate student: (1) 5 core expert mental models, (2) mapping foundational expert disagreements/debates, (3) 10 litmus-test questions that separate true understanding from memorization, and (4) Socratic error diagnosis ("Why is this wrong, and what am I missing?"). Use for: treating AI as an active intellectual sparring partner.
 
 ## Wisdom (Communities)
 
