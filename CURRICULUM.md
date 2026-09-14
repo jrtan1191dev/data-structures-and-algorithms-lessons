@@ -13,6 +13,51 @@ A comprehensive, first-principles curriculum for technical interview mastery and
 
 ---
 
+## The Problem-Solving Intuition Framework (Maddy Zhang & Primary Sources)
+
+Technical interviews test your **problem-solving intuition**, not how many solutions you have memorized. Grounded in Maddy Zhang's core methodology, Abdul Bari's theoretical proofs, and Yangshun Tay's interview execution protocols, our curriculum embeds a repeatable 4-phase intuition engine:
+
+### 1. The 4-Phase Diagnostic Engine (Transition Mindset)
+When faced with an unseen interview question:
+1. **Budget Complexity from Constraints**: Inspect the upper bound of $N$ to determine your allowed runtime budget before typing code.
+2. **Formulate the Naive Brute Force**: State the obvious nested-loop or recursive approach ($O(N^2)$ or $O(2^N)$). This anchors your baseline and guarantees partial credit.
+3. **Isolate the Redundant Waste**: Ask: *Where is the CPU doing unnecessary or repeated work?* (e.g., repeatedly scanning forward for the next larger element, recalculating overlapping prefix sums, recomputing identical subtrees).
+4. **Deploy the Invariant & Minimal Pattern**: Choose the minimal data structure whose mathematical invariant permanently eliminates that specific waste.
+
+### 2. Constraint-to-Complexity Budget Table
+In competitive programming and technical interviews (assuming standard $\approx 10^7 - 10^8$ operations per second):
+
+| Input Scale ($N$) | Maximum Viable Time Complexity | Likely Target Patterns | Typical Archetypes |
+| :--- | :--- | :--- | :--- |
+| **$N \le 10 - 12$** | $O(N!)$ | Full permutation generation, traveling salesperson | N-Queens, generating all valid sequences |
+| **$N \le 20 - 25$** | $O(2^N)$ | Backtracking, power set generation, bitmask DP | Subsets, Combination Sum, Word Search |
+| **$N \le 100 - 500$** | $O(N^3)$ | 2D/3D Grid Dynamic Programming, All-Pairs Shortest Path | Floyd-Warshall, 3Sum Brute Force |
+| **$N \le 1\,000 - 2\,000$** | $O(N^2)$ | 2D DP matrices, nested array scans | Longest Common Subsequence, Edit Distance |
+| **$N \le 10^5 - 10^6$** | $O(N \log N)$ or $O(N)$ | Two Pointers, Sliding Window, Monotonic Stack, Hash Maps, Heaps | Two Sum, Subarray Sum Equals K, Daily Temperatures, Merge Intervals |
+| **$N \ge 10^9$** | $O(\log N)$ or $O(1)$ | Binary Search on Answer Space, Bit Manipulation, Math | Koko Eating Bananas, Single Number, Reverse Bits |
+
+### 3. Maddy Zhang's 9 Core Pattern Recognition Triggers
+
+| Pattern | Unmistakable Problem Triggers | Underlying Invariant & Intuition | Canonical Benchmark |
+| :--- | :--- | :--- | :--- |
+| **1. Two Pointers** | Sorted array, finding pairs/triplets, palindrome checks, in-place element swapping | Monotonicity of sorted sequence: moving pointer discards entire row/column in $O(1)$ | Two Sum II, 3Sum, Container With Most Water |
+| **2. Sliding Window** | Contiguous subarrays/substrings, "longest/shortest subarray with condition $X$" | State reuse: update entering/exiting elements in $O(1)$ instead of recalculating window | Longest Substring Without Repeating, Min Window |
+| **3. Hash Maps & Prefix Sums** | Frequency counting, $O(1)$ lookups, "number of subarrays with sum $K$" | Difference identity $P[j] - P[i] = K \implies P[i] = P[j] - K$; trading $O(N)$ memory for time | Subarray Sum Equals K, Group Anagrams |
+| **4. Monotonic Stack/Queue** | "Next greater element", "previous smaller element", histogram rectangle area | Maintain monotonic invariant; pop candidates that can never be an answer again | Daily Temperatures, Largest Rectangle in Histogram |
+| **5. Binary Search** | Sorted sequence, or monotonic boolean condition $f(x) \to \{\text{True}, \text{False}\}$ | Halving candidate space in $O(\log N)$; binary search on answer space for min/max | Binary Search, Rotated Array, Koko Bananas |
+| **6. Tree & Graph Traversals** | Hierarchical data, level-by-level dependencies, shortest paths, connected islands | BFS for unweighted shortest path / levels; DFS for exhaustive paths; Kahn's / DSU | Level Order, Number of Islands, Course Schedule |
+| **7. Intervals & Scheduling** | Overlapping time intervals, meeting room scheduling, merge ranges | Sort by start time (for merges) or end time (for max non-overlapping greedy) | Merge Intervals, Meeting Rooms II |
+| **8. Backtracking** | "Return ALL combinations / permutations / partitions", grid word searches | State-space tree exploration with choose-explore-unchoose and branch-and-bound | Subsets, Combination Sum, Word Search |
+| **9. Dynamic Programming** | "Find maximum / minimum / count total ways", overlapping subproblems | Cache subproblem results (memoization / tabulation); state transition recurrence | Climbing Stairs, Coin Change, LCS |
+
+### 4. The 30-Minute Deliberate Practice Protocol (Escaping the "Tutorial Trap")
+- **15-Minute Solitary Attempt**: Stare at the problem with a whiteboard or pencil and paper. Diagram pointer movements and trace 2 small test cases before writing code.
+- **Identify Pattern First**: Do not look up code. If stuck, look ONLY at the *pattern classification* (e.g., "This is Monotonic Stack").
+- **Active Code Reproduction**: If you must read an optimal solution, close the solution window, wait 2 minutes, and implement it from first principles in Python, TypeScript, or Java.
+- **Verify Edge Cases**: Run mental tests on empty input, single element, duplicates, and negative numbers before finishing.
+
+---
+
 ## Master Module & Lesson Map
 
 | Module | Lesson ID | Topic / Pattern | Key Focus & Mechanics | Target Interview Problems | Status |
@@ -54,6 +99,7 @@ A comprehensive, first-principles curriculum for technical interview mastery and
 
 | Cheatsheet | Content Coverage | Status |
 | :--- | :--- | :--- |
+| **Problem-Solving Intuition & Pattern Recognition** | 4-phase transition mindset, constraint-to-complexity budget, 9 pattern visual cues, deliberate practice protocol | **Completed** |
 | **Big-O & Algorithmic Complexity** | Growth rate hierarchy, Golden Simplification Rules, language collections matrix | **Completed** |
 | **Arrays & Dynamic Arrays** | Memory offset formula, operation time/space matrix, internal resizing mechanics | **Completed** |
 | **Hash Tables & Prefix Sums** | Collision resolution (chaining vs open addressing), load factor math, prefix sum identities | **Completed** |
