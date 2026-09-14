@@ -204,8 +204,110 @@
       </tbody>
     </table>
 
-    <!-- 5. Code Demonstration: Transitioning from Brute Force to Invariant -->
-    <h2>5. The Transition in Practice: Subarray Sum Equals K</h2>
+    <!-- 5. Gayle Laakmann McDowell's 5 Optimization Heuristics -->
+    <h2>5. Gayle McDowell's Five Optimization Heuristics (CTCI)</h2>
+    <p>
+      When stuck trying to optimize a brute-force approach, systematically apply these 5 battle-tested heuristics:
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. BUD Optimization</h3>
+        <p>
+          Audit your code for <strong>B</strong>ottlenecks (a single $O(N)$ step inside an $O(N)$ loop), <strong>U</strong>nnecessary work (steps whose output is ignored), and <strong>D</strong>uplicated work (recomputing values that could be cached).
+        </p>
+      </div>
+      <div class="card">
+        <h3>2. DIY (Do It Yourself)</h3>
+        <p>
+          Step away from code. Solve a real, non-trivial example by hand on paper. Watch your own human brain: <em>What manual shortcuts did you instinctively take to skip useless work?</em> Reverse-engineer your subconscious shortcuts into code.
+        </p>
+      </div>
+      <div class="card">
+        <h3>3. Simplify and Generalize</h3>
+        <p>
+          Temporarily strip constraints away: assume the array is already sorted, assume $K = 2$, or assume numbers are strictly positive. Solve the simplified toy version, then generalize the missing variables.
+        </p>
+      </div>
+      <div class="card">
+        <h3>4. Base Case and Build</h3>
+        <p>
+          Solve the problem manually for $N = 1$, then $N = 2$, then $N = 3$. Look at how the solution for $N = 3$ is built from the outputs of $N = 2$ and $N = 1$. This directly exposes the recurrence relation.
+        </p>
+      </div>
+      <div class="card">
+        <h3>5. Data Structure Brainstorm</h3>
+        <p>
+          Cycle through your mental toolbox: <em>Hash Table? Min-Heap? Monotonic Stack? Trie? Two Pointers?</em> Ask: <em>"If I had magical instant access to a specific property of past elements, which structure provides it?"</em>
+        </p>
+      </div>
+    </div>
+
+    <!-- 6. Physical & Visual Mental Models -->
+    <h2>6. Visual Mental Models: How to Think About Core Structures</h2>
+    <p>
+      Intuition is grounded in vivid mental representations. Use these physical analogies to instinctively conceptualize data structures:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Data Structure / Pattern</th>
+          <th>Physical / Visual Mental Model</th>
+          <th>How Your Brain Should Conceptualize It</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Two Pointers (Opposing)</strong></td>
+          <td><strong>Search Space Coordinate Discard</strong></td>
+          <td>Imagine an $N \times N$ matrix of all possible pairs $(i, j)$. Because the sequence is sorted, moving <code>right</code> leftward eliminates an entire column of impossible pairs; moving <code>left</code> rightward eliminates an entire row.</td>
+        </tr>
+        <tr>
+          <td><strong>Sliding Window</strong></td>
+          <td><strong>The Rolling Accounting Ledger</strong></td>
+          <td>You don't recount the cash drawer every second; when one customer enters, add their transaction ($+ \text{enter}$); when one leaves, subtract their transaction ($- \text{exit}$). Instant $O(1)$ net balance delta.</td>
+        </tr>
+        <tr>
+          <td><strong>Hash Map / Prefix Sums</strong></td>
+          <td><strong>The Missing Puzzle Piece</strong></td>
+          <td>At each step, don't look forward. Look backward into your memory vault and ask: <em>"I am holding value $X$. Has my complementary puzzle piece ($X - K$) already walked past me?"</em></td>
+        </tr>
+        <tr>
+          <td><strong>Monotonic Stack</strong></td>
+          <td><strong>Line of Sight / Shadow Casting</strong></td>
+          <td>Imagine people of various heights standing in a line. A taller person in front completely blocks the view of everyone shorter behind them. The shorter people cast in shadow are permanently obsolete and popped from the stack.</td>
+        </tr>
+        <tr>
+          <td><strong>Min / Max Heap</strong></td>
+          <td><strong>The VIP Club Bouncer (Capacity $K$)</strong></td>
+          <td>You want to find the $K$ largest elements. Keep a Min-Heap of size $K$. The bouncer watches the door; the poorest VIP sits at the root. If someone richer arrives, eject the poorest VIP and let the newcomer in.</td>
+        </tr>
+        <tr>
+          <td><strong>Binary Search</strong></td>
+          <td><strong>The Monotonic Light Switch</strong></td>
+          <td>You are never searching for a number; you are searching for the boundary where a boolean condition flips from <code>[False, False, ..., True, True]</code>. Test the midpoint; cut the candidate space in half.</td>
+        </tr>
+        <tr>
+          <td><strong>Breadth-First Search (BFS)</strong></td>
+          <td><strong>Expanding Water Ripples</strong></td>
+          <td>Drop a pebble into still water. The ripples expand outwards in concentric rings. Layer 1, Layer 2, Layer 3. The very first ripple to touch the target is mathematically guaranteed to be the shortest unweighted path.</td>
+        </tr>
+        <tr>
+          <td><strong>Depth-First Search (DFS)</strong></td>
+          <td><strong>Spool of Thread in a Dark Maze</strong></td>
+          <td>Walk as deep down one corridor as possible, unspooling thread behind you. When you hit a dead end, follow the thread backward (backtracking call stack) until you find an unexplored branching hallway.</td>
+        </tr>
+        <tr>
+          <td><strong>Dynamic Programming</strong></td>
+          <td><strong>Directed Acyclic Schedule of Shared Answers</strong></td>
+          <td>"Those who cannot remember the past are condemned to repeat it." Break a complex problem into a DAG of subproblems; solve each node once, record it in your ledger, and build the final answer upward.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 7. Code Demonstration: Transitioning from Brute Force to Invariant -->
+    <h2>7. The Transition in Practice: Subarray Sum Equals K</h2>
     <p>
       Observe how Maddy Zhang's transition mindset converts an $O(N^2)$ brute force into an optimal $O(N)$ single-pass solution:
     </p>
@@ -312,8 +414,8 @@ public class SubarraySumTransition {
       </div>
     </div>
 
-    <!-- 6. The 30-Minute Deliberate Practice Protocol -->
-    <h2>6. The 30-Minute Deliberate Practice Protocol (Escaping "Tutorial Hell")</h2>
+    <!-- 8. The 30-Minute Deliberate Practice Protocol -->
+    <h2>8. The 30-Minute Deliberate Practice Protocol (Escaping "Tutorial Hell")</h2>
     <div class="callout">
       <h4>How to Build Permanent Problem-Solving Muscle</h4>
       <ol>
@@ -324,8 +426,23 @@ public class SubarraySumTransition {
       </ol>
     </div>
 
-    <!-- 7. Active Retrieval Quiz -->
-    <h2>7. Active Retrieval Practice</h2>
+    <!-- 9. George Pólya's "Look Back & Generalize" Routine -->
+    <h2>9. George Pólya's "Look Back &amp; Generalize" Routine (The Intuition Maker)</h2>
+    <div class="callout">
+      <h4>The 4 Questions to Ask After Solving ANY Problem</h4>
+      <p>
+        Solving a problem is only half the battle. In George Pólya's <em>How to Solve It</em>, the 4th phase ("Looking Back") is where <strong>intuition is permanently crystallized into long-term memory</strong>. After every solved problem, write down answers to:
+      </p>
+      <ul>
+        <li><strong>What Was the Core Invariant?</strong> What condition remained strictly true throughout the loop or recursive descent?</li>
+        <li><strong>Where Was the Redundant Waste?</strong> What specific repetitive work did our optimal data structure prevent the CPU from executing?</li>
+        <li><strong>What Did the Optimal Solution See That I Missed?</strong> If you needed a hint or struggled, what visual cue in the problem prompt should have triggered the pattern immediately?</li>
+        <li><strong>How Can I Generalize This Result?</strong> Can this exact invariant or pointer maneuver solve a different problem with strings, graphs, or matrices?</li>
+      </ul>
+    </div>
+
+    <!-- 10. Active Retrieval Quiz -->
+    <h2>10. Active Retrieval Practice</h2>
     <section class="quiz-container" aria-label="Intuition Check">
       <div class="quiz-card"
            data-question="When an array has N = 100,000 and the problem asks for the maximum subarray sum of fixed length K, which pattern and target complexity must you immediately select?"
@@ -344,8 +461,8 @@ public class SubarraySumTransition {
       </div>
     </section>
 
-    <!-- 8. Curated Primary Sources -->
-    <h2>8. Curated Primary Sources</h2>
+    <!-- 11. Curated Primary Sources -->
+    <h2>11. Curated Primary Sources</h2>
     <ul class="resource-list">
       <li class="resource-item">
         <div>
@@ -353,6 +470,30 @@ public class SubarraySumTransition {
             Maddy Zhang: "Fastest Way to Learn DSA (Even If your Logic is WEAK)" &nearr;
           </a>
           <p>Pattern recognition over brute force, the 30-minute daily practice rule, and escaping the tutorial trap.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="http://www.crackingthecodinginterview.com/" target="_blank" rel="noreferrer">
+            Gayle Laakmann McDowell: Cracking the Coding Interview &nearr;
+          </a>
+          <p>The 5 optimization heuristics: BUD (Bottlenecks, Unnecessary, Duplicated), DIY, Simplify &amp; Generalize, and Data Structure Brainstorm.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://en.wikipedia.org/wiki/How_to_Solve_It" target="_blank" rel="noreferrer">
+            George Pólya: How to Solve It &nearr;
+          </a>
+          <p>The foundational mathematical problem-solving heuristic: Understand, Devise a Plan, Carry Out, and Look Back &amp; Generalize.</p>
+        </div>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://www.algorist.com/" target="_blank" rel="noreferrer">
+            Steven Skiena: The Algorithm Design Manual &nearr;
+          </a>
+          <p>Practical algorithmic design, war stories, algorithm catalog mapping, and loop invariants.</p>
         </div>
       </li>
       <li class="resource-item">

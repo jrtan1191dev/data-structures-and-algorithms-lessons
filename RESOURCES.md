@@ -14,6 +14,12 @@
   Deep breakdown of the 9 foundational interview patterns (Two Pointers, Sliding Window, Hashing & Prefix Sums, Monotonic Stack, Binary Search, Trees/BFS/DFS, Intervals, Backtracking, DP) and how to identify visual triggers in problem descriptions.
 - [Mental Framework: The Transition Mindset (Brute Force to Optimal) by Maddy Zhang](https://www.youtube.com/@maddyzhang)
   Structured 4-step interview problem-solving framework: (1) Constraint & complexity budgeting, (2) Naive brute-force state formulation, (3) Identifying redundant waste / invariant, (4) Selecting the minimal pattern data structure. Use for: tackling unseen interview questions under pressure.
+- [Book: "How to Solve It" by George Pólya](https://en.wikipedia.org/wiki/How_to_Solve_It)
+  The foundational heuristic for mathematical and algorithmic problem-solving: (1) Understand, (2) Devise a Plan, (3) Carry Out, and (4) Look Back & Generalize. Use for: internalizing the "Look Back" reflection that converts completed problems into permanent intuition.
+- [Book: "Cracking the Coding Interview" by Gayle Laakmann McDowell](http://www.crackingthecodinginterview.com/)
+  The 5 optimization heuristics: BUD (Bottlenecks, Unnecessary work, Duplicated work), DIY (Do It Yourself on paper), Simplify & Generalize, Base Case & Build, and Data Structure Brainstorm. Use for: breaking down brute-force solutions when stuck.
+- [Book: "The Algorithm Design Manual" by Steven Skiena](https://www.algorist.com/)
+  Intuition over formalism, war stories, algorithmic catalog mapping, and loop invariants. Use for: understanding how to model unseen problems as graphs, sets, or search trees.
 
 ## Wisdom (Communities)
 
