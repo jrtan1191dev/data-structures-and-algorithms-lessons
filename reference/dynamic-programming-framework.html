@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Dynamic Programming Decision Framework &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Dynamic Programming Framework</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Dynamic Programming Decision Framework</h1>
+      <p class="subtitle">Systematic 4-step derivation protocol, canonical recurrence archetypes, and memory compression techniques from O(M &times; N) down to O(1).</p>
+    </section>
+
+    <!-- 1. The 4-Step Formulation Protocol -->
+    <h2>1. The 4-Step DP Formulation Protocol</h2>
+    <div class="callout">
+      <h4>First-Principles Derivation Blueprint</h4>
+      <ol>
+        <li><strong>Define State:</strong> State clearly in natural language what $dp[i]$ or $dp[i][j]$ represents (e.g. <em>"minimum coins to form amount $i$"</em> or <em>"length of LCS in prefixes $s1[0\dots i-1]$ and $s2[0\dots j-1]$"</em>).</li>
+        <li><strong>Establish Recurrence:</strong> Express $dp[\text{current}]$ strictly as an optimal combination of preceding subproblems (e.g. $\min$, $\max$, or $\sum$).</li>
+        <li><strong>Set Base Cases:</strong> Initialize trivial boundaries ($dp[0] = 0$, unreachable states $= +\infty$, empty strings).</li>
+        <li><strong>Order &amp; Compress:</strong> Verify that subproblems are computed in topological order. Check if preceding states can be evicted to compress memory.</li>
+      </ol>
+    </div>
+
+    <!-- 2. The 5 Core Recurrence Archetypes -->
+    <h2>2. The Five Core Recurrence Archetypes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Archetype</th>
+          <th>State Definition</th>
+          <th>Transition Equation</th>
+          <th>Space Optimization</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1D Linear Prefix</strong></td>
+          <td>$dp[i]$: Optimal value ending at or using up to index $i$</td>
+          <td>$dp[i] = \max(dp[i-1], dp[i-2] + \text{val}[i])$</td>
+          <td>$O(N) \to O(1)$ via 2 rolling scalar variables</td>
+        </tr>
+        <tr>
+          <td><strong>Unbounded Knapsack</strong></td>
+          <td>$dp[a]$: Minimum cost / ways to make change for amount $a$</td>
+          <td>$dp[a] = \min_{c} (dp[a - c] + 1)$ (forward left-to-right scan)</td>
+          <td>$O(A)$ single 1D array</td>
+        </tr>
+        <tr>
+          <td><strong>0/1 Knapsack</strong></td>
+          <td>$dp[w]$: Boolean reachability / max value with capacity $w$</td>
+          <td>$dp[w] = dp[w] \lor dp[w - \text{weight}]$ (<strong>reverse right-to-left scan</strong>)</td>
+          <td>$O(W)$ single 1D array iterated backwards</td>
+        </tr>
+        <tr>
+          <td><strong>2D Coordinate Grid</strong></td>
+          <td>$dp[r][c]$: Paths / cost to reach cell $(r, c)$</td>
+          <td>$dp[r][c] = dp[r-1][c] + dp[r][c-1]$</td>
+          <td>$O(R \times C) \to O(C)$ single 1D row array</td>
+        </tr>
+        <tr>
+          <td><strong>2D String Subsequence</strong></td>
+          <td>$dp[i][j]$: Alignment score for prefixes $s_1[0\dots i-1]$ and $s_2[0\dots j-1]$</td>
+          <td>If match: $dp[i-1][j-1] + 1$; else: $\max(dp[i-1][j], dp[i][j-1])$</td>
+          <td>$O(M \times N) \to O(\min(M, N))$ dual-row rolling buffer</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Space Compression Matrix -->
+    <h2>3. Memory Hierarchy &amp; Cache Efficiency</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>RAM Footprint</th>
+          <th>CPU Cache Utilization</th>
+          <th>Stack Frame Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Top-Down (Memoization)</strong></td>
+          <td>$O(N)$ hash table + $O(N)$ call frames</td>
+          <td>Moderate; scattered stack pointers</td>
+          <td>High (StackOverflow on large $N$)</td>
+        </tr>
+        <tr>
+          <td><strong>Bottom-Up Tabulation</strong></td>
+          <td>$O(N)$ or $O(M \times N)$ contiguous array</td>
+          <td>High; sequential cache prefetching</td>
+          <td>Zero (pure iterative loops)</td>
+        </tr>
+        <tr>
+          <td><strong>Compressed Rolling State</strong></td>
+          <td>$O(1)$ variables or $O(N)$ row buffer</td>
+          <td>Optimal; fits entirely in L1/L2 cache</td>
+          <td>Zero</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># 1. Linear O(1) Space (House Robber)
+def rob(nums: list[int]) -> int:
+    prev1 = prev2 = 0
+    for x in nums:
+        prev1, prev2 = max(prev1, prev2 + x), prev1
+    return prev1
+
+# 2. 0/1 Knapsack Reverse Traversal (Partition Equal Subset Sum)
+def can_partition(nums: list[int]) -> bool:
+    total = sum(nums)
+    if total % 2 != 0: return False
+    target = total // 2
+    dp = [False] * (target + 1)
+    dp[0] = True
+    for x in nums:
+        # Reverse scan prevents reusing x in the same iteration
+        for w in range(target, x - 1, -1):
+            dp[w] = dp[w] or dp[w - x]
+    return dp[target]</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// 1. Linear O(1) Space (House Robber)
+function rob(nums: number[]): number {
+  let prev1 = 0, prev2 = 0;
+  for (const x of nums) {
+    const temp = Math.max(prev1, prev2 + x);
+    prev2 = prev1;
+    prev1 = temp;
+  }
+  return prev1;
+}
+
+// 2. 0/1 Knapsack Reverse Traversal (Partition Equal Subset Sum)
+function canPartition(nums: number[]): boolean {
+  const total = nums.reduce((a, b) => a + b, 0);
+  if (total % 2 !== 0) return false;
+  const target = total / 2;
+  const dp = new Uint8Array(target + 1);
+  dp[0] = 1;
+  for (const x of nums) {
+    for (let w = target; w >= x; w--) {
+      if (dp[w - x] === 1) dp[w] = 1;
+    }
+  }
+  return dp[target] === 1;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// 1. Linear O(1) Space (House Robber)
+public int rob(int[] nums) {
+    int prev1 = 0, prev2 = 0;
+    for (int x : nums) {
+        int temp = Math.max(prev1, prev2 + x);
+        prev2 = prev1;
+        prev1 = temp;
+    }
+    return prev1;
+}
+
+// 2. 0/1 Knapsack Reverse Traversal (Partition Equal Subset Sum)
+public boolean canPartition(int[] nums) {
+    int total = 0;
+    for (int x : nums) total += x;
+    if (total % 2 != 0) return false;
+    int target = total / 2;
+
+    boolean[] dp = new boolean[target + 1];
+    dp[0] = true;
+    for (int x : nums) {
+        for (int w = target; w >= x; w--) {
+            dp[w] = dp[w] || dp[w - x];
+        }
+    }
+    return dp[target];
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="trees-and-graph-traversals.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Tree &amp; Graph Traversals</span>
+      </a>
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">Return to Syllabus &rarr;</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

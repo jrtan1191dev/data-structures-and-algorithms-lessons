@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Intervals &amp; Scheduling Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Intervals &amp; Scheduling</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Intervals &amp; Scheduling Cheatsheet</h1>
+      <p class="subtitle">Sorting preconditions, overlap consolidation rules, greedy interval scheduling algorithms, and concurrent meeting room allocations.</p>
+    </section>
+
+    <!-- 1. The 3 Core Interval Archetypes -->
+    <h2>1. The Three Core Interval Archetypes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Archetype</th>
+          <th>Sorting Key</th>
+          <th>Core Invariant &amp; Greedy Rule</th>
+          <th>Canonical Problems</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Interval Merging</strong></td>
+          <td>Sort by <strong>Start Time</strong></td>
+          <td>If <code>curr.start &le; prev.end</code>, overlap exists: <code>prev.end = max(prev.end, curr.end)</code>.</td>
+          <td>Merge Intervals (LC 56), Insert Interval (LC 57)</td>
+        </tr>
+        <tr>
+          <td><strong>Non-Overlapping Scheduling</strong></td>
+          <td>Sort by <strong>End Time</strong></td>
+          <td>Earliest deadline first: greedily select intervals finishing earliest to maximize future timeline.</td>
+          <td>Non-overlapping Intervals (LC 435), Minimum Arrows (LC 452)</td>
+        </tr>
+        <tr>
+          <td><strong>Concurrent Resource Tracking</strong></td>
+          <td>Sort by <strong>Start Time</strong> + Min-Heap of Ends</td>
+          <td>Min-heap tracks active end times. If <code>heap.peek() &le; curr.start</code>, reuse resource (pop); else allocate new.</td>
+          <td>Meeting Rooms II (LC 253)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Overlap Evaluation Decision Tree -->
+    <h2>2. Overlap Evaluation Decision Protocol</h2>
+    <div class="callout">
+      <h4>Two Sorted Intervals: A = [A.start, A.end] and B = [B.start, B.end] (where A.start &le; B.start)</h4>
+      <ul>
+        <li><strong>Disjoint (No Overlap):</strong> <code>B.start &gt; A.end</code> &rarr; Push A to output, set <code>prev = B</code>.</li>
+        <li><strong>Overlap:</strong> <code>B.start &le; A.end</code> &rarr; Merge: <code>A.end = max(A.end, B.end)</code>.</li>
+        <li><strong>Insertion into Pre-Sorted Sequence (LC 57):</strong>
+          <br>Phase 1: Add all intervals where <code>end &lt; newInterval.start</code>.
+          <br>Phase 2: Merge all intervals where <code>start &le; newInterval.end</code> by expanding <code>newInterval</code>.
+          <br>Phase 3: Add all remaining intervals. Time: $O(N)$.
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. Production Templates -->
+    <h2>3. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Template 1: Merge Intervals (LC 56)
+def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:
+    intervals.sort(key=lambda x: x[0])
+    merged = [intervals[0]]
+    for start, end in intervals[1:]:
+        if start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return merged
+
+# Template 2: Non-Overlapping Elimination (LC 435)
+def erase_overlap_intervals(intervals: list[list[int]]) -> int:
+    intervals.sort(key=lambda x: x[1]) # Sort by end time
+    removals, last_end = 0, float('-inf')
+    for start, end in intervals:
+        if start >= last_end:
+            last_end = end
+        else:
+            removals += 1
+    return removals</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Template 1: Merge Intervals (LC 56)
+function mergeIntervals(intervals: number[][]): number[][] {
+  intervals.sort((a, b) => a[0] - b[0]);
+  const merged: number[][] = [intervals[0]];
+  for (let i = 1; i < intervals.length; i++) {
+    const prev = merged[merged.length - 1];
+    const curr = intervals[i];
+    if (curr[0] <= prev[1]) {
+      prev[1] = Math.max(prev[1], curr[1]);
+    } else {
+      merged.push(curr);
+    }
+  }
+  return merged;
+}
+
+// Template 2: Non-Overlapping Elimination (LC 435)
+function eraseOverlapIntervals(intervals: number[][]): number {
+  intervals.sort((a, b) => a[1] - b[1]); // Sort by end time
+  let removals = 0;
+  let lastEnd = -Infinity;
+  for (const [start, end] of intervals) {
+    if (start >= lastEnd) {
+      lastEnd = end;
+    } else {
+      removals++;
+    }
+  }
+  return removals;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Template 1: Merge Intervals (LC 56)
+import java.util.*;
+
+public int[][] mergeIntervals(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+    List&lt;int[]&gt; merged = new ArrayList&lt;&gt;();
+    merged.add(intervals[0]);
+
+    for (int i = 1; i < intervals.length; i++) {
+        int[] prev = merged.get(merged.size() - 1);
+        int[] curr = intervals[i];
+        if (curr[0] <= prev[1]) {
+            prev[1] = Math.max(prev[1], curr[1]);
+        } else {
+            merged.add(curr);
+        }
+    }
+    return merged.toArray(new int[merged.size()][]);
+}
+
+// Template 2: Non-Overlapping Elimination (LC 435)
+public int eraseOverlapIntervals(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[1])); // Sort by end time
+    int removals = 0;
+    int lastEnd = Integer.MIN_VALUE;
+
+    for (int[] interval : intervals) {
+        if (interval[0] >= lastEnd) {
+            lastEnd = interval[1];
+        } else {
+            removals++;
+        }
+    }
+    return removals;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="two-pointers-and-sliding-window.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Two Pointers &amp; Sliding Window</span>
+      </a>
+      <a href="bit-manipulation-and-binary.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-title">Bit Manipulation &amp; Binary</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

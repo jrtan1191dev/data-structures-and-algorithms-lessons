@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Heaps &amp; Top-K Patterns Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Heaps &amp; Top-K Patterns</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures</div>
+      <h1>Heaps &amp; Top-K Patterns Cheatsheet</h1>
+      <p class="subtitle">Complete binary tree array indexing, Floyd's O(N) heapify mechanics, bounded Top-K priority queues, and dual-heap continuous stream median architectures.</p>
+    </section>
+
+    <!-- 1. Array Indexing Formulas -->
+    <h2>1. Array Indexing Invariants</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Relationship</th>
+          <th>Array Formula</th>
+          <th>Operation</th>
+          <th>Complexity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Parent Node</strong></td>
+          <td><code>parent(i) = floor((i - 1) / 2)</code></td>
+          <td>Sift-Up (insertion)</td>
+          <td><code>O(log N)</code> comparisons</td>
+        </tr>
+        <tr>
+          <td><strong>Left Child</strong></td>
+          <td><code>left(i) = 2 * i + 1</code></td>
+          <td>Sift-Down (extract-min)</td>
+          <td><code>O(log N)</code> comparisons</td>
+        </tr>
+        <tr>
+          <td><strong>Right Child</strong></td>
+          <td><code>right(i) = 2 * i + 2</code></td>
+          <td>Sift-Down (extract-min)</td>
+          <td><code>O(log N)</code> comparisons</td>
+        </tr>
+        <tr>
+          <td><strong>Floyd's Heapify</strong></td>
+          <td>Sift-down from index $\lfloor N/2 \rfloor - 1$ down to 0</td>
+          <td>Build Heap in-place</td>
+          <td><strong>O(N)</strong> (convergent geometric sum)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Bounded Heap Top-K Decision Rule -->
+    <h2>2. Bounded Top-K Selection Rule</h2>
+    <div class="callout">
+      <h4>The Inverse Heap Rule for Extremes</h4>
+      <ul>
+        <li>
+          <strong>To find the $K$ Largest Elements:</strong> Use a <strong>MIN-HEAP</strong> capped at size $K$.
+          <br>
+          Push elements into the min-heap. When size exceeds $K$, pop the root (the minimum of the top $K+1$ candidates). At termination, the heap holds the $K$ largest elements, and the root is the $K$-th largest.
+          <br>
+          <em>Time:</em> <code>O(N log K)</code> &bull; <em>Space:</em> <code>O(K)</code> (avoids full <code>O(N log N)</code> sorting).
+        </li>
+        <li>
+          <strong>To find the $K$ Smallest Elements:</strong> Use a <strong>MAX-HEAP</strong> capped at size $K$.
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. The Two-Heaps Streaming Architecture -->
+    <h2>3. The Two-Heaps Dynamic Median Architecture</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Heap Type</th>
+          <th>Invariant</th>
+          <th>Median Extraction</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lower Half (Small)</strong></td>
+          <td>Max-Heap</td>
+          <td>Holds smallest $\lceil N/2 \rceil$ numbers</td>
+          <td rowspan="2">
+            If <code>len(small) &gt; len(large)</code>: <code>small[0]</code>
+            <br>
+            Else: <code>(small[0] + large[0]) / 2.0</code>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Upper Half (Large)</strong></td>
+          <td>Min-Heap</td>
+          <td>Holds largest $\lfloor N/2 \rfloor$ numbers; $\max(\text{small}) \le \min(\text{large})$</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Production Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Bounded Min-Heap: Kth Largest Element (LC 215)
+import heapq
+
+def find_kth_largest(nums: list[int], k: int) -> int:
+    min_heap = []
+    for x in nums:
+        heapq.heappush(min_heap, x)
+        if len(min_heap) > k:
+            heapq.heappop(min_heap) # Evicts smallest candidate
+    return min_heap[0]</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Bounded Min-Heap: Kth Largest Element (LC 215)
+class MinHeap {
+  private data: number[] = [];
+
+  push(val: number): void {
+    this.data.push(val);
+    let i = this.data.length - 1;
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (this.data[i] < this.data[p]) {
+        [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+        i = p;
+      } else break;
+    }
+  }
+
+  pop(): number {
+    const top = this.data[0];
+    const bottom = this.data.pop()!;
+    if (this.data.length > 0) {
+      this.data[0] = bottom;
+      let i = 0;
+      while (2 * i + 1 < this.data.length) {
+        let best = 2 * i + 1;
+        const r = 2 * i + 2;
+        if (r < this.data.length && this.data[r] < this.data[best]) best = r;
+        if (this.data[best] < this.data[i]) {
+          [this.data[i], this.data[best]] = [this.data[best], this.data[i]];
+          i = best;
+        } else break;
+      }
+    }
+    return top;
+  }
+
+  peek(): number { return this.data[0]; }
+  get size(): number { return this.data.length; }
+}
+
+function findKthLargest(nums: number[], k: number): number {
+  const heap = new MinHeap();
+  for (const x of nums) {
+    heap.push(x);
+    if (heap.size > k) heap.pop();
+  }
+  return heap.peek();
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Bounded Min-Heap: Kth Largest Element (LC 215)
+import java.util.PriorityQueue;
+
+public int findKthLargest(int[] nums, int k) {
+    PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue<>(k);
+
+    for (int x : nums) {
+        minHeap.offer(x);
+        if (minHeap.size() > k) {
+            minHeap.poll(); // Evicts smallest candidate
+        }
+    }
+
+    return minHeap.peek();
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="binary-search-and-answer-space.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Binary Search &amp; Answer Space</span>
+      </a>
+      <a href="backtracking-and-state-pruning.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-title">Backtracking &amp; State Pruning</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Trie &amp; Prefix Tree Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Trie &amp; Prefix Tree</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures</div>
+      <h1>Trie &amp; Prefix Tree Cheatsheet</h1>
+      <p class="subtitle">26-ary tree node pointer architecture, prefix querying mechanics, wildcard depth-first searches, and exponential multi-string grid pruning.</p>
+    </section>
+
+    <!-- 1. Trie vs Hash Table -->
+    <h2>1. Trie vs. Hash Table Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Trie (Prefix Tree)</th>
+          <th>Hash Table (HashSet/Map)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Exact Word Search</strong></td>
+          <td><code>O(L)</code> step-by-step pointer traversal</td>
+          <td><code>O(L)</code> average hashing + comparison</td>
+        </tr>
+        <tr>
+          <td><strong>Prefix Search (<code>startsWith</code>)</strong></td>
+          <td><strong>O(L)</strong> immediate termination at prefix node</td>
+          <td><code>O(N &times; L)</code> scan through all $N$ dictionary keys</td>
+        </tr>
+        <tr>
+          <td><strong>Wildcard Matching (<code>.</code>)</strong></td>
+          <td>Recursive branch across non-null children</td>
+          <td>Impractical; requires scanning all stored words</td>
+        </tr>
+        <tr>
+          <td><strong>Memory Overhead</strong></td>
+          <td>High pointer overhead (26 pointers per node)</td>
+          <td>Low; compact contiguous bucket array</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Trie Operations Blueprint -->
+    <h2>2. Trie Operations Invariant Protocol</h2>
+    <div class="callout">
+      <h4>Standard Trie Operations ($L$ = word length)</h4>
+      <ul>
+        <li><strong>Insert (word):</strong> Start at <code>root</code>. For each char <code>c</code>: if <code>curr.children[c]</code> is null, create new <code>TrieNode</code>. Advance <code>curr = curr.children[c]</code>. Mark <code>curr.is_end = true</code>. Time: $O(L)$, Space: $O(L)$.</li>
+        <li><strong>Search (word):</strong> Walk matching child pointers. Return <code>true</code> if last node has <code>is_end == true</code>, else <code>false</code>. Time: $O(L)$, Space: $O(1)$.</li>
+        <li><strong>StartsWith (prefix):</strong> Walk matching child pointers. If all characters are found, return <code>true</code> immediately without checking <code>is_end</code>. Time: $O(L)$, Space: $O(1)$.</li>
+      </ul>
+    </div>
+
+    <!-- 3. Production Templates -->
+    <h2>3. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code>class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        curr = self.root
+        for ch in word:
+            if ch not in curr.children:
+                curr.children[ch] = TrieNode()
+            curr = curr.children[ch]
+        curr.is_end = True
+
+    def search(self, word: str) -> bool:
+        curr = self.root
+        for ch in word:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+        return curr.is_end
+
+    def starts_with(self, prefix: str) -> bool:
+        curr = self.root
+        for ch in prefix:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+        return True</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>class TrieNode {
+  children: Array<TrieNode | null> = new Array(26).fill(null);
+  isEnd = false;
+}
+
+class Trie {
+  private root = new TrieNode();
+
+  insert(word: string): void {
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const idx = word.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) curr.children[idx] = new TrieNode();
+      curr = curr.children[idx]!;
+    }
+    curr.isEnd = true;
+  }
+
+  search(word: string): boolean {
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const idx = word.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) return false;
+      curr = curr.children[idx]!;
+    }
+    return curr.isEnd;
+  }
+
+  startsWith(prefix: string): boolean {
+    let curr = this.root;
+    for (let i = 0; i < prefix.length; i++) {
+      const idx = prefix.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) return false;
+      curr = curr.children[idx]!;
+    }
+    return true;
+  }
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>public class Trie {
+    private static class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+
+    private final TrieNode root = new TrieNode();
+
+    public void insert(String word) {
+        TrieNode curr = root;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (curr.children[idx] == null) {
+                curr.children[idx] = new TrieNode();
+            }
+            curr = curr.children[idx];
+        }
+        curr.isEnd = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode curr = root;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (curr.children[idx] == null) return false;
+            curr = curr.children[idx];
+        }
+        return curr.isEnd;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode curr = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            int idx = prefix.charAt(i) - 'a';
+            if (curr.children[idx] == null) return false;
+            curr = curr.children[idx];
+        }
+        return true;
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="bit-manipulation-and-binary.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Bit Manipulation &amp; Binary</span>
+      </a>
+      <a href="trees-and-graph-traversals.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-title">Trees &amp; Graph Traversals</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

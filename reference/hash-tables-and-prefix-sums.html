@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Hash Tables &amp; Prefix Sums Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Hash Tables &amp; Prefix Sums</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures &amp; Algorithms</div>
+      <h1>Hash Tables &amp; Prefix Sums Cheatsheet</h1>
+      <p class="subtitle">Collision resolution internals, load factor mathematics, canonical string signature hashing, and prefix sum difference formulas.</p>
+    </section>
+
+    <!-- 1. Collision Resolution Mechanics -->
+    <h2>1. Collision Resolution Strategies</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Strategy</th>
+          <th>Physical RAM Structure</th>
+          <th>Load Factor Threshold (&alpha;)</th>
+          <th>Cache Locality &amp; Trade-offs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Separate Chaining</strong> (Java HashMap)</td>
+          <td>Array of bucket pointers pointing to linked lists (or Red-Black trees if bin count &ge; 8)</td>
+          <td>&alpha; &ge; 0.75</td>
+          <td>Poor spatial cache locality due to scattered node pointers, but handles clustering gracefully without infinite probe cycles.</td>
+        </tr>
+        <tr>
+          <td><strong>Linear Probing</strong> (Python dict)</td>
+          <td>Single flat array; collisions probe sequentially <code>(hash + i) % capacity</code></td>
+          <td>&alpha; &ge; 0.66</td>
+          <td>Superior hardware cache line utilization; prone to primary clustering when consecutive buckets fill up.</td>
+        </tr>
+        <tr>
+          <td><strong>Robin Hood Hashing</strong></td>
+          <td>Open addressing with age displacement (rich gives to poor)</td>
+          <td>&alpha; &ge; 0.85 &ndash; 0.90</td>
+          <td>Minimizes search variance by equalizing probe distances; achieves high density with minimal lookup latency.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Prefix Sum & Subarray Invariants -->
+    <h2>2. Prefix Sum &amp; Subarray Algebraic Identities</h2>
+    <div class="callout">
+      <h4>The Subarray Sum Identity</h4>
+      <p>
+        For any subarray <code>nums[i...j]</code>, its sum is given by:
+        <br>
+        <code>Sum(i...j) = Prefix[j] - Prefix[i - 1]</code> (where <code>Prefix[k] = Sum(nums[0...k])</code>)
+      </p>
+      <p>
+        <strong>Finding Subarrays with Sum Equals K (LC 560):</strong>
+        <br>
+        <code>Prefix[j] - Prefix[i] = K &implies; Prefix[i] = Prefix[j] - K</code>
+        <br>
+        Store running prefix sums in a hash map: <code>count_map[prefix_sum] += 1</code>.
+        <br>
+        <strong>Mandatory Boundary Initialization:</strong> Always initialize <code>count_map[0] = 1</code> to account for valid subarrays starting at index 0.
+      </p>
+    </div>
+
+    <!-- 3. Key Patterns & Time/Space Matrix -->
+    <h2>3. Canonical Hashing Patterns Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern Archetype</th>
+          <th>Key Idea</th>
+          <th>Time Complexity</th>
+          <th>Space Complexity</th>
+          <th>Canonical Problem</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Complement Lookup</strong></td>
+          <td>Check if <code>target - x</code> exists in set/map before inserting <code>x</code></td>
+          <td><code>O(N)</code></td>
+          <td><code>O(N)</code></td>
+          <td>Two Sum (LC 1)</td>
+        </tr>
+        <tr>
+          <td><strong>Frequency Counting</strong></td>
+          <td>Fixed 26-int array or hash table tallying character counts</td>
+          <td><code>O(N)</code></td>
+          <td><code>O(1)</code> / <code>O(K)</code></td>
+          <td>Valid Anagram (LC 242), Ransom Note (LC 383)</td>
+        </tr>
+        <tr>
+          <td><strong>Signature Grouping</strong></td>
+          <td>Map character count tuples (26 ints) or sorted string keys to lists of words</td>
+          <td><code>O(N &times; K)</code></td>
+          <td><code>O(N &times; K)</code></td>
+          <td>Group Anagrams (LC 49)</td>
+        </tr>
+        <tr>
+          <td><strong>Streak Boundary Verification</strong></td>
+          <td>Only initiate consecutive counting if <code>(x - 1) not in hash_set</code></td>
+          <td><code>O(N)</code></td>
+          <td><code>O(N)</code></td>
+          <td>Longest Consecutive Sequence (LC 128)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Production Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Subarray Sum Equals K (LC 560)
+from collections import defaultdict
+
+def subarray_sum(nums: list[int], k: int) -> int:
+    prefix_counts = defaultdict(int)
+    prefix_counts[0] = 1 # Essential base case
+    curr_sum = total_subarrays = 0
+
+    for x in nums:
+        curr_sum += x
+        if (curr_sum - k) in prefix_counts:
+            total_subarrays += prefix_counts[curr_sum - k]
+        prefix_counts[curr_sum] += 1
+
+    return total_subarrays</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Subarray Sum Equals K (LC 560)
+function subarraySum(nums: number[], k: number): number {
+  const prefixCounts = new Map&lt;number, number&gt;();
+  prefixCounts.set(0, 1); // Essential base case
+
+  let currSum = 0;
+  let totalSubarrays = 0;
+
+  for (const x of nums) {
+    currSum += x;
+    const target = currSum - k;
+    if (prefixCounts.has(target)) {
+      totalSubarrays += prefixCounts.get(target)!;
+    }
+    prefixCounts.set(currSum, (prefixCounts.get(currSum) || 0) + 1);
+  }
+
+  return totalSubarrays;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Subarray Sum Equals K (LC 560)
+import java.util.HashMap;
+
+public int subarraySum(int[] nums, int k) {
+    HashMap&lt;Integer, Integer&gt; prefixCounts = new HashMap&lt;&gt;();
+    prefixCounts.put(0, 1); // Essential base case
+
+    int currSum = 0;
+    int totalSubarrays = 0;
+
+    for (int x : nums) {
+        currSum += x;
+        if (prefixCounts.containsKey(currSum - k)) {
+            totalSubarrays += prefixCounts.get(currSum - k);
+        }
+        prefixCounts.put(currSum, prefixCounts.getOrDefault(currSum, 0) + 1);
+    }
+
+    return totalSubarrays;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="arrays-and-dynamic-arrays.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Arrays &amp; Dynamic Arrays</span>
+      </a>
+      <a href="two-pointers-and-sliding-window.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Two Pointers &amp; Sliding Window</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

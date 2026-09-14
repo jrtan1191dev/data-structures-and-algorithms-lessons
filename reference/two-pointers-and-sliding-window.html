@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Two Pointers &amp; Sliding Window Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Two Pointers &amp; Sliding Window</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Two Pointers &amp; Sliding Window Cheatsheet</h1>
+      <p class="subtitle">Canonical templates, boundary invariants, state contraction conditions, and common edge cases across sequence patterns.</p>
+    </section>
+
+    <!-- 1. The 4 Sequence Archetypes -->
+    <h2>1. The Four Sequence Archetypes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern Archetype</th>
+          <th>Pointer Motion</th>
+          <th>Core Invariant</th>
+          <th>Canonical Problems</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Converging (Opposing)</strong></td>
+          <td><code>left &rarr; &larr; right</code></td>
+          <td>Monotonic search space reduction; each step eliminates an entire row or column.</td>
+          <td>Two Sum II (LC 167), 3Sum (LC 15), Container With Most Water (LC 11), Valid Palindrome (LC 125)</td>
+        </tr>
+        <tr>
+          <td><strong>Fast &amp; Slow (Tortoise &amp; Hare)</strong></td>
+          <td><code>slow += 1</code>, <code>fast += 2</code></td>
+          <td>Pointer speed differential guarantees collision in circular topologies or finds exact midpoints.</td>
+          <td>Linked List Cycle (LC 141), Find the Duplicate Number (LC 287), Middle of the Linked List (LC 876)</td>
+        </tr>
+        <tr>
+          <td><strong>Fixed-Size Sliding Window</strong></td>
+          <td><code>right += 1</code>, <code>left = right - k + 1</code></td>
+          <td>Window length is invariant ($k$); state updates in $O(1)$ by adding entering and subtracting exiting elements.</td>
+          <td>Maximum Average Subarray I (LC 643), Permutation in String (LC 567), Find All Anagrams (LC 438)</td>
+        </tr>
+        <tr>
+          <td><strong>Dynamic-Size Sliding Window</strong></td>
+          <td><code>right += 1</code>; shrink <code>left</code> while condition broken</td>
+          <td>Maintain validity invariant; expand greedily, contract minimally to discover optimal boundary.</td>
+          <td>Longest Substring Without Repeating Characters (LC 3), Minimum Window Substring (LC 76), Character Replacement (LC 424)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Boundary Conditions Checklist -->
+    <h2>2. Boundary Conditions &amp; Invariants Checklist</h2>
+    <div class="callout">
+      <h4>Pre-Flight Verification Before Coding</h4>
+      <ul>
+        <li><strong>Loop Termination:</strong> Use <code>left &lt; right</code> when examining distinct pairs (e.g. Two Sum II, Container With Most Water). Use <code>left &le; right</code> only if single-element windows are valid.</li>
+        <li><strong>Window Length Calculation:</strong> The number of elements in $[left, right]$ is always <code>right - left + 1</code> (inclusive).</li>
+        <li><strong>Duplicate Elimination:</strong> In 3Sum, skip identical consecutive elements: <code>while left &lt; right and nums[left] == nums[left + 1]: left += 1</code>.</li>
+        <li><strong>State Contraction:</strong> In dynamic windows, update hash table / counter state <em>before</em> incrementing <code>left</code>.</li>
+      </ul>
+    </div>
+
+    <!-- 3. Reference Implementation Templates -->
+    <h2>3. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Template 1: Converging Pointers (Two Sum II)
+def two_sum_sorted(nums: list[int], target: int) -> list[int]:
+    left, right = 0, len(nums) - 1
+    while left < right:
+        curr = nums[left] + nums[right]
+        if curr == target:
+            return [left + 1, right + 1]
+        elif curr < target:
+            left += 1
+        else:
+            right -= 1
+    return []
+
+# Template 2: Dynamic Sliding Window (Longest Substring)
+def length_of_longest_substring(s: str) -> int:
+    last_seen = {}
+    max_len = left = 0
+    for right, ch in enumerate(s):
+        if ch in last_seen and last_seen[ch] >= left:
+            left = last_seen[ch] + 1
+        last_seen[ch] = right
+        max_len = max(max_len, right - left + 1)
+    return max_len</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Template 1: Converging Pointers (Two Sum II)
+function twoSumSorted(nums: number[], target: number): number[] {
+  let left = 0;
+  let right = nums.length - 1;
+  while (left < right) {
+    const sum = nums[left] + nums[right];
+    if (sum === target) return [left + 1, right + 1];
+    if (sum < target) left++;
+    else right--;
+  }
+  return [];
+}
+
+// Template 2: Dynamic Sliding Window (Longest Substring)
+function lengthOfLongestSubstring(s: string): number {
+  const lastSeen = new Map&lt;string, number&gt;();
+  let maxLen = 0;
+  let left = 0;
+  for (let right = 0; right < s.length; right++) {
+    const ch = s[right];
+    if (lastSeen.has(ch) &amp;&amp; lastSeen.get(ch)! &gt;= left) {
+      left = lastSeen.get(ch)! + 1;
+    }
+    lastSeen.set(ch, right);
+    maxLen = Math.max(maxLen, right - left + 1);
+  }
+  return maxLen;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Template 1: Converging Pointers (Two Sum II)
+public int[] twoSumSorted(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+        if (sum == target) return new int[]{left + 1, right + 1};
+        if (sum < target) left++;
+        else right--;
+    }
+    return new int[]{};
+}
+
+// Template 2: Dynamic Sliding Window (Longest Substring)
+import java.util.HashMap;
+
+public int lengthOfLongestSubstring(String s) {
+    HashMap&lt;Character, Integer&gt; lastSeen = new HashMap&lt;&gt;();
+    int maxLen = 0, left = 0;
+    for (int right = 0; right < s.length(); right++) {
+        char ch = s.charAt(right);
+        if (lastSeen.containsKey(ch) &amp;&amp; lastSeen.get(ch) &gt;= left) {
+            left = lastSeen.get(ch) + 1;
+        }
+        lastSeen.put(ch, right);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    return maxLen;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Return to Syllabus</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+      <a href="trees-and-graph-traversals.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Trees &amp; Graph Traversals</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

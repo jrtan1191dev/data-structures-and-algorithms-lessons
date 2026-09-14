@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Bit Manipulation &amp; Binary Operations Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Bit Manipulation &amp; Binary</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Bit Manipulation &amp; Binary Operations Cheatsheet</h1>
+      <p class="subtitle">Hardware ALU bitwise primitives, XOR self-cancellation rules, bitmask recipes, and binary arithmetic without arithmetic operators.</p>
+    </section>
+
+    <!-- 1. Universal Bitmasking Recipes -->
+    <h2>1. Universal Bitmasking Recipes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Operation</th>
+          <th>Bitwise Expression</th>
+          <th>Physical Mechanism</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Test if $k$-th bit is set</strong></td>
+          <td><code>(n &gt;&gt; k) &amp; 1 == 1</code></td>
+          <td>Shifts bit $k$ to the units position and masks all higher bits with 1.</td>
+        </tr>
+        <tr>
+          <td><strong>Set $k$-th bit to 1</strong></td>
+          <td><code>n | (1 &lt;&lt; k)</code></td>
+          <td>OR with a mask containing 1 exclusively at position $k$.</td>
+        </tr>
+        <tr>
+          <td><strong>Clear $k$-th bit to 0</strong></td>
+          <td><code>n &amp; ~(1 &lt;&lt; k)</code></td>
+          <td>AND with inverted mask having 0 at position $k$ and 1s elsewhere.</td>
+        </tr>
+        <tr>
+          <td><strong>Toggle $k$-th bit</strong></td>
+          <td><code>n ^ (1 &lt;&lt; k)</code></td>
+          <td>XOR flips bit $k$ (0 becomes 1; 1 becomes 0).</td>
+        </tr>
+        <tr>
+          <td><strong>Clear lowest set bit</strong></td>
+          <td><code>n &amp; (n - 1)</code></td>
+          <td>Brian Kernighan's trick: resets rightmost 1-bit to 0 in 1 ALU cycle.</td>
+        </tr>
+        <tr>
+          <td><strong>Extract lowest set bit</strong></td>
+          <td><code>n &amp; (-n)</code></td>
+          <td>Exploits two's complement inversion: isolates lowest 1-bit as a power of 2.</td>
+        </tr>
+        <tr>
+          <td><strong>Test if power of 2</strong></td>
+          <td><code>n &gt; 0 and (n &amp; (n - 1)) == 0</code></td>
+          <td>Powers of 2 have exactly one 1-bit in their binary representation.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Algebraic Identities -->
+    <h2>2. Algebraic Identities &amp; XOR Magic</h2>
+    <div class="callout">
+      <h4>The 4 Laws of XOR ($^$)</h4>
+      <ol>
+        <li><strong>Identity:</strong> <code>x ^ 0 = x</code></li>
+        <li><strong>Self-Cancellation:</strong> <code>x ^ x = 0</code></li>
+        <li><strong>Commutative:</strong> <code>a ^ b = b ^ a</code></li>
+        <li><strong>Associative:</strong> <code>a ^ (b ^ c) = (a ^ b) ^ c</code></li>
+      </ol>
+      <p>
+        <strong>Implication:</strong> XORing an entire sequence cancels out all elements appearing an even number of times, leaving odd occurrences in $O(N)$ time and $O(1)$ memory.
+      </p>
+    </div>
+
+    <!-- 3. Production Templates -->
+    <h2>3. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># 1. Number of 1 Bits (Brian Kernighan)
+def hamming_weight(n: int) -> int:
+    count = 0
+    while n:
+        n &= (n - 1) # Clears lowest set bit
+        count += 1
+    return count
+
+# 2. Add Two Numbers Without '+' (LC 371)
+def get_sum(a: int, b: int) -> int:
+    mask = 0xFFFFFFFF
+    while b & mask != 0:
+        carry = (a & b) << 1
+        a = (a ^ b)
+        b = carry
+    return a if b > 0 else (a & mask)</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// 1. Number of 1 Bits (Brian Kernighan)
+function hammingWeight(n: number): number {
+  let count = 0;
+  while (n !== 0) {
+    n = n & (n - 1);
+    count++;
+  }
+  return count;
+}
+
+// 2. Add Two Numbers Without '+' (LC 371)
+function getSum(a: number, b: number): number {
+  while (b !== 0) {
+    const carry = (a & b) << 1;
+    a = a ^ b;
+    b = carry;
+  }
+  return a;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// 1. Number of 1 Bits (Brian Kernighan)
+public int hammingWeight(int n) {
+    int count = 0;
+    while (n != 0) {
+        n &= (n - 1);
+        count++;
+    }
+    return count;
+}
+
+// 2. Add Two Numbers Without '+' (LC 371)
+public int getSum(int a, int b) {
+    while (b != 0) {
+        int carry = (a & b) << 1;
+        a = a ^ b;
+        b = carry;
+    }
+    return a;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="intervals-and-scheduling.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Intervals &amp; Scheduling</span>
+      </a>
+      <a href="trie-and-prefix-tree.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-title">Trie &amp; Prefix Tree</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

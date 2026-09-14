@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Technical Interview Corner Cases &amp; Edge Cases Checklist &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Interview Corner Cases</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Interview Preparation</div>
+      <h1>Technical Interview Corner Cases &amp; Edge Cases Checklist</h1>
+      <p class="subtitle">A battle-tested pre-flight verification checklist for high-stakes technical coding interviews, derived directly from Tech Interview Handbook standards.</p>
+    </section>
+
+    <!-- 1. Universal Pre-Flight Protocol -->
+    <h2>1. Universal Pre-Flight Verification Protocol</h2>
+    <div class="callout">
+      <h4>Before Writing Any Code, Clarify With Your Interviewer:</h4>
+      <ul>
+        <li><strong>Input Cardinality:</strong> Can the input be <code>null</code>, <code>None</code>, empty (<code>[]</code> or <code>""</code>), or contain only 1 element?</li>
+        <li><strong>Value Ranges:</strong> Are numbers strictly positive, or can they be zero or negative? Can intermediate calculations overflow 32-bit signed integers ($2^{31}-1$)?</li>
+        <li><strong>Duplicates:</strong> Can the sequence contain duplicate values? Does the problem require returning unique combinations or all permutations?</li>
+        <li><strong>Ordering:</strong> Is the input guaranteed to be sorted? Can we mutate the input array in-place, or is it read-only?</li>
+        <li><strong>Memory Constraints:</strong> Is an $O(N)$ auxiliary hash map acceptable, or is $O(1)$ in-place space strictly required?</li>
+      </ul>
+    </div>
+
+    <!-- 2. Corner Cases by Data Structure -->
+    <h2>2. Data Structure-Specific Corner Cases Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data Structure</th>
+          <th>Critical Edge Cases to Test</th>
+          <th>Defensive Implementation Strategy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Arrays &amp; Strings</strong></td>
+          <td>
+            &bull; Empty collection (<code>len == 0</code>)<br>
+            &bull; Single element (<code>len == 1</code>)<br>
+            &bull; All elements are identical (e.g. <code>[1, 1, 1]</code>)<br>
+            &bull; Negative numbers / zero values<br>
+            &bull; String with non-alphanumeric punctuation
+          </td>
+          <td>
+            &bull; Guard clause: <code>if not nums: return ...</code><br>
+            &bull; Use <code>mid = left + (right - left) // 2</code> for integer safety<br>
+            &bull; For strings, clarify character set: ASCII (26 or 128 int array) vs Unicode
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Two Pointers &amp; Sliding Window</strong></td>
+          <td>
+            &bull; Window size $k &gt; N$ (target length exceeds array)<br>
+            &bull; No valid window exists in the string<br>
+            &bull; Every element in the array satisfies the condition<br>
+            &bull; Left and right pointers cross prematurely
+          </td>
+          <td>
+            &bull; Verify loop invariant: <code>left &lt; right</code> (distinct pairs) vs <code>left &le; right</code><br>
+            &bull; Window length formula is always <code>right - left + 1</code><br>
+            &bull; Check whether <code>max_len</code> remains 0 or initial state
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Linked Lists</strong></td>
+          <td>
+            &bull; Empty list (<code>head == null</code>)<br>
+            &bull; Single node list<br>
+            &bull; Two-node list<br>
+            &bull; Cycle present in list<br>
+            &bull; Deleting or replacing the head node
+          </td>
+          <td>
+            &bull; <strong>Always use a dummy/sentinel node:</strong> <code>dummy.next = head</code><br>
+            &bull; Fast pointer null check: <code>while fast and fast.next:</code><br>
+            &bull; Disconnect traversed nodes when splicing or splitting lists
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Binary Search</strong></td>
+          <td>
+            &bull; Target is strictly smaller than array minimum<br>
+            &bull; Target is strictly larger than array maximum<br>
+            &bull; Target does not exist in array<br>
+            &bull; Rotated sorted array with identical boundaries (<code>nums[l] == nums[mid]</code>)
+          </td>
+          <td>
+            &bull; Exact Match: <code>while left &le; right:</code><br>
+            &bull; Boundary Match: <code>while left &lt; right:</code> terminates with <code>left == right</code><br>
+            &bull; Handle boundary check before returning: <code>if left &lt; n and nums[left] == target:</code>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Binary Trees &amp; BST</strong></td>
+          <td>
+            &bull; Empty tree (<code>root == null</code>)<br>
+            &bull; Single root node with no children<br>
+            &bull; Skewed tree (linked list shape, $O(N)$ depth)<br>
+            &bull; Subtree satisfies local parent condition but violates global ancestor bounds
+          </td>
+          <td>
+            &bull; Pass open range intervals $(-\infty, +\infty)$ down recursion<br>
+            &bull; Guard against call stack overflow on skewed trees<br>
+            &bull; Snapshot FIFO queue size: <code>level_size = len(queue)</code> at level start
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Graphs &amp; Topo Sort</strong></td>
+          <td>
+            &bull; Disconnected components (forests)<br>
+            &bull; Graph with isolated vertices (0 edges)<br>
+            &bull; Cycles in directed graph (deadlock)<br>
+            &bull; Self-loops (edge from $u \to u$)
+          </td>
+          <td>
+            &bull; Loop through all vertices $0 \dots V-1$ to handle disconnected clusters<br>
+            &bull; Kahn's cycle check: <code>if completed_count &lt; V: cycle_detected</code><br>
+            &bull; Use 3-color DFS or visited set to prevent infinite loop recursion
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Dynamic Programming</strong></td>
+          <td>
+            &bull; Target amount is 0 (base case)<br>
+            &bull; Target amount is impossible to form (unreachable state)<br>
+            &bull; Off-by-one table sizing (allocating <code>n</code> instead of <code>n + 1</code>)<br>
+            &bull; Negative weights in knapsack
+          </td>
+          <td>
+            &bull; Initialize base cases explicitly: <code>dp[0] = 0</code><br>
+            &bull; Fill table with infinity: <code>amount + 1</code> (avoids integer overflow)<br>
+            &bull; Scan 0/1 knapsack 1D table in reverse order: <code>range(target, x - 1, -1)</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Final 60-Second Walkthrough -->
+    <h2>3. The 60-Second Final Code Walkthrough</h2>
+    <div class="callout">
+      <h4>Before Saying "I'm Done":</h4>
+      <ol>
+        <li><strong>Dry-run an edge case:</strong> Walk through your code with an empty input (<code>[]</code>) or single element (<code>[1]</code>). Did it crash with an <code>IndexOutOfBounds</code> or <code>NullPointerException</code>?</li>
+        <li><strong>Check loop bounds:</strong> Are indices 0-indexed or 1-indexed? Does the loop terminate or can it run infinitely?</li>
+        <li><strong>Confirm Return Type:</strong> Does the problem ask for the <em>value</em>, the <em>index</em>, the <em>length</em>, or a <em>boolean</em>?</li>
+        <li><strong>State Complexity:</strong> Confidently state time and auxiliary space complexity in Big-O, differentiating between heap memory and recursion stack frames.</li>
+      </ol>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="backtracking-and-state-pruning.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Backtracking &amp; State Pruning</span>
+      </a>
+      <a href="../index.html" class="nav-card">
+        <span class="nav-card-sub">Return to Syllabus &rarr;</span>
+        <span class="nav-card-title">Course Index</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

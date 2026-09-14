@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Binary Search &amp; Answer Space Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Binary Search &amp; Answer Space</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Binary Search &amp; Answer Space Cheatsheet</h1>
+      <p class="subtitle">Overflow-proof midpoint calculation, the 2 canonical loop templates, rotated array partition logic, and monotonic answer-space reductions.</p>
+    </section>
+
+    <!-- 1. The 2 Canonical Templates -->
+    <h2>1. The Two Canonical Binary Search Templates</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Template Type</th>
+          <th>Loop Condition</th>
+          <th>Left Update</th>
+          <th>Right Update</th>
+          <th>Termination &amp; Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Template 1: Exact Match</strong></td>
+          <td><code>left &le; right</code></td>
+          <td><code>left = mid + 1</code></td>
+          <td><code>right = mid - 1</code></td>
+          <td>Terminates when <code>left &gt; right</code>. Returns <code>mid</code> on exact match, else <code>-1</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Template 2: Boundary / Insertion (Bisect Left)</strong></td>
+          <td><code>left &lt; right</code></td>
+          <td><code>left = mid + 1</code></td>
+          <td><code>right = mid</code></td>
+          <td>Terminates with <code>left == right</code>. Finds first element satisfying condition (First Bad Version LC 278).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Midpoint Arithmetic & Rotated Arrays -->
+    <h2>2. Midpoint Arithmetic &amp; Rotated Sorted Arrays</h2>
+    <div class="callout">
+      <h4>Preventing 32-Bit Signed Integer Overflow</h4>
+      <p>
+        In Java, C++, and fixed-width languages, naive addition <code>(left + right) / 2</code> overflows if <code>left + right &gt; 2^31 - 1</code>.
+        <br>
+        <strong>Canonical Safe Formulation:</strong> <code>mid = left + ((right - left) / 2)</code>
+      </p>
+      <h4>Rotated Sorted Array Decision Rule (LC 33)</h4>
+      <p>
+        In a circularly shifted sorted array with no duplicates, at least one half is always strictly sorted:
+      </p>
+      <ul>
+        <li>If <code>nums[mid] &ge; nums[left]</code>: <strong>Left half is sorted</strong>. If <code>nums[left] &le; target &lt; nums[mid]</code>, search left (<code>right = mid - 1</code>); else search right (<code>left = mid + 1</code>).</li>
+        <li>Otherwise: <strong>Right half is sorted</strong>. If <code>nums[mid] &lt; target &le; nums[right]</code>, search right (<code>left = mid + 1</code>); else search left (<code>right = mid - 1</code>).</li>
+      </ul>
+    </div>
+
+    <!-- 3. Binary Search on Answer Space -->
+    <h2>3. Binary Search on Answer Space Framework</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Objective</th>
+          <th>Concrete Example (Koko Eating Bananas LC 875)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Define Monotonic Predicate</strong></td>
+          <td>$f(x) \to \{\text{False}, \dots, \text{False}, \text{True}, \dots, \text{True}\}$</td>
+          <td>$f(k) = \text{hours}(k) \le H$. If speed $k$ suffices, all $k' &gt; k$ also suffice.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Identify Bounds</strong></td>
+          <td>Determine minimum possible and maximum possible values $[low, high]$</td>
+          <td>$low = 1$ (minimum speed); $high = \max(\text{piles})$ (eat whole pile in 1 hour).</td>
+        </tr>
+        <tr>
+          <td><strong>3. Converge on Boundary</strong></td>
+          <td>Use Template 2 (<code>left &lt; right</code>) to pinpoint minimum valid parameter</td>
+          <td>If $f(mid)$ is True: <code>right = mid</code> (try smaller); else: <code>left = mid + 1</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Production Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Template: Search in Rotated Sorted Array (LC 33)
+def search_rotated(nums: list[int], target: int) -> int:
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = left + ((right - left) // 2)
+        if nums[mid] == target:
+            return mid
+
+        # Left half is sorted
+        if nums[left] <= nums[mid]:
+            if nums[left] <= target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        # Right half is sorted
+        else:
+            if nums[mid] < target <= nums[right]:
+                left = mid + 1
+            else:
+                right = mid - 1
+    return -1</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Template: Search in Rotated Sorted Array (LC 33)
+function searchRotated(nums: number[], target: number): number {
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left <= right) {
+    const mid = left + Math.floor((right - left) / 2);
+    if (nums[mid] === target) return mid;
+
+    // Left half is sorted
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+    // Right half is sorted
+    else {
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+  }
+
+  return -1;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Template: Search in Rotated Sorted Array (LC 33)
+public int searchRotated(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+
+    while (left <= right) {
+        int mid = left + ((right - left) / 2); // Prevents integer overflow
+        if (nums[mid] == target) return mid;
+
+        // Left half is sorted
+        if (nums[left] <= nums[mid]) {
+            if (nums[left] <= target && target < nums[mid]) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        // Right half is sorted
+        else {
+            if (nums[mid] < target && target <= nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+    }
+
+    return -1;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="linked-lists-stacks-and-monotonic.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Linked Lists, Stacks &amp; Monotonic</span>
+      </a>
+      <a href="heaps-and-top-k-patterns.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Heaps &amp; Top-K Patterns</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

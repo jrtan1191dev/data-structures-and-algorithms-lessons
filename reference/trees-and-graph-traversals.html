@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Tree &amp; Graph Traversals Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Tree &amp; Graph Traversals</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures &amp; Algorithms</div>
+      <h1>Tree &amp; Graph Traversals Cheatsheet</h1>
+      <p class="subtitle">Recursive call stacks, BFS queue level-batching, Kahn's in-degree topological sort, and Disjoint Set Union (DSU).</p>
+    </section>
+
+    <!-- 1. Tree Traversal Taxonomy -->
+    <h2>1. Tree Traversal Taxonomy</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Order / Traversal</th>
+          <th>Node Sequence</th>
+          <th>Primary Use Case &amp; Invariant</th>
+          <th>Data Structure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pre-Order (DFS)</strong></td>
+          <td>Root &rarr; Left &rarr; Right</td>
+          <td>Tree cloning, prefix serialization, root-first decisions</td>
+          <td>Call Stack / LIFO Stack</td>
+        </tr>
+        <tr>
+          <td><strong>In-Order (DFS)</strong></td>
+          <td>Left &rarr; Root &rarr; Right</td>
+          <td>Monotonically ascending order in Binary Search Trees</td>
+          <td>Call Stack / LIFO Stack</td>
+        </tr>
+        <tr>
+          <td><strong>Post-Order (DFS)</strong></td>
+          <td>Left &rarr; Right &rarr; Root</td>
+          <td>Bottom-up aggregation (height, diameter, subtree sums)</td>
+          <td>Call Stack / LIFO Stack</td>
+        </tr>
+        <tr>
+          <td><strong>Level-Order (BFS)</strong></td>
+          <td>Level by level (top to bottom)</td>
+          <td>Shortest path in unweighted trees, horizontal layer snapshots</td>
+          <td>FIFO Queue (batch by size)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Graph Algorithms Complexity Crosswalk -->
+    <h2>2. Graph Algorithms Complexity Crosswalk</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Graph Type</th>
+          <th>Time Complexity</th>
+          <th>Space Complexity</th>
+          <th>Core Mechanism</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Multi-Source BFS</strong></td>
+          <td>Unweighted Grid / Graph</td>
+          <td><code>O(V + E)</code></td>
+          <td><code>O(V)</code></td>
+          <td>Seed queue with all sources at $t=0$; uniform wavefront expansion</td>
+        </tr>
+        <tr>
+          <td><strong>Kahn's Algorithm</strong></td>
+          <td>Directed Graph (DAG)</td>
+          <td><code>O(V + E)</code></td>
+          <td><code>O(V)</code></td>
+          <td>FIFO queue of nodes with <code>in_degree == 0</code>; cycle if completed $&lt; V$</td>
+        </tr>
+        <tr>
+          <td><strong>3-Color DFS</strong></td>
+          <td>Directed Graph</td>
+          <td><code>O(V + E)</code></td>
+          <td><code>O(V)</code></td>
+          <td>White (0: unvisited), Gray (1: in stack), Black (2: done); Gray = cycle</td>
+        </tr>
+        <tr>
+          <td><strong>Disjoint Set Union (DSU)</strong></td>
+          <td>Undirected Graph</td>
+          <td><code>O(E &times; &alpha;(V))</code></td>
+          <td><code>O(V)</code></td>
+          <td>Path compression + Union by rank; dynamic connectivity in nearly $O(1)$</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Reference Implementation Templates -->
+    <h2>3. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Template 1: Kahn's Topological Sort
+from collections import deque
+
+def topological_sort(v: int, edges: list[list[int]]) -> list[int]:
+    adj = [[] for _ in range(v)]
+    in_degree = [0] * v
+    for dest, src in edges:
+        adj[src].append(dest)
+        in_degree[dest] += 1
+    
+    queue = deque([i for i in range(v) if in_degree[i] == 0])
+    order = []
+    while queue:
+        u = queue.popleft()
+        order.append(u)
+        for nxt in adj[u]:
+            in_degree[nxt] -= 1
+            if in_degree[nxt] == 0:
+                queue.append(nxt)
+    return order if len(order) == v else []
+
+# Template 2: Disjoint Set Union (DSU)
+class DSU:
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x: int) -> int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x]) # Path compression
+        return self.parent[x]
+
+    def union(self, x: int, y: int) -> bool:
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False # Cycle detected
+        if self.rank[rx] < self.rank[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]:
+            self.rank[rx] += 1
+        return True</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Template 1: Kahn's Topological Sort
+function topologicalSort(v: number, edges: number[][]): number[] {
+  const adj: number[][] = Array.from({ length: v }, () => []);
+  const inDegree = new Array(v).fill(0);
+  for (const [dest, src] of edges) {
+    adj[src].push(dest);
+    inDegree[dest]++;
+  }
+
+  const queue: number[] = [];
+  for (let i = 0; i < v; i++) {
+    if (inDegree[i] === 0) queue.push(i);
+  }
+
+  const order: number[] = [];
+  let head = 0;
+  while (head < queue.length) {
+    const u = queue[head++];
+    order.push(u);
+    for (const nxt of adj[u]) {
+      if (--inDegree[nxt] === 0) queue.push(nxt);
+    }
+  }
+  return order.length === v ? order : [];
+}
+
+// Template 2: Disjoint Set Union (DSU)
+class DSU {
+  private parent: Int32Array;
+  private rank: Int32Array;
+
+  constructor(n: number) {
+    this.parent = new Int32Array(n);
+    this.rank = new Int32Array(n);
+    for (let i = 0; i < n; i++) this.parent[i] = i;
+  }
+
+  find(x: number): number {
+    if (this.parent[x] !== x) {
+      this.parent[x] = this.find(this.parent[x]); // Path compression
+    }
+    return this.parent[x];
+  }
+
+  union(x: number, y: number): boolean {
+    let rx = this.find(x);
+    let ry = this.find(y);
+    if (rx === ry) return false;
+    if (this.rank[rx] < this.rank[ry]) {
+      const temp = rx; rx = ry; ry = temp;
+    }
+    this.parent[ry] = rx;
+    if (this.rank[rx] === this.rank[ry]) this.rank[rx]++;
+    return true;
+  }
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Template 1: Kahn's Topological Sort
+import java.util.*;
+
+public int[] topologicalSort(int v, int[][] edges) {
+    List&lt;List&lt;Integer&gt;&gt; adj = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; v; i++) adj.add(new ArrayList&lt;&gt;());
+    int[] inDegree = new int[v];
+
+    for (int[] edge : edges) {
+        adj.get(edge[1]).add(edge[0]);
+        inDegree[edge[0]]++;
+    }
+
+    Queue&lt;Integer&gt; queue = new ArrayDeque&lt;&gt;();
+    for (int i = 0; i &lt; v; i++) {
+        if (inDegree[i] == 0) queue.offer(i);
+    }
+
+    int[] order = new int[v];
+    int idx = 0;
+    while (!queue.isEmpty()) {
+        int u = queue.poll();
+        order[idx++] = u;
+        for (int nxt : adj.get(u)) {
+            if (--inDegree[nxt] == 0) queue.offer(nxt);
+        }
+    }
+    return idx == v ? order : new int[]{};
+}
+
+// Template 2: Disjoint Set Union (DSU)
+public static class DSU {
+    int[] parent;
+    int[] rank;
+
+    public DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i &lt; n; i++) parent[i] = i;
+    }
+
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+
+    public boolean union(int x, int y) {
+        int rx = find(x), ry = find(y);
+        if (rx == ry) return false;
+        if (rank[rx] &lt; rank[ry]) {
+            int t = rx; rx = ry; ry = t;
+        }
+        parent[ry] = rx;
+        if (rank[rx] == rank[ry]) rank[rx]++;
+        return true;
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="two-pointers-and-sliding-window.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Two Pointers &amp; Sliding Window</span>
+      </a>
+      <a href="dynamic-programming-framework.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Dynamic Programming Framework</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Linked Lists, Stacks &amp; Monotonic Sequences Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Linked Lists, Stacks &amp; Monotonic</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Data Structures</div>
+      <h1>Linked Lists, Stacks &amp; Monotonic Sequences Cheatsheet</h1>
+      <p class="subtitle">Sentinel node patterns, in-place pointer reversal, ring buffer arithmetic, and monotonic stack/queue templates for linear-time extreme extraction.</p>
+    </section>
+
+    <!-- 1. Linked List Patterns & Invariants -->
+    <h2>1. Linked List Patterns &amp; Pointer Invariants</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Technique</th>
+          <th>Pointer Mechanism</th>
+          <th>Invariant / Key Rule</th>
+          <th>Canonical Problem</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dummy (Sentinel) Node</strong></td>
+          <td><code>dummy = ListNode(0); dummy.next = head</code></td>
+          <td>Eliminates conditional checks for empty lists or head node removals. Return <code>dummy.next</code>.</td>
+          <td>Merge Two Sorted Lists (LC 21), Remove Nth Node (LC 19)</td>
+        </tr>
+        <tr>
+          <td><strong>In-Place 3-Pointer Reversal</strong></td>
+          <td><code>prev = null; curr = head; next_temp</code></td>
+          <td>Preserve <code>curr.next</code> before re-pointing backward: <code>curr.next = prev</code>.</td>
+          <td>Reverse Linked List (LC 206), Palindrome Linked List (LC 234)</td>
+        </tr>
+        <tr>
+          <td><strong>Fast &amp; Slow Pointers</strong></td>
+          <td><code>slow = slow.next; fast = fast.next.next</code></td>
+          <td>When <code>fast</code> reaches end, <code>slow</code> is exactly at the midpoint $\lfloor N/2 \rfloor$.</td>
+          <td>Middle of the Linked List (LC 876), Reorder List (LC 143)</td>
+        </tr>
+        <tr>
+          <td><strong>DLL + Hash Map Synergy</strong></td>
+          <td>Hash map points directly to doubly linked list nodes</td>
+          <td>$O(1)$ key lookup via map; $O(1)$ node eviction and splice to MRU head via DLL pointers.</td>
+          <td>LRU Cache (LC 146)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. Stacks, Queues & Ring Buffers -->
+    <h2>2. LIFO / FIFO &amp; Circular Ring Buffer Arithmetic</h2>
+    <div class="callout">
+      <h4>Circular Array Ring Buffer Formula</h4>
+      <p>
+        Fixed-size arrays simulate FIFO queues without $O(N)$ element shifts by maintaining two modular pointers:
+        <br>
+        <code>Enqueue: arr[tail] = x; tail = (tail + 1) % capacity; size++</code>
+        <br>
+        <code>Dequeue: val = arr[head]; head = (head + 1) % capacity; size--</code>
+        <br>
+        <strong>Condition:</strong> Full when <code>size == capacity</code>; Empty when <code>size == 0</code>.
+      </p>
+    </div>
+
+    <!-- 3. Monotonic Stack & Monotonic Queue Templates -->
+    <h2>3. Monotonic Invariant Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Structure</th>
+          <th>Monotonic Property</th>
+          <th>Eviction Condition</th>
+          <th>Canonical Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Monotonic Decreasing Stack</strong></td>
+          <td>Values strictly decrease from bottom to top</td>
+          <td>Pop while <code>curr &gt; stack[-1]</code></td>
+          <td>Next Greater Element (LC 739 Daily Temperatures)</td>
+        </tr>
+        <tr>
+          <td><strong>Monotonic Increasing Stack</strong></td>
+          <td>Values strictly increase from bottom to top</td>
+          <td>Pop while <code>curr &lt; stack[-1]</code></td>
+          <td>Next Smaller Element, Largest Rectangle in Histogram (LC 84)</td>
+        </tr>
+        <tr>
+          <td><strong>Monotonic Deque</strong></td>
+          <td>Indices strictly increasing; values strictly decreasing</td>
+          <td>Pop back while <code>curr &ge; deque[-1]</code>; pop front if out of window</td>
+          <td>Sliding Window Maximum (LC 239)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Production Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># 1. In-Place Linked List Reversal
+def reverse_list(head):
+    prev, curr = None, head
+    while curr:
+        nxt = curr.next
+        curr.next = prev
+        prev = curr
+        curr = nxt
+    return prev
+
+# 2. Monotonic Stack: Next Greater Element (LC 739)
+def daily_temperatures(temperatures: list[int]) -> list[int]:
+    n = len(temperatures)
+    ans = [0] * n
+    stack = [] # Stores indices
+
+    for i, t in enumerate(temperatures):
+        while stack and temperatures[stack[-1]] < t:
+            prev_idx = stack.pop()
+            ans[prev_idx] = i - prev_idx
+        stack.append(i)
+
+    return ans</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// 1. In-Place Linked List Reversal
+function reverseList(head: ListNode | null): ListNode | null {
+  let prev: ListNode | null = null;
+  let curr = head;
+  while (curr !== null) {
+    const nextTemp = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = nextTemp;
+  }
+  return prev;
+}
+
+// 2. Monotonic Stack: Next Greater Element (LC 739)
+function dailyTemperatures(temperatures: number[]): number[] {
+  const n = temperatures.length;
+  const ans = new Array(n).fill(0);
+  const stack: number[] = []; // Stores indices
+
+  for (let i = 0; i < n; i++) {
+    while (stack.length > 0 && temperatures[stack[stack.length - 1]] < temperatures[i]) {
+      const prevIdx = stack.pop()!;
+      ans[prevIdx] = i - prevIdx;
+    }
+    stack.push(i);
+  }
+
+  return ans;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// 1. In-Place Linked List Reversal
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+    while (curr != null) {
+        ListNode nextTemp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+    return prev;
+}
+
+// 2. Monotonic Stack: Next Greater Element (LC 739)
+import java.util.ArrayDeque;
+
+public int[] dailyTemperatures(int[] temperatures) {
+    int n = temperatures.length;
+    int[] ans = new int[n];
+    ArrayDeque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;(); // Stores indices
+
+    for (int i = 0; i < n; i++) {
+        while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
+            int prevIdx = stack.pop();
+            ans[prevIdx] = i - prevIdx;
+        }
+        stack.push(i);
+    }
+
+    return ans;
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="hash-tables-and-prefix-sums.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Hash Tables &amp; Prefix Sums</span>
+      </a>
+      <a href="binary-search-and-answer-space.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Binary Search &amp; Answer Space</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>

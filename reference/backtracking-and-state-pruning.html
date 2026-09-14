@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Backtracking &amp; State Pruning Cheatsheet &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-accent">Cheatsheet</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Backtracking &amp; State Pruning</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Algorithms</div>
+      <h1>Backtracking &amp; State Pruning Cheatsheet</h1>
+      <p class="subtitle">Canonical Choose &rarr; Explore &rarr; Un-choose execution template, combinatorial branching models, branch-and-bound pruning, and in-place grid mutation rollbacks.</p>
+    </section>
+
+    <!-- 1. State Space Decision Archetypes -->
+    <h2>1. The 3 Combinatorial Archetypes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Problem Class</th>
+          <th>State Space Size</th>
+          <th>Branching Loop Setup</th>
+          <th>Duplicate Prevention Rule</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Subsets (Powerset)</strong></td>
+          <td>$2^N$ leaves</td>
+          <td><code>for i in range(start, n):</code></td>
+          <td>Pass <code>i + 1</code> forward to prevent visiting earlier elements.</td>
+        </tr>
+        <tr>
+          <td><strong>Combinations (K items)</strong></td>
+          <td>$\binom{N}{K}$ leaves</td>
+          <td><code>for i in range(start, n):</code></td>
+          <td>Prune early if remaining elements cannot fill quota: <code>n - i &lt; k - len(path)</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Permutations</strong></td>
+          <td>$N!$ leaves</td>
+          <td><code>for i in range(0, n):</code></td>
+          <td>Track used elements via <code>boolean[] used</code> mask or swap elements in-place.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. The Canonical Execution Paradigm -->
+    <h2>2. The Choose &rarr; Explore &rarr; Un-choose Framework</h2>
+    <div class="callout">
+      <h4>Mutable Path Buffer Protocol</h4>
+      <pre><code>function backtrack(startState):
+    if isGoal(state):
+        results.add(clone(path))    // Deep copy snapshot
+        return
+
+    for candidate in getCandidates(startState):
+        if not isValid(candidate):
+            continue                // Pruning / Branch-and-bound
+
+        // 1. CHOOSE: Mutate state
+        path.push(candidate)
+
+        // 2. EXPLORE: Recurse deeper
+        backtrack(nextState)
+
+        // 3. UN-CHOOSE: Rollback state (Backtrack)
+        path.pop()</code></pre>
+    </div>
+
+    <!-- 3. Pruning & Memory Optimizations -->
+    <h2>3. Pruning &amp; Memory Optimizations</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Optimization Strategy</th>
+          <th>Implementation</th>
+          <th>Complexity Benefit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sorted Boundary Pruning</strong></td>
+          <td>Sort candidates ascendingly; if <code>candidate &gt; target</code>, <code>break</code> immediately instead of <code>continue</code>.</td>
+          <td>Prunes massive exponential subtrees in Combination Sum (LC 39).</td>
+        </tr>
+        <tr>
+          <td><strong>Sibling Duplicate Elimination</strong></td>
+          <td>If <code>nums[i] == nums[i-1]</code> and <code>i &gt; start</code>, <code>continue</code>.</td>
+          <td>Prevents duplicate branches when input contains repeated values (LC 40, LC 90).</td>
+        </tr>
+        <tr>
+          <td><strong>In-Place Grid Sentinel Masking</strong></td>
+          <td>Overwrite grid cell byte with <code>'#'</code> before exploring neighbors; restore original byte on return.</td>
+          <td>Achieves $O(1)$ auxiliary space without allocating an $O(R \times C)$ visited boolean array (LC 79).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 4. Production Reference Templates -->
+    <h2>4. Production Templates (Python &bull; TypeScript &bull; Java)</h2>
+
+    <div class="code-tabs">
+      <div class="tab-list" role="tablist">
+        <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+        <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+        <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+      </div>
+
+      <!-- Python -->
+      <div class="tab-content active" data-lang="python">
+<pre><code># Combination Sum with Sort Pruning (LC 39)
+def combination_sum(candidates: list[int], target: int) -> list[list[int]]:
+    candidates.sort() # Upfront sort is required for branch break
+    results, path = [], []
+
+    def backtrack(start: int, remain: int):
+        if remain == 0:
+            results.append(path[:])
+            return
+
+        for i in range(start, len(candidates)):
+            x = candidates[i]
+            if x > remain:
+                break # Prunes all subsequent larger candidates
+
+            path.append(x)
+            backtrack(i, remain - x) # Reuse allowed: stay at index i
+            path.pop()
+
+    backtrack(0, target)
+    return results</code></pre>
+      </div>
+
+      <!-- TypeScript -->
+      <div class="tab-content" data-lang="ts">
+<pre><code>// Combination Sum with Sort Pruning (LC 39)
+function combinationSum(candidates: number[], target: number): number[][] {
+  candidates.sort((a, b) => a - b);
+  const results: number[][] = [];
+  const path: number[] = [];
+
+  function backtrack(start: number, remain: number): void {
+    if (remain === 0) {
+      results.push([...path]);
+      return;
+    }
+
+    for (let i = start; i < candidates.length; i++) {
+      const x = candidates[i];
+      if (x > remain) break; // Prunes all subsequent candidates
+
+      path.push(x);
+      backtrack(i, remain - x); // Reuse allowed
+      path.pop();
+    }
+  }
+
+  backtrack(0, target);
+  return results;
+}</code></pre>
+      </div>
+
+      <!-- Java -->
+      <div class="tab-content" data-lang="java">
+<pre><code>// Combination Sum with Sort Pruning (LC 39)
+import java.util.*;
+
+public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] candidates, int target) {
+    Arrays.sort(candidates);
+    List&lt;List&lt;Integer&gt;&gt; results = new ArrayList&lt;&gt;();
+    backtrack(candidates, target, 0, new ArrayList&lt;&gt;(), results);
+    return results;
+}
+
+private void backtrack(int[] candidates, int remain, int start, List&lt;Integer&gt; path, List&lt;List&lt;Integer&gt;&gt; results) {
+    if (remain == 0) {
+        results.add(new ArrayList&lt;&gt;(path));
+        return;
+    }
+
+    for (int i = start; i &lt; candidates.length; i++) {
+        if (candidates[i] &gt; remain) {
+            break; // Prunes all subsequent candidates
+        }
+
+        path.add(candidates[i]);
+        backtrack(candidates, remain - candidates[i], i, path, results);
+        path.remove(path.size() - 1);
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <div class="lesson-footer-nav">
+      <a href="heaps-and-top-k-patterns.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Heaps &amp; Top-K Patterns</span>
+      </a>
+      <a href="interview-corner-cases-checklist.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-title">Interview Corner Cases Checklist</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>
