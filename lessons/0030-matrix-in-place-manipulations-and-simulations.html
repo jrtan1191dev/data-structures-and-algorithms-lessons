@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0030: Matrix In-Place Manipulations &amp; Simulations &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 17: Matrix Simulation</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0030</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0030</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 169 Core</span>
+      </div>
+      <h1>Matrix In-Place Manipulations &amp; Simulations</h1>
+      <p class="subtitle">
+        Row-major hardware stride effects, 4-boundary inward coordinate contraction, in-place matrix transposition, and row/column zero-marker compression.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Row-Major Layout &amp; Cache Line Strides</h2>
+      <p>
+        In systems memory, 2D arrays are stored sequentially in <strong>row-major order</strong>. Memory offset for coordinate $(r, c)$ in an $R \times C$ matrix is computed directly as:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Row-Major Memory Offset</div>
+        <pre><code>Address(r, c) = BaseAddress + (r * C + c) * SizeOfElement</code></pre>
+      </div>
+      <p>
+        Scanning left-to-right across row $r$ streams through sequential memory addresses, exploiting hardware CPU cache prefetching. In contrast, scanning top-to-bottom down column $c$ jumps by $C \times \text{SizeOfElement}$ bytes each step, resulting in continuous cache misses on large matrices.
+      </p>
+
+      <h3>The 4-Boundary Inward Contraction Model (LC 54 Spiral Matrix)</h3>
+      <p>
+        To traverse a grid in a spiral without allocating visited tables, initialize four boundary coordinates: <code>top = 0</code>, <code>bottom = R - 1</code>, <code>left = 0</code>, <code>right = C - 1</code>.
+      </p>
+      <ol>
+        <li>Traverse from <code>left &rarr; right</code> along <code>top</code> row. Increment <code>top++</code>.</li>
+        <li>Traverse from <code>top &rarr; bottom</code> down <code>right</code> column. Decrement <code>right--</code>.</li>
+        <li>If <code>top &le; bottom</code>: traverse from <code>right &rarr; left</code> along <code>bottom</code> row. Decrement <code>bottom--</code>.</li>
+        <li>If <code>left &le; right</code>: traverse from <code>bottom &rarr; top</code> up <code>left</code> column. Increment <code>left++</code>.</li>
+      </ol>
+
+      <h3>In-Place 90&deg; Rotation Without Auxiliary Memory (LC 48)</h3>
+      <p>
+        A 90&deg; clockwise matrix rotation can be decomposed into two fundamental geometric transformations that operate entirely in-place:
+      </p>
+      <div class="code-frame">
+        <div class="code-header">Two-Step Geometric Decomposition</div>
+        <pre><code>Step 1: Transpose Matrix (swap along main diagonal)
+matrix[i][j] <-> matrix[j][i]  (for all i < j)
+
+Step 2: Horizontally Reflect (reverse every row)
+matrix[i][left] <-> matrix[i][right]  (converging two pointers per row)
+
+Result: Perfect 90-degree clockwise rotation in O(N^2) time and O(1) auxiliary RAM!</code></pre>
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 54: Spiral Matrix</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>4-Boundary Contraction</td>
+              <td>Maintain <code>top, bottom, left, right</code> bounds. Contract boundary after each side traversal; guard reverse sweeps against single-line overlaps.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 48: Rotate Image</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Transpose + Horizontal Reverse</td>
+              <td>Decompose 90-degree rotation into main-diagonal transposition followed by row reversal, achieving $O(1)$ space without creating a copy matrix.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 73: Set Matrix Zeroes</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>First Row/Col State Flagging</td>
+              <td>Use the matrix's own 0th row and 0th column as zero-markers instead of allocating $O(M + N)$ boolean arrays, compressing auxiliary space to $O(1)$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 54: Spiral Matrix ($O(R \cdot C)$ Time, $O(1)$ Auxiliary Space)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Inward Boundary Contraction</div>
+            <pre><code>from typing import List
+
+def spiralOrder(matrix: List[List[int]]) -> List[int]:
+    if not matrix:
+        return []
+
+    top, bottom = 0, len(matrix) - 1
+    left, right = 0, len(matrix[0]) - 1
+    result = []
+
+    while top <= bottom and left <= right:
+        # 1. Traverse top row
+        for c in range(left, right + 1):
+            result.append(matrix[top][c])
+        top += 1
+
+        # 2. Traverse right column
+        for r in range(top, bottom + 1):
+            result.append(matrix[r][right])
+        right -= 1
+
+        # 3. Traverse bottom row (if valid)
+        if top <= bottom:
+            for c in range(right, left - 1, -1):
+                result.append(matrix[bottom][c])
+            bottom -= 1
+
+        # 4. Traverse left column (if valid)
+        if left <= right:
+            for r in range(bottom, top - 1, -1):
+                result.append(matrix[r][left])
+            left += 1
+
+    return result</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Fast Array Boundary Contraction</div>
+            <pre><code>function spiralOrder(matrix: number[][]): number[] {
+  if (matrix.length === 0) return [];
+
+  let top = 0;
+  let bottom = matrix.length - 1;
+  let left = 0;
+  let right = matrix[0].length - 1;
+  const result: number[] = [];
+
+  while (top <= bottom && left <= right) {
+    // 1. Top row
+    for (let c = left; c <= right; c++) {
+      result.push(matrix[top][c]);
+    }
+    top++;
+
+    // 2. Right column
+    for (let r = top; r <= bottom; r++) {
+      result.push(matrix[r][right]);
+    }
+    right--;
+
+    // 3. Bottom row (guarded)
+    if (top <= bottom) {
+      for (let c = right; c >= left; c--) {
+        result.push(matrix[bottom][c]);
+      }
+      bottom--;
+    }
+
+    // 4. Left column (guarded)
+    if (left <= right) {
+      for (let r = bottom; r >= top; r--) {
+        result.push(matrix[r][left]);
+      }
+      left++;
+    }
+  }
+
+  return result;
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: ArrayList Inward Contraction</div>
+            <pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        if (matrix == null || matrix.length == 0) return result;
+
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+
+        while (top <= bottom && left <= right) {
+            // 1. Top row
+            for (int c = left; c <= right; c++) {
+                result.add(matrix[top][c]);
+            }
+            top++;
+
+            // 2. Right column
+            for (int r = top; r <= bottom; r++) {
+                result.add(matrix[r][right]);
+            }
+            right--;
+
+            // 3. Bottom row (guarded)
+            if (top <= bottom) {
+                for (int c = right; c >= left; c--) {
+                    result.add(matrix[bottom][c]);
+                }
+                bottom--;
+            }
+
+            // 4. Left column (guarded)
+            if (left <= right) {
+                for (int r = bottom; r >= top; r--) {
+                    result.add(matrix[r][left]);
+                }
+                left++;
+            }
+        }
+
+        return result;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="2" data-explanation="A 90-degree clockwise rotation can be performed entirely in-place by first transposing the matrix along its main diagonal (matrix[i][j] <-> matrix[j][i]) and then reversing each row horizontally using converging two pointers.">
+        <h3 class="quiz-question">Which two geometric transformations perform a 90-degree clockwise matrix rotation in O(1) space?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Vertical inversion across bottom boundaries followed by binary search tree shifts.</button>
+          <button type="button" class="quiz-option" data-index="1">Linear row summation calculations followed by modular arithmetic coordinate hashing.</button>
+          <button type="button" class="quiz-option" data-index="2">Main-diagonal matrix transposition followed by horizontal reflection of every row.</button>
+          <button type="button" class="quiz-option" data-index="3">Circular array ring buffer rotations executed recursively across each sub-grid layer.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="1" data-explanation="When traversing the bottom row and left column in a spiral, if the top and bottom boundaries (or left and right) have already crossed due to odd matrix dimensions, re-traversing the line would duplicate elements.">
+        <h3 class="quiz-question">Why must the bottom-row and left-column sweeps in Spiral Matrix include boundary guard checks?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">To ensure operating systems do not trigger segmentation faults on zero indices.</button>
+          <button type="button" class="quiz-option" data-index="1">To avoid duplicate element processing when rectangular dimensions narrow to single lines.</button>
+          <button type="button" class="quiz-option" data-index="2">To convert dynamic memory allocation requests into contiguous hardware SIMD words.</button>
+          <button type="button" class="quiz-option" data-index="3">To verify that integer matrix coordinates do not exceed maximum register capacity.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0029-prefix-trees-and-multi-string-search.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0029: Prefix Trees (Tries) &amp; Multi-String Search</span>
+      </a>
+      <a href="../index.html" class="nav-card next-card">
+        <span class="nav-dir">Course Home &rarr;</span>
+        <span class="nav-title">Return to Master Curriculum Syllabus</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

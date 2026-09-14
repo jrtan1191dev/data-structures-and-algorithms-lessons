@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0028: Bitwise Arithmetic &amp; Binary Masking &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Algorithms</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 15: Bit Manipulation</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0028</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0028</span>
+        </span>
+        <span>&bull;</span>
+        <span>Algorithms</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 169 Core</span>
+      </div>
+      <h1>Bitwise Arithmetic &amp; Binary Masking</h1>
+      <p class="subtitle">
+        CPU ALU bitwise operations, XOR self-cancellation identities, Brian Kernighan's bit-clearing mask, and O(N) bit-count dynamic programming.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>Hardware ALU Registers &amp; Bitwise Primitives</h2>
+      <p>
+        At the physical transistor level, integer variables reside in fixed-width CPU hardware registers (typically 32-bit or 64-bit words). Bitwise instructions execute in a single CPU cycle on the Arithmetic Logic Unit (ALU):
+      </p>
+
+      <div class="code-frame">
+        <div class="code-header">Universal Bitwise Identities</div>
+        <pre><code>1. XOR Self-Cancellation:
+   x ^ x = 0
+   x ^ 0 = x
+   Property: Commutative and associative. Order of operations does not matter!
+
+2. Brian Kernighan's Lowest Set Bit Clearing:
+   n & (n - 1)
+   Subtracting 1 flips all bits from the rightmost set bit downward.
+   ANDing with original n clears the lowest set bit to 0 in a single cycle.
+
+3. Extract Lowest Set Bit:
+   lowest_bit = n & (-n)
+   Due to two's complement arithmetic: -n = (~n) + 1.</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <strong>Language Bitwise Nuances:</strong> In JavaScript/TypeScript, all numbers are 64-bit floating point by default. However, applying any bitwise operator (<code>&amp;</code>, <code>|</code>, <code>^</code>, <code>&gt;&gt;</code>) truncates the operand to a <strong>32-bit signed integer</strong>. In Java, <code>&gt;&gt;</code> is arithmetic right shift (preserves sign bit), while <code>&gt;&gt;&gt;</code> is logical unsigned right shift (fills with zeroes).
+      </div>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 136: Single Number</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>XOR Accumulator</td>
+              <td>XOR all elements together. Identical pairs cancel out to 0 ($x \oplus x = 0$), leaving the unique element in $O(N)$ time and $O(1)$ space.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 191: Number of 1 Bits</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>Brian Kernighan's Mask</td>
+              <td>Iterate <code>n = n &amp; (n - 1)</code> until <code>n == 0</code>. Loop iterations equal the exact number of set bits (Hamming weight).</td>
+            </tr>
+            <tr>
+              <td><strong>LC 338: Counting Bits</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>Bit Transition DP</td>
+              <td>$dp[i] = dp[i &gt;&gt; 1] + (i \ \& \ 1)$. Shifting right by 1 reuses previously computed subproblems in $O(N)$ time.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 268: Missing Number</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>XOR Range Invariance</td>
+              <td>XOR all indices $0 \dots N$ with all array values. Complete pairs cancel to zero, leaving only the missing number without integer overflow.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 190: Reverse Bits</strong></td>
+              <td><span class="badge badge-purple">Easy</span></td>
+              <td>Bit Shift Accumulator</td>
+              <td>Loop 32 times: shift result left by 1 and OR with the least significant bit of <code>n</code>, then shift <code>n</code> right by 1.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 338: Counting Bits ($O(N)$ Time, $O(N)$ Space Linear DP)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Right Shift Subproblem DP</div>
+            <pre><code>from typing import List
+
+def countBits(n: int) -> List[int]:
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        # i >> 1 is i // 2; (i & 1) is 1 if odd, 0 if even
+        dp[i] = dp[i >> 1] + (i & 1)
+    return dp</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Fast Typed Int32Array Bit DP</div>
+            <pre><code>function countBits(n: number): number[] {
+  const dp = new Int32Array(n + 1);
+  for (let i = 1; i <= n; i++) {
+    dp[i] = dp[i >> 1] + (i & 1);
+  }
+  return Array.from(dp);
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Primitive int[] Bit DP</div>
+            <pre><code>public class Solution {
+    public int[] countBits(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            dp[i] = dp[i >> 1] + (i & 1);
+        }
+        return dp;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="1" data-explanation="Subtracting 1 from n flips all bits starting from the least significant set bit downward. Performing a bitwise AND (n & (n - 1)) resets that least significant set bit to 0 in a single ALU cycle.">
+        <h3 class="quiz-question">What physical hardware bit transformation occurs when evaluating the expression n &amp; (n - 1)?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">It doubles the integer value by performing an arithmetic left shift operation.</button>
+          <button type="button" class="quiz-option" data-index="1">It clears the lowest set bit to zero while leaving higher bits unchanged.</button>
+          <button type="button" class="quiz-option" data-index="2">It reverses the thirty-two bit register order from end to start in memory.</button>
+          <button type="button" class="quiz-option" data-index="3">It verifies whether the binary representation contains an odd number of zeroes.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="0" data-explanation="Because XOR is commutative and associative, and any number XORed with itself produces zero (x ^ x = 0), XORing all elements cancels duplicate pairs, leaving the unique element in O(N) time and O(1) space.">
+        <h3 class="quiz-question">Why does the XOR accumulator algorithm solve the Single Number problem in O(1) auxiliary space?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Identical number pairs cancel out to zero due to algebraic self-inversion.</button>
+          <button type="button" class="quiz-option" data-index="1">Binary search trees compress consecutive bitwise entries into register pointers.</button>
+          <button type="button" class="quiz-option" data-index="2">Operating systems allocate shadow registers to record duplicate occurrences.</button>
+          <button type="button" class="quiz-option" data-index="3">Integer division instructions isolate odd frequencies during linear scans.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0027-interval-manipulation-and-overlap-consolidation.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0027: Interval Manipulation &amp; Overlap Consolidation</span>
+      </a>
+      <a href="0029-prefix-trees-and-multi-string-search.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0029: Prefix Trees (Tries) &amp; Multi-String Search</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0029: Prefix Trees (Tries) &amp; Multi-String Search &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-purple">Data Structures</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Module 16: Tries &amp; Prefix Trees</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Lesson 0029</span>
+    </div>
+    <span class="row-meta">⏱ 9 min read</span>
+  </nav>
+
+  <main class="page-container">
+    <!-- Lesson Header -->
+    <section class="page-hero">
+      <div class="lesson-meta">
+        <span class="status-dot-wrap">
+          <span class="status-dot pulsing" data-variant="success" aria-hidden="true"></span>
+          <span>Lesson 0029</span>
+        </span>
+        <span>&bull;</span>
+        <span>Data Structures</span>
+        <span>&bull;</span>
+        <span class="badge badge-purple">Grind 169 Core</span>
+      </div>
+      <h1>Prefix Trees (Tries) &amp; Multi-String Search</h1>
+      <p class="subtitle">
+        26-ary tree node pointers in heap memory, O(L) prefix querying independent of dictionary size, wildcard backtracks, and exponential grid pruning.
+      </p>
+    </section>
+
+    <!-- 1. Physical RAM & Conceptual Mechanics -->
+    <section class="content-section">
+      <div class="section-badge">1. Memory &amp; Architecture</div>
+      <h2>The Trie Node in Memory</h2>
+      <p>
+        A <strong>Trie</strong> (pronounced "try" from re<em>trie</em>val) is an $M$-ary tree structure where each edge represents a character, and common string prefixes share common ancestor pathways:
+      </p>
+
+      <div class="code-frame">
+        <div class="code-header">Heap Memory Layout of a TrieNode (Lowercase English Alphabet)</div>
+        <pre><code>class TrieNode {
+    // Array of 26 pointers (each 8 bytes on 64-bit architecture = 208 bytes)
+    TrieNode* children[26];
+    
+    // 1-byte boolean flag marking whether a word terminates at this node
+    bool is_end_of_word;
+}</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <strong>Trie vs Hash Table for Prefix Operations:</strong> While a hash table checks exact word membership in $O(L)$ time, finding whether any word starts with prefix <code>"app"</code> requires scanning through all $N$ dictionary keys ($O(N \cdot L)$). A Trie executes both exact lookup and prefix searches in strictly <strong>O(L)</strong> steps, completely independent of the total number of words $N$ stored!
+      </div>
+
+      <h3>Exponential Grid Pruning (LC 212 Word Search II)</h3>
+      <p>
+        Searching for $W$ separate words in an $R \times C$ character grid naively requires running $W$ independent DFS passes: $O(W \cdot R \cdot C \cdot 4^L)$.
+      </p>
+      <p>
+        By loading all words into a single Trie and traversing the grid alongside the Trie nodes, we can abort grid exploration the instant the current cell's character does not exist as a child in the Trie. This prunes billions of dead branches and completes the search in a single pass.
+      </p>
+    </section>
+
+    <!-- 2. Grind 75 Questions & Key Learning Points -->
+    <section class="content-section">
+      <div class="section-badge">2. Grind 75 Alignment</div>
+      <h2>Target Grind 75 Questions &amp; Architectural Takeaways</h2>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Difficulty</th>
+              <th>Core Pattern</th>
+              <th>Intended Lesson &amp; Mental Takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>LC 208: Implement Trie (Prefix Tree)</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>26-ary Node Tree</td>
+              <td>Implement <code>insert</code>, <code>search</code>, and <code>startsWith</code> in $O(L)$ time by stepping through child pointer arrays indexed by <code>ch - 'a'</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 211: Design Add and Search Words</strong></td>
+              <td><span class="badge badge-purple">Medium</span></td>
+              <td>Trie + Wildcard DFS</td>
+              <td>When encountering a <code>'.'</code> wildcard, branch across all 26 non-null children via recursive depth-first search.</td>
+            </tr>
+            <tr>
+              <td><strong>LC 212: Word Search II</strong></td>
+              <td><span class="badge badge-purple">Hard</span></td>
+              <td>Trie + Backtracking Grid DFS</td>
+              <td>Feed all dictionary words into a Trie. Walk the grid DFS along Trie edges to simultaneously discover and prune multi-word paths.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Implementation Comparison -->
+    <section class="content-section">
+      <div class="section-badge">3. Trilingual Reference Implementations</div>
+      <h2>LC 208: Implement Trie ($O(L)$ Operations, $O(N \cdot L)$ Space)</h2>
+
+      <div class="code-tabs">
+        <div class="tab-list" role="tablist">
+          <button type="button" class="tab-btn active" data-lang="python" role="tab" aria-selected="true">Python 3</button>
+          <button type="button" class="tab-btn" data-lang="ts" role="tab" aria-selected="false">TypeScript</button>
+          <button type="button" class="tab-btn" data-lang="java" role="tab" aria-selected="false">Java 21</button>
+        </div>
+
+        <!-- Python -->
+        <div class="tab-content active" data-lang="python" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Python 3: Dict-Backed Trie Node</div>
+            <pre><code>class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        curr = self.root
+        for ch in word:
+            if ch not in curr.children:
+                curr.children[ch] = TrieNode()
+            curr = curr.children[ch]
+        curr.is_end = True
+
+    def search(self, word: str) -> bool:
+        curr = self.root
+        for ch in word:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+        return curr.is_end
+
+    def startsWith(self, prefix: str) -> bool:
+        curr = self.root
+        for ch in prefix:
+            if ch not in curr.children:
+                return False
+            curr = curr.children[ch]
+        return True</code></pre>
+          </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="tab-content" data-lang="ts" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">TypeScript: Fixed 26-Pointer Array Node</div>
+            <pre><code>class TrieNode {
+  children: Array<TrieNode | null> = new Array(26).fill(null);
+  isEnd = false;
+}
+
+class Trie {
+  private root = new TrieNode();
+
+  insert(word: string): void {
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const idx = word.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) {
+        curr.children[idx] = new TrieNode();
+      }
+      curr = curr.children[idx]!;
+    }
+    curr.isEnd = true;
+  }
+
+  search(word: string): boolean {
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const idx = word.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) return false;
+      curr = curr.children[idx]!;
+    }
+    return curr.isEnd;
+  }
+
+  startsWith(prefix: string): boolean {
+    let curr = this.root;
+    for (let i = 0; i < prefix.length; i++) {
+      const idx = prefix.charCodeAt(i) - 97;
+      if (curr.children[idx] === null) return false;
+      curr = curr.children[idx]!;
+    }
+    return true;
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Java -->
+        <div class="tab-content" data-lang="java" role="tabpanel">
+          <div class="code-frame">
+            <div class="code-header">Java 21: Fast Array-Pointer Trie</div>
+            <pre><code>public class Trie {
+    private static class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+
+    private final TrieNode root;
+
+    public Trie() {
+        this.root = new TrieNode();
+    }
+
+    public void insert(String word) {
+        TrieNode curr = root;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (curr.children[idx] == null) {
+                curr.children[idx] = new TrieNode();
+            }
+            curr = curr.children[idx];
+        }
+        curr.isEnd = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode curr = root;
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (curr.children[idx] == null) return false;
+            curr = curr.children[idx];
+        }
+        return curr.isEnd;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode curr = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            int idx = prefix.charAt(i) - 'a';
+            if (curr.children[idx] == null) return false;
+            curr = curr.children[idx];
+        }
+        return true;
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive Retrieval Quiz -->
+    <section class="content-section">
+      <div class="section-badge">4. Concept Verification</div>
+      <h2>Interactive Knowledge Check</h2>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-box" data-correct="2" data-explanation="A Trie operates in O(L) time proportional strictly to the length of the searched string, because each character corresponds to an immediate O(1) array pointer lookup regardless of how many total words exist in the dictionary.">
+        <h3 class="quiz-question">Why does searching for a prefix in a Trie scale independently of total dictionary size?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">Binary search trees compress consecutive characters into cryptographic 64-bit integer values.</button>
+          <button type="button" class="quiz-option" data-index="1">Operating systems parallelize character lookup across available background threads automatically.</button>
+          <button type="button" class="quiz-option" data-index="2">Each character transition follows a direct array pointer lookup in constant O(1) time.</button>
+          <button type="button" class="quiz-option" data-index="3">Hardware SIMD registers prefetch entire dictionary vocabulary lists into CPU L1 caches.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-box" data-correct="0" data-explanation="In Word Search II, matching grid cells against a Trie allows the DFS to abort immediately when a prefix path does not exist in the Trie, avoiding traversal of vast dead grid branches.">
+        <h3 class="quiz-question">How does combining a Trie with grid backtracking solve Word Search II efficiently?</h3>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-index="0">It aborts depth-first grid search immediately when candidate prefixes do not exist.</button>
+          <button type="button" class="quiz-option" data-index="1">It eliminates the requirement to track visited cells during multi-directional movement.</button>
+          <button type="button" class="quiz-option" data-index="2">It compresses grid character matrices into single-dimensional bitwise integer buffers.</button>
+          <button type="button" class="quiz-option" data-index="3">It sorts dictionary words ascendingly to allow binary search over board coordinates.</button>
+        </div>
+        <div class="quiz-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- Lesson Navigation Footer -->
+    <nav class="lesson-footer-nav" aria-label="Lesson Navigation">
+      <a href="0028-bitwise-arithmetic-and-binary-masking.html" class="nav-card prev-card">
+        <span class="nav-dir">&larr; Previous Lesson</span>
+        <span class="nav-title">Lesson 0028: Bitwise Arithmetic &amp; Binary Masking</span>
+      </a>
+      <a href="0030-matrix-in-place-manipulations-and-simulations.html" class="nav-card next-card">
+        <span class="nav-dir">Next Lesson &rarr;</span>
+        <span class="nav-title">Lesson 0030: Matrix In-Place Manipulations &amp; Simulations</span>
+      </a>
+    </nav>
+  </main>
+</body>
+</html>
