@@ -116,6 +116,7 @@ To compress months of algorithmic study into rapid, durable mastery, use AI as a
 | Cheatsheet | Content Coverage | Status |
 | :--- | :--- | :--- |
 | **Problem-Solving Intuition & Pattern Recognition** | 4-phase transition mindset, constraint-to-complexity budget, 9 pattern visual cues, deliberate practice protocol | **Completed** |
+| **Grind 169: Core "Easy" Foundations Roadmap** | Complete breakdown of the 41 Easy problems across 13 concept modules, target solve times, and prerequisite lessons | **Completed** |
 | **Expert Mental Models, Debates & Litmus Tests** | MIT 48-hour learning method: 5 expert models, 6 architectural debates, 10 deep understanding litmus tests | **Completed** |
 | **Big-O & Algorithmic Complexity** | Growth rate hierarchy, Golden Simplification Rules, language collections matrix | **Completed** |
 | **Arrays & Dynamic Arrays** | Memory offset formula, operation time/space matrix, internal resizing mechanics | **Completed** |

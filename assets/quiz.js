@@ -206,7 +206,14 @@ function initIndexFiltering() {
     rowItems.forEach(item => {
       const category = item.getAttribute('data-category') || '';
       const text = item.textContent.toLowerCase();
-      const matchesCat = currentCategory === 'all' || category === currentCategory;
+      let matchesCat = false;
+      if (currentCategory === 'all') {
+        matchesCat = true;
+      } else if (currentCategory === 'grind-easy' || currentCategory === 'easy') {
+        matchesCat = category === 'grind169' && (item.querySelector('.badge-green, .badge-success')?.textContent.trim() === 'Easy');
+      } else {
+        matchesCat = category === currentCategory;
+      }
       const matchesSearch = !searchQuery || text.includes(searchQuery);
       item.hidden = !(matchesCat && matchesSearch);
     });

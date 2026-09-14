@@ -266,7 +266,8 @@ h1 {
   color: var(--color-text-accent);
 }
 
-.badge-success {
+.badge-success,
+.badge-green {
   background-color: var(--color-success-muted);
   color: var(--color-success);
 }

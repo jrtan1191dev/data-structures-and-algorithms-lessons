@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" data-astryx-theme="scholar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reference: Grind 169 Core "Easy" Foundations Roadmap &bull; DSA Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/astryx.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <!-- App Shell Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand-link">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>DSA Mastery</span>
+      </a>
+      <div class="nav-actions">
+        <span class="badge badge-success">41 Core Easy</span>
+        <button type="button" class="theme-toggle-btn" aria-label="Toggle theme">
+          <span>🌙</span>
+          <span>Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="top-nav" aria-label="Breadcrumb">
+    <div class="breadcrumbs">
+      <a href="../index.html">Course Index</a>
+      <span class="separator" aria-hidden="true">/</span>
+      <span>Reference</span>
+      <span class="separator" aria-hidden="true">/</span>
+      <span class="current">Grind 169: Easy Foundations</span>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <section class="page-hero">
+      <div class="lesson-meta">Reference Document &bull; Practice Roadmap</div>
+      <h1>Grind 169: Core "Easy" Foundations Roadmap</h1>
+      <p class="subtitle">
+        Mastering the 41 canonical LeetCode Easy problems from the Tech Interview Handbook (26-Week Track).
+        Organized module by module so you master foundational data structure invariants before escalating to Mediums.
+      </p>
+    </section>
+
+    <!-- Strategy Callout -->
+    <div class="callout">
+      <h4>🎯 Pedagogical Strategy: Why Master "Easy" Archetypes First?</h4>
+      <p>
+        In the Tech Interview Handbook 26-Week schedule, <strong>all 41 Easy problems are concentrated in Weeks 1 through 6</strong>.
+        This front-loading is deliberate: every LeetCode Medium problem is simply an Easy concept combined with an extra constraint or edge condition, and every Hard is two Mediums stitched together.
+      </p>
+      <p>
+        By practicing the 41 Easy archetypes across all 13 core modules first, you build instantaneous <strong>fluency strength</strong> (syntax, boilerplate, boundary checks) and deep <strong>storage strength</strong> (mental models like Spatial Complement, LIFO Stacks, Fast/Slow Pointers, and Tree Invariants) before tackling multi-phase problem transitions.
+      </p>
+    </div>
+
+    <!-- Stats Banner -->
+    <section class="stats-grid" style="margin: var(--spacing-6) 0;">
+      <div class="stat-card">
+        <div class="stat-number">41</div>
+        <div class="stat-label">Total Easy Problems</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">6 <span style="font-size: var(--font-size-base); color: var(--color-text-secondary);">Weeks</span></div>
+        <div class="stat-label">Foundation Stage (Wk 1–6)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">13</div>
+        <div class="stat-label">Core Algorithmic Modules</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">15 <span style="font-size: var(--font-size-base); color: var(--color-text-secondary);">min</span></div>
+        <div class="stat-label">Target Solve Speed Benchmark</div>
+      </div>
+    </section>
+
+    <!-- Top 5 Invariants -->
+    <h2>1. The 5 Core Invariants of the "Easy" Curriculum</h2>
+    <p>Before touching code, verify that you can articulate these 5 fundamental mental models from first principles:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Spatial Complement</h3>
+        <p><strong>Archetype:</strong> LC #1 Two Sum, LC #217 Contains Duplicate</p>
+        <p>Instead of comparing all pairs in $O(N^2)$, store traversed elements in a hash set/map and ask: <em>Does $(target - x)$ already exist?</em> Trades $O(N)$ RAM for instantaneous $O(1)$ pair discovery.</p>
+      </div>
+      <div class="card">
+        <h3>2. Converging Boundaries</h3>
+        <p><strong>Archetype:</strong> LC #125 Valid Palindrome, LC #977 Squares of a Sorted Array</p>
+        <p>Move two pointer indices toward each other from extremes. Monotonically narrows the candidate window in strict $O(N)$ linear time without allocating auxiliary copy buffers.</p>
+      </div>
+      <div class="card">
+        <h3>3. Pointer Speed Differentials</h3>
+        <p><strong>Archetype:</strong> LC #141 Linked List Cycle, LC #876 Middle of the Linked List</p>
+        <p>Advance <code>slow</code> by 1 hop and <code>fast</code> by 2 hops. Solves cycle detection and middle-node identification in $O(1)$ auxiliary memory by exploiting Floyd's relative speed ($\Delta v = 1$).</p>
+      </div>
+      <div class="card">
+        <h3>4. LIFO State Pairing</h3>
+        <p><strong>Archetype:</strong> LC #20 Valid Parentheses, LC #844 Backspace Compare</p>
+        <p>Push opening symbols onto an explicit execution stack. When an opener meets its expected closer, pop. An empty stack at the end guarantees well-formed nested structures.</p>
+      </div>
+      <div class="card">
+        <h3>5. Post-Order Tree Aggregation</h3>
+        <p><strong>Archetype:</strong> LC #104 Max Depth, LC #110 Balanced Tree, LC #543 Diameter</p>
+        <p>Let subtrees compute their height/depth first ($O(N)$ bottom-up DFS). Parent nodes aggregate child results and validate balance conditions without repeated re-traversals.</p>
+      </div>
+    </div>
+
+    <!-- Module-by-Module Easy Breakdown -->
+    <h2>2. Complete 41 "Easy" Problems Grouped by Module</h2>
+    <p>Each table below maps the foundational LeetCode Easy problems to their respective theory lesson in this course, target solve time, and core algorithmic invariant.</p>
+
+    <!-- Module 1: Arrays & Dynamic Arrays -->
+    <h3>Module 1: Arrays &amp; In-Place Modifications (3 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/move-zeroes" target="_blank" rel="noreferrer">LC #283: Move Zeroes &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Two pointers (write index &amp; read index). Shift non-zeros forward; fill remainder with 0. $O(N)$ time, $O(1)$ space.</td>
+            <td><a href="../lessons/0003-contiguous-memory-and-dynamic-arrays.html">Lesson 0003 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/squares-of-a-sorted-array" target="_blank" rel="noreferrer">LC #977: Squares of a Sorted Array &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>Opposing two pointers at both ends. Compare absolute values and write largest square into result back-to-front.</td>
+            <td><a href="../lessons/0003-contiguous-memory-and-dynamic-arrays.html">Lesson 0003 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/meeting-rooms" target="_blank" rel="noreferrer">LC #252: Meeting Rooms &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Sort intervals by start time; verify consecutive invariant: <code>intervals[i].start &ge; intervals[i-1].end</code>.</td>
+            <td><a href="../lessons/0027-interval-manipulation-and-overlap-consolidation.html">Lesson 0027 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 2: Strings & Byte Mechanics -->
+    <h3>Module 2: Strings &amp; Frequency Maps (4 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/valid-anagram" target="_blank" rel="noreferrer">LC #242: Valid Anagram &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Fixed-size 26-int frequency buffer. Increment for string $s$, decrement for string $t$. All slots must equal zero.</td>
+            <td><a href="../lessons/0010-frequency-counting-and-prefix-sums.html">Lesson 0010 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/ransom-note" target="_blank" rel="noreferrer">LC #383: Ransom Note &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>Pre-count magazine characters. Decrement for ransom note; if any frequency count drops below 0, return false.</td>
+            <td><a href="../lessons/0009-hash-tables-collisions-and-load-factors.html">Lesson 0009 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/longest-palindrome" target="_blank" rel="noreferrer">LC #409: Longest Palindrome &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>Greedy character pairing: sum all even counts. If any odd character exists, allow exactly one odd character in center (+1).</td>
+            <td><a href="../lessons/0004-strings-and-byte-representation.html">Lesson 0004 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/longest-common-prefix" target="_blank" rel="noreferrer">LC #14: Longest Common Prefix &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Horizontal scan or vertical column scan across strings. Terminate upon first character divergence or end of shortest string.</td>
+            <td><a href="../lessons/0004-strings-and-byte-representation.html">Lesson 0004 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 3: Two Pointers & Sliding Windows -->
+    <h3>Module 3: Two Pointers &amp; Sliding Windows (2 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock" target="_blank" rel="noreferrer">LC #121: Best Time to Buy and Sell Stock &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Single-pass running minimum price tracker. At day $i$, calculate potential profit <code>prices[i] - min_price</code>.</td>
+            <td><a href="../lessons/0008-dynamic-size-sliding-windows.html">Lesson 0008 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/valid-palindrome" target="_blank" rel="noreferrer">LC #125: Valid Palindrome &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Opposing two pointers skipping non-alphanumeric chars. Compare lowercased code points until pointers cross.</td>
+            <td><a href="../lessons/0004-strings-and-byte-representation.html">Lesson 0004 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 4: Hash Tables & Complements -->
+    <h3>Module 4: Hash Tables &amp; Spatial Complements (3 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/two-sum" target="_blank" rel="noreferrer">LC #1: Two Sum &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Spatial complement lookup. Check if <code>target - nums[i]</code> is in map; if not, insert <code>nums[i] &rarr; i</code>. $O(N)$ time.</td>
+            <td><a href="../lessons/0009-hash-tables-collisions-and-load-factors.html">Lesson 0009 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/majority-element" target="_blank" rel="noreferrer">LC #169: Majority Element &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>Boyer-Moore Voting Algorithm: maintain candidate and count. Majority element (&gt; N/2) survives cancellation. $O(1)$ space.</td>
+            <td><a href="../lessons/0009-hash-tables-collisions-and-load-factors.html">Lesson 0009 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/contains-duplicate" target="_blank" rel="noreferrer">LC #217: Contains Duplicate &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Hash set insertion check: return true on first duplicate lookup. Early-exit optimization before full scan.</td>
+            <td><a href="../lessons/0003-contiguous-memory-and-dynamic-arrays.html">Lesson 0003 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 5: Linked Lists & Floyd's Pointers -->
+    <h3>Module 5: Linked Lists &amp; Floyd's Cycle Detection (5 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/merge-two-sorted-lists" target="_blank" rel="noreferrer">LC #21: Merge Two Sorted Lists &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Sentinel dummy node avoids edge cases on empty lists. Compare heads, wire smallest node next, advance pointer.</td>
+            <td><a href="../lessons/0012-advanced-list-techniques-and-sentinels.html">Lesson 0012 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/linked-list-cycle" target="_blank" rel="noreferrer">LC #141: Linked List Cycle &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Floyd's Tortoise and Hare: slow moves 1 step, fast moves 2 steps. Collision proves loop existence in $O(1)$ space.</td>
+            <td><a href="../lessons/0006-fast-and-slow-pointers.html">Lesson 0006 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/reverse-linked-list" target="_blank" rel="noreferrer">LC #206: Reverse Linked List &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>3-pointer iterative manipulation (<code>prev</code>, <code>curr</code>, <code>nxt</code>). Invert pointer direction in-place in $O(N)$ time.</td>
+            <td><a href="../lessons/0011-singly-and-doubly-linked-lists.html">Lesson 0011 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/middle-of-the-linked-list" target="_blank" rel="noreferrer">LC #876: Middle of the Linked List &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Fast and slow pointers. When fast reaches end of list, slow is guaranteed to sit precisely at the middle node.</td>
+            <td><a href="../lessons/0006-fast-and-slow-pointers.html">Lesson 0006 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/palindrome-linked-list" target="_blank" rel="noreferrer">LC #234: Palindrome Linked List &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Find middle via fast/slow pointers; reverse second half in-place; compare first half and second half nodes.</td>
+            <td><a href="../lessons/0011-singly-and-doubly-linked-lists.html">Lesson 0011 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 6: Stacks & Queues -->
+    <h3>Module 6: Stacks &amp; Queues (LIFO / FIFO State) (3 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/valid-parentheses" target="_blank" rel="noreferrer">LC #20: Valid Parentheses &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>LIFO call stack. Push expected closing bracket on opener; on closer, verify <code>stack.pop() == char</code>.</td>
+            <td><a href="../lessons/0013-stacks-queues-and-deques.html">Lesson 0013 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/implement-queue-using-stacks" target="_blank" rel="noreferrer">LC #232: Implement Queue using Stacks &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Dual stack architecture: <code>inStack</code> for push, <code>outStack</code> for pop/peek. Amortized $O(1)$ operations via lazy transfers.</td>
+            <td><a href="../lessons/0013-stacks-queues-and-deques.html">Lesson 0013 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/backspace-string-compare" target="_blank" rel="noreferrer">LC #844: Backspace String Compare &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Stack simulation (push char, pop on '#') or two-pointer backwards traversal with backspace skip counters.</td>
+            <td><a href="../lessons/0013-stacks-queues-and-deques.html">Lesson 0013 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 7: Binary Search -->
+    <h3>Module 7: Binary Search on Monotonic Ranges (2 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/binary-search" target="_blank" rel="noreferrer">LC #704: Binary Search &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Standard sorted array template: <code>mid = left + (right - left) // 2</code> preventing integer overflow. $O(\log N)$ runtime.</td>
+            <td><a href="../lessons/0015-classic-binary-search-and-boundary-templates.html">Lesson 0015 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/first-bad-version" target="_blank" rel="noreferrer">LC #278: First Bad Version &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Binary search on monotonic boolean predicate ($F, F, \dots, T, T$). Find minimal index where <code>isBadVersion(mid) == True</code>.</td>
+            <td><a href="../lessons/0015-classic-binary-search-and-boundary-templates.html">Lesson 0015 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 8: Binary Trees & DFS -->
+    <h3>Module 8: Binary Trees &amp; Recursive DFS Traversals (7 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/invert-binary-tree" target="_blank" rel="noreferrer">LC #226: Invert Binary Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 1</span></td>
+            <td>15 min</td>
+            <td>Recursive DFS mirror swap: swap left and right child pointers at current node, then recurse down both branches.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/balanced-binary-tree" target="_blank" rel="noreferrer">LC #110: Balanced Binary Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Bottom-up post-order DFS: return subtree height if balanced, else return -1 immediately to prune execution. $O(N)$ time.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/diameter-of-binary-tree" target="_blank" rel="noreferrer">LC #543: Diameter of Binary Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>At each node, local path is <code>left_depth + right_depth</code>. Update global maximum diameter during single $O(N)$ post-order pass.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree" target="_blank" rel="noreferrer">LC #104: Maximum Depth of Binary Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Inductive base case: if node is null return 0; else return <code>1 + max(depth(left), depth(right))</code>.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/same-tree" target="_blank" rel="noreferrer">LC #100: Same Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Structural and value isomorphism check: <code>p.val == q.val and sameTree(p.left, q.left) and sameTree(p.right, q.right)</code>.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/symmetric-tree" target="_blank" rel="noreferrer">LC #101: Symmetric Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Dual pointer mirror recursion: compare <code>t1.left</code> with <code>t2.right</code> and <code>t1.right</code> with <code>t2.left</code>.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/subtree-of-another-tree" target="_blank" rel="noreferrer">LC #572: Subtree of Another Tree &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>DFS node traversal paired with <code>isSameTree</code> comparator on candidate roots, or Merkle tree hash serialization.</td>
+            <td><a href="../lessons/0017-binary-tree-traversals-dfs-and-bfs.html">Lesson 0017 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 9: Binary Search Trees -->
+    <h3>Module 9: Binary Search Trees &amp; Invariants (2 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree" target="_blank" rel="noreferrer">LC #235: Lowest Common Ancestor of a BST &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>BST split invariant: if both $p, q &lt; root$, go left; if both $p, q &gt; root$, go right; first node between $p$ and $q$ is the LCA.</td>
+            <td><a href="../lessons/0018-binary-search-trees-and-validation.html">Lesson 0018 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree" target="_blank" rel="noreferrer">LC #108: Convert Sorted Array to BST &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>Divide-and-conquer: choose middle element as root to ensure height balance, recurse on left and right slices.</td>
+            <td><a href="../lessons/0018-binary-search-trees-and-validation.html">Lesson 0018 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 10: Graph Traversals -->
+    <h3>Module 10: Graph Traversals &amp; Connected Components (1 Problem)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/flood-fill" target="_blank" rel="noreferrer">LC #733: Flood Fill &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 2</span></td>
+            <td>15 min</td>
+            <td>Grid DFS/BFS connected components. Guard against infinite loop if <code>initialColor == newColor</code>. $O(R \cdot C)$ bounds.</td>
+            <td><a href="../lessons/0023-graph-representations-and-core-traversals.html">Lesson 0023 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 11: Dynamic Programming -->
+    <h3>Module 11: 1D Dynamic Programming Foundations (1 Problem)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/climbing-stairs" target="_blank" rel="noreferrer">LC #70: Climbing Stairs &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>Recurrence relation: <code>dp[i] = dp[i-1] + dp[i-2]</code> (Fibonacci). Compress state to two variables for $O(1)$ space.</td>
+            <td><a href="../lessons/0025-1d-dynamic-programming-memoization-vs-tabulation.html">Lesson 0025 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 12: Bitwise Arithmetic -->
+    <h3>Module 12: Bitwise Arithmetic &amp; Binary Masking (6 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/add-binary" target="_blank" rel="noreferrer">LC #67: Add Binary &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 3</span></td>
+            <td>15 min</td>
+            <td>Simulate full adder with carry flag: <code>total = bit_a + bit_b + carry; carry = total // 2; digit = total % 2</code>.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/counting-bits" target="_blank" rel="noreferrer">LC #338: Counting Bits &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Bit DP recurrence: <code>dp[i] = dp[i >> 1] + (i & 1)</code>. Computes all bit counts up to $N$ in linear $O(N)$ time.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/number-of-1-bits" target="_blank" rel="noreferrer">LC #191: Number of 1 Bits &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>Brian Kernighan's bit-clearing trick: <code>n &= (n - 1)</code> clears lowest set bit. Runs in $O(k)$ time where $k$ is number of 1s.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/single-number" target="_blank" rel="noreferrer">LC #136: Single Number &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 5</span></td>
+            <td>15 min</td>
+            <td>XOR self-cancellation identity: $x \oplus x = 0$ and $x \oplus 0 = x$. Cumulative XOR across array reveals the unique value in $O(1)$ space.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/missing-number" target="_blank" rel="noreferrer">LC #268: Missing Number &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>Gauss summation formula <code>n*(n+1)//2 - sum(nums)</code> or XOR indices with values to avoid integer overflow in constrained languages.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/reverse-bits" target="_blank" rel="noreferrer">LC #190: Reverse Bits &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>32-iteration bit shift accumulator: <code>result = (result << 1) | (n & 1); n >>= 1</code>. Constant time $O(1)$.</td>
+            <td><a href="../lessons/0028-bitwise-arithmetic-and-binary-masking.html">Lesson 0028 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Module 13: Mathematical Invariants -->
+    <h3>Module 13: Mathematical Invariants &amp; Conversions (2 Problems)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Grind Week</th>
+            <th>Target</th>
+            <th>Core Invariant &amp; Strategy</th>
+            <th>Theory Lesson</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/roman-to-integer" target="_blank" rel="noreferrer">LC #13: Roman to Integer &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 4</span></td>
+            <td>15 min</td>
+            <td>Subtractive numeral rule: if <code>val[i] &lt; val[i+1]</code>, subtract <code>val[i]</code>; otherwise add. Single linear scan.</td>
+            <td><a href="../lessons/0001-big-o-and-algorithmic-intuition.html">Lesson 0001 &rarr;</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://leetcode.com/problems/palindrome-number" target="_blank" rel="noreferrer">LC #9: Palindrome Number &nearr;</a></strong></td>
+            <td><span class="badge badge-neutral">Week 6</span></td>
+            <td>15 min</td>
+            <td>Reverse half of integer via modulo 10 arithmetic until <code>x &le; reversed_num</code>. Avoids string conversion and heap allocation.</td>
+            <td><a href="../lessons/0001-big-o-and-algorithmic-intuition.html">Lesson 0001 &rarr;</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Active Retrieval Quiz -->
+    <h2>3. Diagnostic Litmus Test: The Easy Foundations</h2>
+    <p>Test your understanding of the foundational invariants before moving on to Mediums:</p>
+
+    <!-- Quiz 1 -->
+    <div class="quiz-box" data-correct="1" data-explanation="Floyd's Cycle-Finding algorithm operates in strict O(1) auxiliary memory because it only tracks two pointers, whereas storing visited nodes in a hash set consumes O(N) heap memory.">
+      <div class="quiz-header-row">
+        <div class="quiz-header">
+          <span>🧠</span>
+          <span>Knowledge Check 1: Space Invariants</span>
+        </div>
+        <span class="quiz-badge">Memory Hierarchy</span>
+      </div>
+      <div class="quiz-question">
+        Why is Floyd's Tortoise and Hare algorithm preferred over a HashSet lookup in production systems when detecting a linked list cycle?
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option">It runs in O(log N) runtime compared to linear time</div>
+        <div class="quiz-option">It achieves O(1) auxiliary space without allocating heap node set references</div>
+        <div class="quiz-option">It modifies the node pointer values to store visited markers in-place</div>
+        <div class="quiz-option">It automatically sorts the nodes by address value to guarantee termination</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Quiz 2 -->
+    <div class="quiz-box" data-correct="2" data-explanation="Sorting the array takes O(N log N) time, which violates the optimal O(N) linear time bound achieved by single-pass hash map complement lookups.">
+      <div class="quiz-header-row">
+        <div class="quiz-header">
+          <span>🧠</span>
+          <span>Knowledge Check 2: Asymptotic Trade-offs</span>
+        </div>
+        <span class="quiz-badge">Time Complexity</span>
+      </div>
+      <div class="quiz-question">
+        In LC #1 (Two Sum), why is sorting the array and running two converging pointers suboptimal compared to a single-pass HashMap?
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option">Two pointers cannot find negative complement values</div>
+        <div class="quiz-option">Sorting mutates node pointers and triggers memory leaks</div>
+        <div class="quiz-option">Sorting incurs an O(N log N) bottleneck and loses original index positions</div>
+        <div class="quiz-option">Two pointers require an auxiliary priority queue of size K</div>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Curated Primary Sources -->
+    <h2>4. Curated Primary References</h2>
+    <ul class="resource-list">
+      <li class="resource-item">
+        <div>
+          <a href="https://www.techinterviewhandbook.org/grind75/?weeks=26" target="_blank" rel="noreferrer">Tech Interview Handbook: Grind 75 / Grind 169 (26-Week Schedule) &nearr;</a>
+          <p>Yangshun Tay's official problem priority matrix, difficulty progression, and time allocation guide.</p>
+        </div>
+        <span class="badge badge-purple">Official Schedule</span>
+      </li>
+      <li class="resource-item">
+        <div>
+          <a href="https://elementsofprogramminginterviews.com/" target="_blank" rel="noreferrer">Elements of Programming Interviews (EPI) &nearr;</a>
+          <p>Adnan Aziz, Tsung-Hsien Lee, and Amit Prakash. Invariant preservation and direct cross-references for Grind 75 archetypes.</p>
+        </div>
+        <span class="badge badge-purple">Primary Canon</span>
+      </li>
+    </ul>
+
+    <!-- Bottom Navigation -->
+    <nav class="lesson-footer-nav" aria-label="Cheatsheet Navigation">
+      <a href="./problem-solving-intuition-framework.html" class="nav-card">
+        <span class="nav-card-sub">&larr; Previous Cheatsheet</span>
+        <span class="nav-card-title">Problem-Solving Intuition &amp; Pattern Recognition Framework</span>
+      </a>
+      <a href="./expert-mental-models-and-debates.html" class="nav-card">
+        <span class="nav-card-sub">Next Cheatsheet &rarr;</span>
+        <span class="nav-card-title">Expert Mental Models, Debates &amp; Understanding Litmus Tests</span>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>Data Structures &amp; Algorithms Mastery &bull; Designed with Astryx Design System</div>
+      <div>Python &bull; TypeScript &bull; Java</div>
+    </div>
+  </footer>
+</body>
+</html>
