@@ -1005,6 +1005,18 @@ pre code {
   white-space: nowrap;
 }
 
+/* Grind 169 row links: external LC problem title + internal lesson reference.
+   Replaces repeated inline styles across every problem row. */
+.problem-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a.lesson-ref {
+  color: var(--color-brand);
+  font-weight: var(--font-weight-medium);
+}
+
 .row-arrow {
   color: var(--color-text-disabled);
   font-size: var(--font-size-sm);
@@ -1052,6 +1064,24 @@ pre code {
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   margin-top: var(--spacing-1);
+}
+
+/* Secondary denominator inside a stat number, e.g. "30 / 30". */
+.stat-number-sub {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+}
+
+/* Grind 169 orientation callout: tighter rhythm before the week sections. */
+.callout-grind {
+  margin: var(--spacing-8) 0 var(--spacing-6);
+}
+
+/* Emphasised inline link (roadmap pointer inside prose). */
+.link-emphasis {
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
 }
 
 /* Curated Resource List */
@@ -1114,6 +1144,95 @@ footer.app-footer {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--spacing-3);
+}
+
+/* ==========================================================================
+   Responsive Layout (Astryx frame: content stacks below tablet width)
+   ========================================================================== */
+
+/* Tablet and below: toolbar filters become a horizontal scroll rail so the
+   7 Grind/module filters never overflow or clip. */
+@media (max-width: 768px) {
+  .syllabus-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-3);
+  }
+
+  .filter-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .filter-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .search-input-wrap {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* Phone: dense rows stack so long LC titles and the linked lesson reference
+   no longer collide. The aside drops beneath the main content. */
+@media (max-width: 640px) {
+  .row-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .row-main {
+    width: 100%;
+  }
+
+  .row-aside {
+    width: 100%;
+    justify-content: flex-start;
+    gap: var(--spacing-2);
+  }
+
+  /* Grind rows: the "Lesson XXXX ->" reference reads as a footer chip,
+     separated from the main content by a hairline. */
+  .row-item[data-category="grind169"] .row-aside {
+    padding-top: var(--spacing-2);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  /* Keep the trailing arrow anchored right on tappable lesson/reference rows. */
+  .row-item:not([data-category="grind169"]) .row-aside {
+    justify-content: space-between;
+  }
+
+  .module-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1);
+  }
+
+  .stat-number {
+    font-size: var(--font-size-xl);
+  }
+
+  .resource-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Print Styles */
