@@ -1160,6 +1160,7 @@ footer.app-footer {
   }
 
   .filter-group {
+    max-width: 100%;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
